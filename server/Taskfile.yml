@@ -63,3 +63,20 @@ tasks:
     desc: "Stripe will resend a particular webhook event. Example of running this task: `task striperesend -- evt_1NsUFHH2wIbBWH08QipiWfOI`"
     cmds:
       - stripe events resend {{.CLI_ARGS}}
+
+  dockerlogin:
+    desc: Command will log in your developer's machine with the private docker registry.
+    cmds:
+      -  docker login registry.digitalocean.com
+
+  dockerlogout:
+    desc: Command will log out of the private docker registry. (Important step if you are using other private docker registries)
+    cmds:
+      - docker logout registry.digitalocean.com
+
+  dockerdeploy:
+    desc: Command will build the production container of this project and deploy to the private docker registry
+    cmds:
+      - docker build -f Dockerfile --rm -t registry.digitalocean.com/ssp/cps-backend:latest --platform linux/amd64 .
+      - docker tag registry.digitalocean.com/ssp/cps-backend:latest registry.digitalocean.com/ssp/cps-backend:latest
+      - docker push registry.digitalocean.com/ssp/cps-backend:latest
