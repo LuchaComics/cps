@@ -19,7 +19,7 @@ TODO
 
 ## Contributing
 
-Found a bug? Want a feature to improve the package? Please create an [issue](https://github.com/LuchaComics/cps/issues).
+Found a bug? Want a feature to improve the package? Please create an [issue](https://github.com/LuchaComics/cps/issues/new).
 
 ## License
 This application is licensed under the **GNU Affero General Public License v3.0**. See [LICENSE](LICENSE) for more information.
