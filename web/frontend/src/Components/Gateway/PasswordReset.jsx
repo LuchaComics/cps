@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 
 import FormErrorBox from "../Reusable/FormErrorBox";
 import useLocalStorage from "../../Hooks/useLocalStorage";
-import { postPasswordResetAPI } from "../../API/gateway";
+import { postPasswordResetAPI } from "../../API/Gateway";
 import { topAlertMessageState, topAlertStatusState } from "../../AppState";
 
 

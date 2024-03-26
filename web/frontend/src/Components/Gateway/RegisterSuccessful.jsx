@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import FormErrorBox from "../Reusable/FormErrorBox";
 import useLocalStorage from "../../Hooks/useLocalStorage";
-import { postLoginAPI } from "../../API/gateway";
+import { postLoginAPI } from "../../API/Gateway";
 
 function RegisterSuccessful() {
     ////

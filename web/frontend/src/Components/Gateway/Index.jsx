@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTasks, faTachometer, faEye, faPencil, faTrashCan, faPlus, faGauge, faArrowRight, faBarcode, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import FormErrorBox from "../Reusable/FormErrorBox";
-import { getVersionAPI } from "../../API/gateway";
+import { getVersionAPI } from "../../API/Gateway";
 
 
 function Index() {

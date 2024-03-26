@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { postLogoutAPI } from "../../API/gateway";
+import { postLogoutAPI } from "../../API/Gateway";
 import Scroll from 'react-scroll';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faSpinner } from '@fortawesome/free-solid-svg-icons';

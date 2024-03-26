@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { camelizeKeys, decamelizeKeys } from 'humps';
+import getCustomAxios from "../Helpers/customAxios";
 import {
     CPS_LOGIN_API_ENDPOINT,
     CPS_VERSION_ENDPOINT,
@@ -7,7 +8,13 @@ import {
     CPS_EMAIL_VERIFICATION_API_ENDPOINT,
     CPS_LOGOUT_API_ENDPOINT,
     CPS_FORGOT_PASSWORD_API_ENDPOINT,
-    CPS_PASSWORD_RESET_API_ENDPOINT
+    CPS_PASSWORD_RESET_API_ENDPOINT,
+    CPS_2FA_GENERATE_OTP_API_ENDPOINT,
+    CPS_2FA_GENERATE_OTP_AND_QR_CODE_API_ENDPOINT,
+    CPS_2FA_VERIFY_OTP_API_ENDPOINT,
+    CPS_2FA_VALIDATE_OTP_API_ENDPOINT,
+    CPS_2FA_DISABLED_OTP_API_ENDPOINT,
+    CPS_2FA_RECOVERY_OTP_API_ENDPOINT,
 } from "../Constants/API";
 import { getAPIBaseURL } from '../Helpers/urlUtility';
 import {
@@ -275,4 +282,159 @@ export function postPasswordResetAPI(verificationCode, password, passwordRepeat,
 
         onErrorCallback(errors);
     }).then(onDoneCallback);
+}
+
+
+export function postGenerateOTP(
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+  onUnauthorizedCallback,
+) {
+  const axios = getCustomAxios(onUnauthorizedCallback);
+
+  let aURL = CPS_2FA_GENERATE_OTP_API_ENDPOINT;
+
+  axios
+    .post(aURL)
+    .then((successResponse) => {
+      const responseData = successResponse.data;
+
+      // Snake-case from API to camel-case for React.
+      const data = {
+        base32: responseData.base32,
+        optAuthURL: responseData.otpauth_url,
+      };
+
+      // console.log("getTagListAPI | post-fix | results:", data);
+
+      // Return the callback data.
+      onSuccessCallback(data);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
+}
+
+export function postGenerateOTPAndQRCodeImage(
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+  onUnauthorizedCallback,
+) {
+  const axios = getCustomAxios(onUnauthorizedCallback);
+
+  let aURL = CPS_2FA_GENERATE_OTP_AND_QR_CODE_API_ENDPOINT;
+
+  axios
+    .post(aURL, { responseType: "blob" })
+    .then((successResponse) => {
+      const binaryData = successResponse.data;
+
+      // Create a Blob from the binary data
+      const blob = new Blob([binaryData], { type: "image/png" });
+
+      // Create a Blob URL from the Blob object
+      const blobUrl = URL.createObjectURL(blob);
+
+      console.log("blobUrl", blobUrl);
+
+      // Call the success callback with the Blob URL
+      onSuccessCallback(blobUrl);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
+}
+
+export function postVertifyOTP(
+  payload,
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+  onUnauthorizedCallback,
+) {
+  const axios = getCustomAxios(onUnauthorizedCallback);
+  let aURL = CPS_2FA_VERIFY_OTP_API_ENDPOINT;
+  axios
+    .post(aURL, payload)
+    .then((successResponse) => {
+      // Return the callback data.
+      onSuccessCallback(successResponse.data);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
+}
+
+export function postValidateOTP(
+  payload,
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+  onUnauthorizedCallback,
+) {
+  const axios = getCustomAxios(onUnauthorizedCallback);
+  let aURL = CPS_2FA_VALIDATE_OTP_API_ENDPOINT;
+  axios
+    .post(aURL, payload)
+    .then((successResponse) => {
+      // Return the callback data.
+      onSuccessCallback(successResponse.data);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
+}
+
+export function postDisableOTP(
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+  onUnauthorizedCallback,
+) {
+  const axios = getCustomAxios(onUnauthorizedCallback);
+
+  let aURL = CPS_2FA_DISABLED_OTP_API_ENDPOINT;
+
+  axios
+    .post(aURL)
+    .then((successResponse) => {
+      onSuccessCallback(successResponse.data);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
+}
+
+export function postRecoveryOTP(
+  payload,
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+  onUnauthorizedCallback,
+) {
+  const axios = getCustomAxios(onUnauthorizedCallback);
+  let aURL = CPS_2FA_RECOVERY_OTP_API_ENDPOINT;
+  axios
+    .post(aURL, payload)
+    .then((successResponse) => {
+      // Return the callback data.
+      onSuccessCallback(successResponse.data);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
 }

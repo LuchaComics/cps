@@ -7,7 +7,7 @@ import Select from 'react-select'
 import { useRecoilState } from 'recoil';
 
 import useLocalStorage from "../../Hooks/useLocalStorage";
-import { postRegisterAPI } from "../../API/gateway";
+import { postRegisterAPI } from "../../API/Gateway";
 import FormErrorBox from "../Reusable/FormErrorBox";
 import FormInputField from "../Reusable/FormInputField";
 import PageLoadingContent from "../Reusable/PageLoadingContent";

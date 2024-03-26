@@ -46,3 +46,15 @@ export const CPS_CREDIT_CREATE_STRIPE_CHECKOUT_SESSION_FOR_COMIC_SUBMISSION_API_
 export const CPS_CREDIT_CANCEL_SUBSCRIPTION_API_ENDPOINT = HTTP_API_SERVER + "/api/v1/stripe/cancel-subscription";
 export const CPS_CREDIT_PAYMENT_PROCESSOR_STRIPE_INVOICES_API_ENDPOINT = HTTP_API_SERVER + "/api/v1/stripe/invoices?user_id={userID}&cursor={cursor}&page_size={pageSize}";
 export const CPS_USER_PURCHASES_API_ENDPOINT = HTTP_API_SERVER + "/api/v1/user-purchases";
+export const CPS_2FA_GENERATE_OTP_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/otp/generate";
+export const CPS_2FA_GENERATE_OTP_AND_QR_CODE_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/otp/generate-qr-code";
+export const CPS_2FA_VERIFY_OTP_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/otp/verify";
+export const CPS_2FA_VALIDATE_OTP_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/otp/validate";
+export const CPS_2FA_DISABLED_OTP_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/otp/disable";
+export const CPS_2FA_RECOVERY_OTP_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/otp/recovery";
