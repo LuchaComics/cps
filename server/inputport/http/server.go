@@ -8,8 +8,8 @@ import (
 
 	"github.com/rs/cors"
 
+	attachment_http "github.com/LuchaComics/cps-backend/app/attachment/httptransport"
 	"github.com/LuchaComics/cps-backend/config"
-	"github.com/LuchaComics/cps-backend/inputport/http/attachment"
 	"github.com/LuchaComics/cps-backend/inputport/http/comicsub"
 	"github.com/LuchaComics/cps-backend/inputport/http/credit"
 	"github.com/LuchaComics/cps-backend/inputport/http/customer"
@@ -38,7 +38,7 @@ type httpInputPort struct {
 	Store                  *store.Handler
 	ComicSubmission        *comicsub.Handler
 	Customer               *customer.Handler
-	Attachment             *attachment.Handler
+	Attachment             *attachment_http.Handler
 	Offer                  *offer.Handler
 	Receipt                *receipt.Handler
 	UserPurchase           *userpurchase.Handler
@@ -55,7 +55,7 @@ func NewInputPort(
 	org *store.Handler,
 	t *comicsub.Handler,
 	cust *customer.Handler,
-	att *attachment.Handler,
+	att *attachment_http.Handler,
 	off *offer.Handler,
 	inv *receipt.Handler,
 	usrp *userpurchase.Handler,

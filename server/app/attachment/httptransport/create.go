@@ -1,4 +1,4 @@
-package attachment
+package httptransport
 
 import (
 	"context"
@@ -7,25 +7,24 @@ import (
 	"net/http"
 	"strconv"
 
-	a_c "github.com/LuchaComics/cps-backend/app/attachment/controller"
-	sub_c "github.com/LuchaComics/cps-backend/app/attachment/controller"
-	sub_s "github.com/LuchaComics/cps-backend/app/attachment/datastore"
-	"github.com/LuchaComics/cps-backend/utils/httperror"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	a_c "github.com/LuchaComics/cps-backend/app/attachment/controller"
+	a_s "github.com/LuchaComics/cps-backend/app/attachment/datastore"
+	"github.com/LuchaComics/cps-backend/utils/httperror"
 )
 
-func UnmarshalUpdateRequest(ctx context.Context, r *http.Request) (*sub_c.AttachmentUpdateRequestIDO, error) {
+func UnmarshalCreateRequest(ctx context.Context, r *http.Request) (*a_c.AttachmentCreateRequestIDO, error) {
 	defer r.Body.Close()
 
 	// Parse the multipart form data
 	err := r.ParseMultipartForm(32 << 20) // Limit the maximum memory used for parsing to 32MB
 	if err != nil {
-		log.Println("UnmarshalUpdateRequest:ParseMultipartForm:err:", err)
+		log.Println("UnmarshalCreateRequest:ParseMultipartForm:err:", err)
 		return nil, err
 	}
 
 	// Get the values of form fields
-	id := r.FormValue("id")
 	name := r.FormValue("name")
 	description := r.FormValue("description")
 	ownershipID := r.FormValue("ownership_id")
@@ -35,23 +34,17 @@ func UnmarshalUpdateRequest(ctx context.Context, r *http.Request) (*sub_c.Attach
 	// Get the uploaded file from the request
 	file, header, err := r.FormFile("file")
 	if err != nil {
-		log.Println("UnmarshalUpdateRequest:FormFile:err:", err)
+		log.Println("UnmarshalCmsImageCreateRequest:FormFile:err:", err)
 		// return nil, err, http.StatusInternalServerError
 	}
 
 	oid, err := primitive.ObjectIDFromHex(ownershipID)
 	if err != nil {
-		log.Println("UnmarshalUpdateRequest: primitive.ObjectIDFromHex:err:", err)
-	}
-
-	aid, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		log.Println("UnmarshalUpdateRequest: primitive.ObjectIDFromHex:err:", err)
+		log.Println("UnmarshalCmsImageCreateRequest: primitive.ObjectIDFromHex:err:", err)
 	}
 
 	// Initialize our array which will store all the results from the remote server.
-	requestData := &a_c.AttachmentUpdateRequestIDO{
-		ID:            aid,
+	requestData := &a_c.AttachmentCreateRequestIDO{
 		Name:          name,
 		Description:   description,
 		OwnershipID:   oid,
@@ -67,24 +60,25 @@ func UnmarshalUpdateRequest(ctx context.Context, r *http.Request) (*sub_c.Attach
 	return requestData, nil
 }
 
-func (h *Handler) UpdateByID(w http.ResponseWriter, r *http.Request, id string) {
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	data, err := UnmarshalUpdateRequest(ctx, r)
-	if err != nil {
-		httperror.ResponseError(w, err)
-		return
-	}
-	attachment, err := h.Controller.UpdateByID(ctx, data)
+	data, err := UnmarshalCreateRequest(ctx, r)
 	if err != nil {
 		httperror.ResponseError(w, err)
 		return
 	}
 
-	MarshalUpdateResponse(attachment, w)
+	attachment, err := h.Controller.Create(ctx, data)
+	if err != nil {
+		httperror.ResponseError(w, err)
+		return
+	}
+
+	MarshalCreateResponse(attachment, w)
 }
 
-func MarshalUpdateResponse(res *sub_s.Attachment, w http.ResponseWriter) {
+func MarshalCreateResponse(res *a_s.Attachment, w http.ResponseWriter) {
 	if err := json.NewEncoder(w).Encode(&res); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

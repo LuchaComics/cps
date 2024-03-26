@@ -1,4 +1,4 @@
-package attachment
+package httptransport
 
 import (
 	attachment_c "github.com/LuchaComics/cps-backend/app/attachment/controller"
