@@ -152,8 +152,18 @@ func (port *httpInputPort) HandleRequests(w http.ResponseWriter, r *http.Request
 		port.Gateway.ForgotPassword(w, r)
 	case n == 3 && p[1] == "v1" && p[2] == "password-reset" && r.Method == http.MethodPost:
 		port.Gateway.PasswordReset(w, r)
-		// case n == 3 && p[1] == "v1" && p[2] == "profile" && r.Method == http.MethodGet:
-		// ...
+	case n == 4 && p[1] == "v1" && p[2] == "otp" && p[3] == "generate" && r.Method == http.MethodPost:
+		port.Gateway.GenerateOTP(w, r)
+	case n == 4 && p[1] == "v1" && p[2] == "otp" && p[3] == "generate-qr-code" && r.Method == http.MethodPost:
+		port.Gateway.GenerateOTPAndQRCodePNGImage(w, r)
+	case n == 4 && p[1] == "v1" && p[2] == "otp" && p[3] == "verify" && r.Method == http.MethodPost:
+		port.Gateway.VerifyOTP(w, r)
+	case n == 4 && p[1] == "v1" && p[2] == "otp" && p[3] == "validate" && r.Method == http.MethodPost:
+		port.Gateway.ValidateOTP(w, r)
+	case n == 4 && p[1] == "v1" && p[2] == "otp" && p[3] == "disable" && r.Method == http.MethodPost:
+		port.Gateway.DisableOTP(w, r)
+	case n == 4 && p[1] == "v1" && p[2] == "otp" && p[3] == "recovery" && r.Method == http.MethodPost:
+		port.Gateway.RecoveryOTP(w, r)
 
 		// --- REGISTRY --- // (TODO)
 	case n == 4 && p[1] == "v1" && p[2] == "cpsrn" && r.Method == http.MethodGet:

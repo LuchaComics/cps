@@ -15,6 +15,7 @@ import (
 	"github.com/LuchaComics/cps-backend/adapter/templatedemailer"
 	gateway_s "github.com/LuchaComics/cps-backend/app/gateway/datastore"
 	store_s "github.com/LuchaComics/cps-backend/app/store/datastore"
+	u_d "github.com/LuchaComics/cps-backend/app/user/datastore"
 	user_s "github.com/LuchaComics/cps-backend/app/user/datastore"
 	"github.com/LuchaComics/cps-backend/config"
 	"github.com/LuchaComics/cps-backend/provider/jwt"
@@ -35,7 +36,12 @@ type GatewayController interface {
 	Profile(ctx context.Context) (*user_s.User, error)
 	ProfileUpdate(ctx context.Context, nu *user_s.User) error
 	ProfileChangePassword(ctx context.Context, req *ProfileChangePasswordRequestIDO) error
-	//TODO: Add more...
+	GenerateOTP(ctx context.Context) (*OTPGenerateResponseIDO, error)
+	GenerateOTPAndQRCodePNGImage(ctx context.Context) ([]byte, error)
+	VerifyOTP(ctx context.Context, req *VerificationTokenRequestIDO) (*VerificationTokenResponseIDO, error)
+	ValidateOTP(ctx context.Context, req *ValidateTokenRequestIDO) (*ValidateTokenResponseIDO, error)
+	DisableOTP(ctx context.Context) (*u_d.User, error)
+	RecoveryOTP(ctx context.Context, req *RecoveryRequestIDO) (*gateway_s.LoginResponseIDO, error)
 }
 
 type GatewayControllerImpl struct {

@@ -78,6 +78,28 @@ type User struct {
 	// copy of this member's details saved and we can reference that customer on
 	// the payment processor using this `customer_id`.
 	PaymentProcessorCustomerID string `bson:"payment_processor_customer_id" json:"payment_processor_customer_id"`
+
+	// OTPEnabled controls whether we force 2FA or not during login.
+	OTPEnabled bool `bson:"otp_enabled" json:"otp_enabled"`
+
+	// OTPVerified indicates user has successfully validated their opt token afer enabling 2FA thus turning it on.
+	OTPVerified bool `bson:"otp_verified" json:"otp_verified"`
+
+	// OTPValidated automatically gets set as `false` on successful login and then sets `true` once successfully validated by 2FA.
+	OTPValidated bool `bson:"otp_validated" json:"otp_validated"`
+
+	// OTPSecret the unique one-time password secret to be shared between our
+	// backend and 2FA authenticator sort of apps that support `TOPT`.
+	OTPSecret string `bson:"otp_secret" json:"-"`
+
+	// OTPAuthURL is the URL used to share.
+	OTPAuthURL string `bson:"otp_auth_url" json:"-"`
+
+	// OTPBackupCodeHash is the one-time use backup code which resets the 2FA settings and allow the user to setup 2FA from scratch for the user.
+	OTPBackupCodeHash string `bson:"otp_backup_code_hash" json:"-"`
+
+	// OTPBackupCodeHashAlgorithm tracks the hashing algorithm used.
+	OTPBackupCodeHashAlgorithm string `bson:"otp_backup_code_hash_algorithm" json:"-"`
 }
 
 type UserComment struct {

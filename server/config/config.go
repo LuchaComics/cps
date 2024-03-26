@@ -16,16 +16,17 @@ type Conf struct {
 }
 
 type serverConf struct {
-	Port                  string
-	IP                    string
-	HMACSecret            []byte
-	HasDebugging          bool
-	InitialAdminEmail     string
-	InitialAdminPassword  string
-	InitialAdminStoreName string
-	APIDomainName         string
-	AppDomainName         string
-	IsDeveloperMode       bool
+	Port                    string
+	IP                      string
+	HMACSecret              []byte
+	HasDebugging            bool
+	InitialAdminEmail       string
+	InitialAdminPassword    string
+	InitialAdminStoreName   string
+	APIDomainName           string
+	AppDomainName           string
+	IsDeveloperMode         bool
+	Enable2FAOnRegistration bool
 }
 
 type dbConfig struct {
@@ -77,6 +78,7 @@ func New() *Conf {
 	c.AppServer.InitialAdminStoreName = getEnv("CPS_BACKEND_INITIAL_ADMIN_ORG_NAME", true)
 	c.AppServer.APIDomainName = getEnv("CPS_BACKEND_API_DOMAIN_NAME", true)
 	c.AppServer.AppDomainName = getEnv("CPS_BACKEND_APP_DOMAIN_NAME", true)
+	c.AppServer.Enable2FAOnRegistration = getEnvBool("CPS_BACKEND_APP_ENABLE_2FA_ON_REGISTRATION", false, false)
 
 	c.DB.URI = getEnv("CPS_BACKEND_DB_URI", true)
 	c.DB.Name = getEnv("CPS_BACKEND_DB_NAME", true)

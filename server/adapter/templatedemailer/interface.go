@@ -11,6 +11,8 @@ import (
 
 // TemplatedEmailer Is adapter for responsive HTML email templates sender.
 type TemplatedEmailer interface {
+	GetBackendDomainName() string
+	GetFrontendDomainName() string
 	SendNewUserTemporaryPasswordEmail(email, firstName, temporaryPassword string) error
 	SendVerificationEmail(email, verificationCode, firstName string) error
 	SendForgotPasswordEmail(email, verificationCode, firstName string) error
@@ -36,4 +38,12 @@ func NewTemplatedEmailer(cfg *c.Conf, logger *slog.Logger, uuidp uuid.Provider, 
 		Logger:  logger,
 		Emailer: emailer,
 	}
+}
+
+func (impl *templatedEmailer) GetBackendDomainName() string {
+	return impl.Emailer.GetBackendDomainName()
+}
+
+func (impl *templatedEmailer) GetFrontendDomainName() string {
+	return impl.Emailer.GetFrontendDomainName()
 }

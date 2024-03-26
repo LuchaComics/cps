@@ -3,20 +3,25 @@ package controller
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"strings"
 	"time"
 
-	"log/slog"
-
 	gateway_s "github.com/LuchaComics/cps-backend/app/gateway/datastore"
 	store_s "github.com/LuchaComics/cps-backend/app/store/datastore"
+	u_s "github.com/LuchaComics/cps-backend/app/user/datastore"
 	"github.com/LuchaComics/cps-backend/utils/httperror"
 )
 
 func (impl *GatewayControllerImpl) Login(ctx context.Context, email, password string) (*gateway_s.LoginResponseIDO, error) {
-	// Defensive Code: For security purposes we need to remove all whitespaces from the email and lower the characters.
+	// Defensive Code: For security purposes we need to perform some sanitization on the inputs.
 	email = strings.ToLower(email)
+	email = strings.ReplaceAll(email, " ", "")
+	email = strings.ReplaceAll(email, "\t", "")
+	email = strings.TrimSpace(email)
 	password = strings.ReplaceAll(password, " ", "")
+	password = strings.ReplaceAll(password, "\t", "")
+	password = strings.TrimSpace(password)
 
 	// Lookup the user in our database, else return a `400 Bad Request` error.
 	u, err := impl.UserStorer.GetByEmail(ctx, email)
@@ -63,6 +68,22 @@ func (impl *GatewayControllerImpl) Login(ctx context.Context, email, password st
 		return nil, httperror.NewForBadRequestWithSingleField("email", "was not verified")
 	}
 
+	// Enforce 2FA if enabled.
+	if u.OTPEnabled {
+		// We need to reset the `otp_validated` status to be false to force
+		// the user to use their `totp authenticator` application.
+		u.OTPValidated = false
+		u.ModifiedAt = time.Now()
+		if err := impl.UserStorer.UpdateByID(ctx, u); err != nil {
+			impl.Logger.Error("failed updating user during login", slog.Any("err", err))
+			return nil, err
+		}
+	}
+
+	return impl.loginWithUser(ctx, u)
+}
+
+func (impl *GatewayControllerImpl) loginWithUser(ctx context.Context, u *u_s.User) (*gateway_s.LoginResponseIDO, error) {
 	uBin, err := json.Marshal(u)
 	if err != nil {
 		impl.Logger.Error("marshalling error", slog.Any("err", err))
