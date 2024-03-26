@@ -1,6 +1,6 @@
 /* The code allows the bulma sidebar to be full height. Special thanks to: https://codepen.io/jalediaz/pen/JjoXJao */
 .is-fullheight {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 /*

@@ -1,21 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Scroll from 'react-scroll';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarMinus, faCalendarPlus, faDumbbell, faCalendar, faGauge, faSearch, faEye, faPencil, faTrashCan, faPlus, faArrowRight, faTable, faArrowUpRightFromSquare, faFilter, faRefresh, faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { useRecoilState } from 'recoil';
+import Scroll from "react-scroll";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCalendarMinus,
+  faCalendarPlus,
+  faDumbbell,
+  faCalendar,
+  faGauge,
+  faSearch,
+  faEye,
+  faPencil,
+  faTrashCan,
+  faPlus,
+  faArrowRight,
+  faTable,
+  faArrowUpRightFromSquare,
+  faFilter,
+  faRefresh,
+  faCalendarCheck,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
 import FormErrorBox from "../../Reusable/FormErrorBox";
 import { PAGE_SIZE_OPTIONS } from "../../../Constants/FieldOptions";
 
-
 function AdminOfferListDesktop(props) {
-  const { listData, setPageSize, pageSize, previousCursors, onPreviousClicked, onNextClicked } = props;
+  const {
+    listData,
+    setPageSize,
+    pageSize,
+    previousCursors,
+    onPreviousClicked,
+    onNextClicked,
+  } = props;
   return (
     <div className="b-table">
       <div className="table-wrapper has-mobile-cards">
-        <table className="table is-fullwidth is-striped is-hoverable is-fullwidth">
+        <table className="is-fullwidth is-striped is-hoverable is-fullwidth table">
           <thead>
             <tr>
               <th>Name</th>
@@ -29,16 +53,19 @@ function AdminOfferListDesktop(props) {
               listData.results.map(function (datum, i) {
                 return (
                   <tr key={`desktop_${datum.id}`}>
-                    <td data-label="Name">
-                      {datum.name}
-                    </td>
+                    <td data-label="Name">{datum.name}</td>
                     <td data-label="Price">
                       ${datum.price}&nbsp;{datum.priceCurrency}
                     </td>
                     <td className="is-actions-cell">
                       <div className="buttons is-right">
-                        <Link to={`/admin/offer/${datum.id}`} className="button is-small is-dark" type="button">
-                          <FontAwesomeIcon className="mdi" icon={faEye} /> &nbsp;View
+                        <Link
+                          to={`/admin/offer/${datum.id}`}
+                          className="button is-small is-dark"
+                          type="button"
+                        >
+                          <FontAwesomeIcon className="mdi" icon={faEye} />{" "}
+                          &nbsp;View
                         </Link>
                       </div>
                     </td>
@@ -54,9 +81,7 @@ function AdminOfferListDesktop(props) {
               <select
                 class={`input has-text-grey-light`}
                 name="pageSize"
-                onChange={(e) =>
-                  setPageSize(parseInt(e.target.value))
-                }
+                onChange={(e) => setPageSize(parseInt(e.target.value))}
               >
                 {PAGE_SIZE_OPTIONS.map(function (option, i) {
                   return (
@@ -73,10 +98,7 @@ function AdminOfferListDesktop(props) {
           </div>
           <div class="column is-half has-text-right">
             {previousCursors.length > 0 && (
-              <button
-                class="button"
-                onClick={onPreviousClicked}
-              >
+              <button class="button" onClick={onPreviousClicked}>
                 Previous
               </button>
             )}

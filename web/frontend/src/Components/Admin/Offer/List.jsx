@@ -17,7 +17,7 @@ import {
   faRefresh,
   faFilter,
   faSearch,
-  faFilterCircleXmark
+  faFilterCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 
@@ -35,22 +35,30 @@ import {
 import PageLoadingContent from "../../Reusable/PageLoadingContent";
 import FormSelectField from "../../Reusable/FormSelectField";
 import FormInputFieldWithButton from "../../Reusable/FormInputFieldWithButton";
-import { PAGE_SIZE_OPTIONS, OFFER_STATUS_OPTIONS } from "../../../Constants/FieldOptions";
+import {
+  PAGE_SIZE_OPTIONS,
+  OFFER_STATUS_OPTIONS,
+} from "../../../Constants/FieldOptions";
 import AdminOfferListDesktop from "./ListDesktop";
 import AdminOfferListMobile from "./ListMobile";
-
 
 function AdminOfferList() {
   ////
   //// Global state.
   ////
 
-  const [topAlertMessage, setTopAlertMessage] = useRecoilState(topAlertMessageState);
-  const [topAlertStatus, setTopAlertStatus] = useRecoilState(topAlertStatusState);
+  const [topAlertMessage, setTopAlertMessage] =
+    useRecoilState(topAlertMessageState);
+  const [topAlertStatus, setTopAlertStatus] =
+    useRecoilState(topAlertStatusState);
   const [currentUser] = useRecoilState(currentUserState);
-  const [showFilter, setShowFilter] = useRecoilState(offersFilterShowState);  // Filtering + Searching
-  const [temporarySearchText, setTemporarySearchText] = useRecoilState(offersFilterTemporarySearchTextState);  // Searching - The search field value as your writes their query.
-  const [actualSearchText, setActualSearchText] = useRecoilState(offersFilterActualSearchTextState); // Searching - The actual search query value to submit to the API.
+  const [showFilter, setShowFilter] = useRecoilState(offersFilterShowState); // Filtering + Searching
+  const [temporarySearchText, setTemporarySearchText] = useRecoilState(
+    offersFilterTemporarySearchTextState,
+  ); // Searching - The search field value as your writes their query.
+  const [actualSearchText, setActualSearchText] = useRecoilState(
+    offersFilterActualSearchTextState,
+  ); // Searching - The actual search query value to submit to the API.
   const [status, setStatus] = useRecoilState(offersFilterStatusState);
 
   ////
@@ -80,7 +88,8 @@ function AdminOfferList() {
       }
     } else {
       setListData([]);
-      setNextCursor("");}
+      setNextCursor("");
+    }
   }
 
   function onOfferListError(apiErr) {
@@ -109,7 +118,7 @@ function AdminOfferList() {
       console.log(
         "onDeleteConfirmButtonClick: topAlertMessage, topAlertStatus:",
         topAlertMessage,
-        topAlertStatus
+        topAlertStatus,
       );
       setTopAlertMessage("");
     }, 2000);
@@ -129,7 +138,7 @@ function AdminOfferList() {
       console.log(
         "onOfferDeleteError: topAlertMessage, topAlertStatus:",
         topAlertMessage,
-        topAlertStatus
+        topAlertStatus,
       );
       setTopAlertMessage("");
     }, 2000);
@@ -157,7 +166,7 @@ function AdminOfferList() {
     let params = new Map();
     params.set("page_size", limit); // Pagination
     params.set("sort_field", "created_at"); // Sorting
-    params.set("sort_order", -1);         // Sorting - descending, meaning most recent start date to oldest start date.
+    params.set("sort_order", -1); // Sorting - descending, meaning most recent start date to oldest start date.
     params.set("status", status);
 
     if (cur !== "") {
@@ -175,7 +184,7 @@ function AdminOfferList() {
       params,
       onOfferListSuccess,
       onOfferListError,
-      onOfferListDone
+      onOfferListDone,
     );
   };
 
@@ -218,7 +227,7 @@ function AdminOfferList() {
       selectedOfferForDeletion.id,
       onOfferDeleteSuccess,
       onOfferDeleteError,
-      onOfferDeleteDone
+      onOfferDeleteDone,
     );
     setSelectedOfferForDeletion("");
   };
@@ -229,7 +238,7 @@ function AdminOfferList() {
     setActualSearchText("");
     setTemporarySearchText("");
     setStatus(2); // 1=Pending, 2=Active, 3=Archived
-  }
+  };
 
   ////
   //// Misc.
@@ -256,15 +265,20 @@ function AdminOfferList() {
     <>
       <div className="container">
         <section className="section">
-
           {/* Desktop Breadcrumbs */}
           <nav className="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
             <ul>
               <li className="">
-                <Link to="/admin/dashboard" aria-current="page"><FontAwesomeIcon className="fas" icon={faGauge} />&nbsp;Admin Dashboard</Link>
+                <Link to="/admin/dashboard" aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faGauge} />
+                  &nbsp;Admin Dashboard
+                </Link>
               </li>
               <li className="is-active">
-                <Link aria-current="page"><FontAwesomeIcon className="fas" icon={faHandHolding} />&nbsp;Offers</Link>
+                <Link aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faHandHolding} />
+                  &nbsp;Offers
+                </Link>
               </li>
             </ul>
           </nav>
@@ -272,16 +286,19 @@ function AdminOfferList() {
           {/* Mobile Breadcrumbs */}
           <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
             <ul>
-              <li class=""><Link to="/admin/dashboard" aria-current="page"><FontAwesomeIcon className="fas" icon={faArrowLeft} />&nbsp;Back to Admin Dashboard</Link></li>
+              <li class="">
+                <Link to="/admin/dashboard" aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faArrowLeft} />
+                  &nbsp;Back to Admin Dashboard
+                </Link>
+              </li>
             </ul>
           </nav>
 
           {/* Page */}
           <nav className="box">
             <div
-              className={`modal ${
-                selectedOfferForDeletion ? "is-active" : ""
-              }`}
+              className={`modal ${selectedOfferForDeletion ? "is-active" : ""}`}
             >
               <div className="modal-background"></div>
               <div className="modal-card">
@@ -294,11 +311,11 @@ function AdminOfferList() {
                   ></button>
                 </header>
                 <section className="modal-card-body">
-                  You are about to <b>archive</b> this Video Category; it will no longer
-                  appear on your dashboard nor will the Video Category be able to log
-                  into their account. This action can be undone but you'll need
-                  to contact the system administrator. Are you sure you would
-                  like to continue?
+                  You are about to <b>archive</b> this Video Category; it will
+                  no longer appear on your dashboard nor will the Video Category
+                  be able to log into their account. This action can be undone
+                  but you'll need to contact the system administrator. Are you
+                  sure you would like to continue?
                 </section>
                 <footer className="modal-card-foot">
                   <button
@@ -325,31 +342,65 @@ function AdminOfferList() {
                 </h1>
               </div>
               <div className="column has-text-right">
-                  <button onClick={()=>fetchList(currentCursor, pageSize, actualSearchText)} class="is-fullwidth-mobile button is-link is-small" type="button">
-                      <FontAwesomeIcon className="mdi" icon={faRefresh} />&nbsp;<span class="is-hidden-desktop is-hidden-tablet">&nbsp;Refresh</span>
-                  </button>
+                <button
+                  onClick={() =>
+                    fetchList(currentCursor, pageSize, actualSearchText)
+                  }
+                  class="is-fullwidth-mobile button is-link is-small"
+                  type="button"
+                >
+                  <FontAwesomeIcon className="mdi" icon={faRefresh} />
                   &nbsp;
-                  <button onClick={(e)=>setShowFilter(!showFilter)} class="is-fullwidth-mobile button is-small is-primary" type="button">
-                      <FontAwesomeIcon className="mdi" icon={faFilter} />&nbsp;Filter
-                  </button>
-                  &nbsp;
-                  <Link to={`/admin/offers/add`} className="is-fullwidth-mobile button is-small is-success" type="button">
-                      <FontAwesomeIcon className="mdi" icon={faPlus} />&nbsp;New
-                  </Link>
+                  <span class="is-hidden-desktop is-hidden-tablet">
+                    &nbsp;Refresh
+                  </span>
+                </button>
+                &nbsp;
+                <button
+                  onClick={(e) => setShowFilter(!showFilter)}
+                  class="is-fullwidth-mobile button is-small is-primary"
+                  type="button"
+                >
+                  <FontAwesomeIcon className="mdi" icon={faFilter} />
+                  &nbsp;Filter
+                </button>
+                &nbsp;
+                <Link
+                  to={`/admin/offers/add`}
+                  className="is-fullwidth-mobile button is-small is-success"
+                  type="button"
+                >
+                  <FontAwesomeIcon className="mdi" icon={faPlus} />
+                  &nbsp;New
+                </Link>
               </div>
             </div>
 
             {/* FILTER */}
             {showFilter && (
-              <div class="has-background-white-bis" style={{ borderRadius: "15px", padding: "20px" }}>
+              <div
+                class="has-background-white-bis"
+                style={{ borderRadius: "15px", padding: "20px" }}
+              >
                 {/* Filter Title + Clear Button */}
                 <div class="columns">
-                    <div class="column is-half">
-                        <strong><u><FontAwesomeIcon className="mdi" icon={faFilter} />&nbsp;Filter</u></strong>
-                    </div>
-                    <div class="column is-half has-text-right">
-                        <Link onClick={onClearFilterClick}><FontAwesomeIcon className="mdi" icon={faFilterCircleXmark} />&nbsp;Clear Filter</Link>
-                    </div>
+                  <div class="column is-half">
+                    <strong>
+                      <u>
+                        <FontAwesomeIcon className="mdi" icon={faFilter} />
+                        &nbsp;Filter
+                      </u>
+                    </strong>
+                  </div>
+                  <div class="column is-half has-text-right">
+                    <Link onClick={onClearFilterClick}>
+                      <FontAwesomeIcon
+                        className="mdi"
+                        icon={faFilterCircleXmark}
+                      />
+                      &nbsp;Clear Filter
+                    </Link>
+                  </div>
                 </div>
                 <div class="columns">
                   <div class="column">
@@ -373,22 +424,22 @@ function AdminOfferList() {
                   </div>
                   <div class="column">
                     <FormSelectField
-                        label="Status"
-                        name="status"
-                        type="number"
-                        placeholder="#"
-                        selectedValue={status}
-                        errorText={errors && errors.status}
-                        helpText={
-                          <ul class="content">
-                            <li>pending - will not show up for members</li>
-                            <li>active - will show up for everyone</li>
-                            <li>archived - will be hidden from everyone</li>
-                          </ul>
-                        }
-                        onChange={(e)=>setStatus(parseInt(e.target.value))}
-                        isRequired={true}
-                        options={OFFER_STATUS_OPTIONS}
+                      label="Status"
+                      name="status"
+                      type="number"
+                      placeholder="#"
+                      selectedValue={status}
+                      errorText={errors && errors.status}
+                      helpText={
+                        <ul class="content">
+                          <li>pending - will not show up for members</li>
+                          <li>active - will show up for everyone</li>
+                          <li>archived - will be hidden from everyone</li>
+                        </ul>
+                      }
+                      onChange={(e) => setStatus(parseInt(e.target.value))}
+                      isRequired={true}
+                      options={OFFER_STATUS_OPTIONS}
                     />
                   </div>
                 </div>
@@ -404,22 +455,21 @@ function AdminOfferList() {
                 listData.results &&
                 (listData.results.length > 0 || previousCursors.length > 0) ? (
                   <div className="container">
-
                     {/*
                         ##################################################################
                         EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A DESKTOP SCREEN.
                         ##################################################################
                     */}
-                    <div class="is-hidden-touch" >
-                        <AdminOfferListDesktop
-                            listData={listData}
-                            setPageSize={setPageSize}
-                            pageSize={pageSize}
-                            previousCursors={previousCursors}
-                            onPreviousClicked={onPreviousClicked}
-                            onNextClicked={onNextClicked}
-                            onSelectOfferForDeletion={onSelectOfferForDeletion}
-                        />
+                    <div class="is-hidden-touch">
+                      <AdminOfferListDesktop
+                        listData={listData}
+                        setPageSize={setPageSize}
+                        pageSize={pageSize}
+                        previousCursors={previousCursors}
+                        onPreviousClicked={onPreviousClicked}
+                        onNextClicked={onNextClicked}
+                        onSelectOfferForDeletion={onSelectOfferForDeletion}
+                      />
                     </div>
 
                     {/*
@@ -428,17 +478,16 @@ function AdminOfferList() {
                         ###########################################################################
                     */}
                     <div class="is-fullwidth is-hidden-desktop">
-                        <AdminOfferListMobile
-                            listData={listData}
-                            setPageSize={setPageSize}
-                            pageSize={pageSize}
-                            previousCursors={previousCursors}
-                            onPreviousClicked={onPreviousClicked}
-                            onNextClicked={onNextClicked}
-                            onSelectOfferForDeletion={onSelectOfferForDeletion}
-                        />
+                      <AdminOfferListMobile
+                        listData={listData}
+                        setPageSize={setPageSize}
+                        pageSize={pageSize}
+                        previousCursors={previousCursors}
+                        onPreviousClicked={onPreviousClicked}
+                        onNextClicked={onNextClicked}
+                        onSelectOfferForDeletion={onSelectOfferForDeletion}
+                      />
                     </div>
-
                   </div>
                 ) : (
                   <section className="hero is-medium has-background-white-ter">
@@ -467,14 +516,25 @@ function AdminOfferList() {
             )}
 
             <div class="columns pt-5">
-                <div class="column is-half">
-                    <Link class="button is-fullwidth-mobile" to={`/admin/dashboard`}><FontAwesomeIcon className="fas" icon={faArrowLeft} />&nbsp;Back to Dashboard</Link>
-                </div>
-                <div class="column is-half has-text-right">
-                    <Link to={`/admin/offers/add`} class="button is-success is-fullwidth-mobile"><FontAwesomeIcon className="fas" icon={faPlus} />&nbsp;New</Link>
-                </div>
+              <div class="column is-half">
+                <Link
+                  class="button is-fullwidth-mobile"
+                  to={`/admin/dashboard`}
+                >
+                  <FontAwesomeIcon className="fas" icon={faArrowLeft} />
+                  &nbsp;Back to Dashboard
+                </Link>
+              </div>
+              <div class="column is-half has-text-right">
+                <Link
+                  to={`/admin/offers/add`}
+                  class="button is-success is-fullwidth-mobile"
+                >
+                  <FontAwesomeIcon className="fas" icon={faPlus} />
+                  &nbsp;New
+                </Link>
+              </div>
             </div>
-
           </nav>
         </section>
       </div>

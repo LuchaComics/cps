@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
-import Scroll from 'react-scroll';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog, faArrowLeft, faTasks, faTachometer, faPlus, faTimesCircle, faCheckCircle, faUserCircle, faGauge, faPencil, faUsers, faIdCard, faAddressBook, faContactCard, faChartPie, faCogs, faBuilding, faEye } from '@fortawesome/free-solid-svg-icons'
-import { useRecoilState } from 'recoil';
+import Scroll from "react-scroll";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCog,
+  faArrowLeft,
+  faTasks,
+  faTachometer,
+  faPlus,
+  faTimesCircle,
+  faCheckCircle,
+  faUserCircle,
+  faGauge,
+  faPencil,
+  faUsers,
+  faIdCard,
+  faAddressBook,
+  faContactCard,
+  faChartPie,
+  faCogs,
+  faBuilding,
+  faEye,
+} from "@fortawesome/free-solid-svg-icons";
+import { useRecoilState } from "recoil";
 
 import useLocalStorage from "../../../Hooks/useLocalStorage";
-import {  postUserCreateAPI } from "../../../API/user";
+import { postUserCreateAPI } from "../../../API/user";
 import { getStoreSelectOptionListAPI } from "../../../API/store";
 import FormErrorBox from "../../Reusable/FormErrorBox";
 import FormInputField from "../../Reusable/FormInputField";
@@ -19,635 +38,765 @@ import FormCountryField from "../../Reusable/FormCountryField";
 import FormRegionField from "../../Reusable/FormRegionField";
 import PageLoadingContent from "../../Reusable/PageLoadingContent";
 import {
-    HOW_DID_YOU_HEAR_ABOUT_US_WITH_EMPTY_OPTIONS,
-    HOW_LONG_HAS_YOUR_STORE_BEEN_OPERATING_FOR_WITH_EMPTY_OPTIONS
+  HOW_DID_YOU_HEAR_ABOUT_US_WITH_EMPTY_OPTIONS,
+  HOW_LONG_HAS_YOUR_STORE_BEEN_OPERATING_FOR_WITH_EMPTY_OPTIONS,
 } from "../../../Constants/FieldOptions";
 import { topAlertMessageState, topAlertStatusState } from "../../../AppState";
 
-
 function AdminUserAdd() {
-    ////
-    //// URL Parameters.
-    ////
+  ////
+  //// URL Parameters.
+  ////
 
-    const [searchParams] = useSearchParams(); // Special thanks via https://stackoverflow.com/a/65451140
-    const orgID = searchParams.get("store_id");
-    const orgName = searchParams.get("store_name");
+  const [searchParams] = useSearchParams(); // Special thanks via https://stackoverflow.com/a/65451140
+  const orgID = searchParams.get("store_id");
+  const orgName = searchParams.get("store_name");
 
-    ////
-    //// Global state.
-    ////
+  ////
+  //// Global state.
+  ////
 
-    const [topAlertMessage, setTopAlertMessage] = useRecoilState(topAlertMessageState);
-    const [topAlertStatus, setTopAlertStatus] = useRecoilState(topAlertStatusState);
+  const [topAlertMessage, setTopAlertMessage] =
+    useRecoilState(topAlertMessageState);
+  const [topAlertStatus, setTopAlertStatus] =
+    useRecoilState(topAlertStatusState);
 
-    ////
-    //// Component states.
-    ////
+  ////
+  //// Component states.
+  ////
 
-    const [errors, setErrors] = useState({});
-    const [isFetching, setFetching] = useState(false);
-    const [forceURL, setForceURL] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [companyName, setCompanyName] = useState("");
-    const [postalCode, setPostalCode] = useState("");
-    const [addressLine1, setAddressLine1] = useState("");
-    const [addressLine2, setAddressLine2] = useState("");
-    const [city, setCity] = useState("");
-    const [region, setRegion] = useState("");
-    const [country, setCountry] = useState("");
-    const [agreePromotionsEmail, setHasPromotionalEmail] = useState(true);
-    const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState(0);
-    const [howDidYouHearAboutUsOther, setHowDidYouHearAboutUsOther] = useState("");
-    const [showCancelWarning, setShowCancelWarning] = useState(false);
-    const [storeSelectOptions, setStoreSelectOptions] = useState([]);
-    const [storeID, setStoreID] = useState(orgID);
-    const [role, setRole] = useState();
-    const [hasShippingAddress, setHasShippingAddress] = useState(false);
-    const [shippingName, setShippingName] = useState("");
-    const [shippingPhone, setShippingPhone] = useState("");
-    const [shippingCountry, setShippingCountry] = useState("");
-    const [shippingRegion, setShippingRegion] = useState("");
-    const [shippingCity, setShippingCity] = useState("");
-    const [shippingAddressLine1, setShippingAddressLine1] = useState("");
-    const [shippingAddressLine2, setShippingAddressLine2] = useState("");
-    const [shippingPostalCode, setShippingPostalCode] = useState("");
+  const [errors, setErrors] = useState({});
+  const [isFetching, setFetching] = useState(false);
+  const [forceURL, setForceURL] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [addressLine1, setAddressLine1] = useState("");
+  const [addressLine2, setAddressLine2] = useState("");
+  const [city, setCity] = useState("");
+  const [region, setRegion] = useState("");
+  const [country, setCountry] = useState("");
+  const [agreePromotionsEmail, setHasPromotionalEmail] = useState(true);
+  const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState(0);
+  const [howDidYouHearAboutUsOther, setHowDidYouHearAboutUsOther] =
+    useState("");
+  const [showCancelWarning, setShowCancelWarning] = useState(false);
+  const [storeSelectOptions, setStoreSelectOptions] = useState([]);
+  const [storeID, setStoreID] = useState(orgID);
+  const [role, setRole] = useState();
+  const [hasShippingAddress, setHasShippingAddress] = useState(false);
+  const [shippingName, setShippingName] = useState("");
+  const [shippingPhone, setShippingPhone] = useState("");
+  const [shippingCountry, setShippingCountry] = useState("");
+  const [shippingRegion, setShippingRegion] = useState("");
+  const [shippingCity, setShippingCity] = useState("");
+  const [shippingAddressLine1, setShippingAddressLine1] = useState("");
+  const [shippingAddressLine2, setShippingAddressLine2] = useState("");
+  const [shippingPostalCode, setShippingPostalCode] = useState("");
 
-    ////
-    //// Event handling.
-    ////
+  ////
+  //// Event handling.
+  ////
 
-    function onAgreePromotionsEmailChange(e) {
-        setHasPromotionalEmail(!agreePromotionsEmail);
+  function onAgreePromotionsEmailChange(e) {
+    setHasPromotionalEmail(!agreePromotionsEmail);
+  }
+
+  ////
+  //// API.
+  ////
+
+  const onSubmitClick = (e) => {
+    console.log("onSubmitClick: Beginning...");
+    setFetching(true);
+    setErrors({});
+    const user = {
+      StoreID: storeID,
+      Role: role,
+      Status: 1, // 1 = UserActiveStatus
+      Email: email,
+      Phone: phone,
+      FirstName: firstName,
+      LastName: lastName,
+      CompanyName: companyName,
+      PostalCode: postalCode,
+      AddressLine1: addressLine1,
+      AddressLine2: addressLine2,
+      City: city,
+      Region: region,
+      Country: country,
+      AgreePromotionsEmail: agreePromotionsEmail,
+      HowDidYouHearAboutUs: howDidYouHearAboutUs,
+      HowDidYouHearAboutUsOther: howDidYouHearAboutUsOther,
+      HasShippingAddress: hasShippingAddress,
+      ShippingName: shippingName,
+      ShippingPhone: shippingPhone,
+      ShippingCountry: shippingCountry,
+      ShippingRegion: shippingRegion,
+      ShippingCity: shippingCity,
+      ShippingAddressLine1: shippingAddressLine1,
+      ShippingAddressLine2: shippingAddressLine2,
+      ShippingPostalCode: shippingPostalCode,
+    };
+    console.log("onSubmitClick, user:", user);
+    postUserCreateAPI(
+      user,
+      onAdminUserAddSuccess,
+      onAdminUserAddError,
+      onAdminUserAddDone,
+      onUnauthorized,
+    );
+  };
+
+  function onAdminUserAddSuccess(response) {
+    // For debugging purposes only.
+    console.log("onAdminUserAddSuccess: Starting...");
+    console.log(response);
+
+    // Add a temporary banner message in the app and then clear itself after 2 seconds.
+    setTopAlertMessage("User created");
+    setTopAlertStatus("success");
+    setTimeout(() => {
+      console.log("onAdminUserAddSuccess: Delayed for 2 seconds.");
+      console.log(
+        "onAdminUserAddSuccess: topAlertMessage, topAlertStatus:",
+        topAlertMessage,
+        topAlertStatus,
+      );
+      setTopAlertMessage("");
+    }, 2000);
+
+    if (orgName !== undefined && orgName !== null && orgName !== "") {
+      // Redirect the user to a new page.
+      setForceURL("/admin/store/" + orgID + "/users");
+    } else {
+      // Redirect the user to a new page.
+      setForceURL("/admin/user/" + response.id);
+    }
+  }
+
+  function onAdminUserAddError(apiErr) {
+    console.log("onAdminUserAddError: Starting...");
+    console.log("onAdminUserAddError: apiErr:", apiErr);
+    setErrors(apiErr);
+
+    // Add a temporary banner message in the app and then clear itself after 2 seconds.
+    setTopAlertMessage("Failed submitting");
+    setTopAlertStatus("danger");
+    setTimeout(() => {
+      // console.log("onAdminUserAddError: Delayed for 2 seconds.");
+      // console.log("onAdminUserAddError: topAlertMessage, topAlertStatus:", topAlertMessage, topAlertStatus);
+      setTopAlertMessage("");
+    }, 2000);
+
+    // The following code will cause the screen to scroll to the top of
+    // the page. Please see ``react-scroll`` for more information:
+    // https://github.com/fisshy/react-scroll
+    var scroll = Scroll.animateScroll;
+    scroll.scrollToTop();
+  }
+
+  function onAdminUserAddDone() {
+    console.log("onAdminUserAddDone: Starting...");
+    setFetching(false);
+  }
+
+  function onStoreOptionListSuccess(response) {
+    console.log("onStoreOptionListSuccess: Starting...");
+    if (response !== null) {
+      const selectOptions = [
+        { value: 0, label: "Please select" }, // Add empty options.
+        ...response,
+      ];
+      setStoreSelectOptions(selectOptions);
+    }
+  }
+
+  function onStoreOptionListError(apiErr) {
+    console.log("onStoreOptionListError: Starting...");
+    console.log("onStoreOptionListError: apiErr:", apiErr);
+    setErrors(apiErr);
+
+    // The following code will cause the screen to scroll to the top of
+    // the page. Please see ``react-scroll`` for more information:
+    // https://github.com/fisshy/react-scroll
+    var scroll = Scroll.animateScroll;
+    scroll.scrollToTop();
+  }
+
+  function onStoreOptionListDone() {
+    console.log("onStoreOptionListDone: Starting...");
+    setFetching(false);
+  }
+
+  // --- All --- //
+
+  const onUnauthorized = () => {
+    setForceURL("/login?unauthorized=true"); // If token expired or user is not logged in, redirect back to login.
+  };
+
+  ////
+  //// Misc.
+  ////
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (mounted) {
+      window.scrollTo(0, 0); // Start the page at the top of the page.
+      let params = new Map();
+      getStoreSelectOptionListAPI(
+        params,
+        onStoreOptionListSuccess,
+        onStoreOptionListError,
+        onStoreOptionListDone,
+        onUnauthorized,
+      );
+      setFetching(true);
     }
 
-    ////
-    //// API.
-    ////
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-    const onSubmitClick = (e) => {
-        console.log("onSubmitClick: Beginning...");
-        setFetching(true);
-        setErrors({});
-        const user = {
-            StoreID: storeID,
-            Role: role,
-            Status: 1, // 1 = UserActiveStatus
-            Email: email,
-            Phone: phone,
-            FirstName: firstName,
-            LastName: lastName,
-            CompanyName: companyName,
-            PostalCode: postalCode,
-            AddressLine1: addressLine1,
-            AddressLine2: addressLine2,
-            City: city,
-            Region: region,
-            Country: country,
-            AgreePromotionsEmail: agreePromotionsEmail,
-            HowDidYouHearAboutUs: howDidYouHearAboutUs,
-            HowDidYouHearAboutUsOther: howDidYouHearAboutUsOther,
-            HasShippingAddress: hasShippingAddress,
-            ShippingName: shippingName,
-            ShippingPhone: shippingPhone,
-            ShippingCountry: shippingCountry,
-            ShippingRegion: shippingRegion,
-            ShippingCity: shippingCity,
-            ShippingAddressLine1: shippingAddressLine1,
-            ShippingAddressLine2: shippingAddressLine2,
-            ShippingPostalCode: shippingPostalCode,
-        };
-        console.log("onSubmitClick, user:", user);
-        postUserCreateAPI(user, onAdminUserAddSuccess, onAdminUserAddError, onAdminUserAddDone, onUnauthorized);
-    }
+  ////
+  //// Component rendering.
+  ////
 
-    function onAdminUserAddSuccess(response){
-        // For debugging purposes only.
-        console.log("onAdminUserAddSuccess: Starting...");
-        console.log(response);
+  if (forceURL !== "") {
+    return <Navigate to={forceURL} />;
+  }
 
-        // Add a temporary banner message in the app and then clear itself after 2 seconds.
-        setTopAlertMessage("User created");
-        setTopAlertStatus("success");
-        setTimeout(() => {
-            console.log("onAdminUserAddSuccess: Delayed for 2 seconds.");
-            console.log("onAdminUserAddSuccess: topAlertMessage, topAlertStatus:", topAlertMessage, topAlertStatus);
-            setTopAlertMessage("");
-        }, 2000);
+  return (
+    <>
+      <div class="container">
+        <section class="section">
+          {/* Desktop Breadcrumbs */}
+          <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
+            {orgName !== undefined && orgName !== null && orgName !== "" ? (
+              <ul>
+                <li class="">
+                  <Link to="/admin/dashboard" aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faGauge} />
+                    &nbsp;Admin Dashboard
+                  </Link>
+                </li>
+                <li class="">
+                  <Link to="/admin/stores" aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faBuilding} />
+                    &nbsp;Stores
+                  </Link>
+                </li>
+                <li class="">
+                  <Link to={`/admin/store/${orgID}/users`} aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faEye} />
+                    &nbsp;Detail (Users)
+                  </Link>
+                </li>
+                <li class="is-active">
+                  <Link aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faPlus} />
+                    &nbsp;New User
+                  </Link>
+                </li>
+              </ul>
+            ) : (
+              <ul>
+                <li class="">
+                  <Link to="/admin/dashboard" aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faGauge} />
+                    &nbsp;Admin Dashboard
+                  </Link>
+                </li>
+                <li class="">
+                  <Link to="/admin/users" aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faUsers} />
+                    &nbsp;Users
+                  </Link>
+                </li>
+                <li class="is-active">
+                  <Link aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faPlus} />
+                    &nbsp;New
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </nav>
 
-        if (orgName !== undefined && orgName !== null && orgName !== "") {
-            // Redirect the user to a new page.
-            setForceURL("/admin/store/"+orgID+"/users");
-        } else {
-            // Redirect the user to a new page.
-            setForceURL("/admin/user/"+response.id);
-        }
-    }
+          {/* Mobile Breadcrumbs */}
+          <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
+            <ul>
+              {orgName !== undefined && orgName !== null && orgName !== "" ? (
+                <li class="">
+                  <Link to={`/admin/store/${orgID}/users`} aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faArrowLeft} />
+                    &nbsp;Back to Detail (Users)
+                  </Link>
+                </li>
+              ) : (
+                <li class="">
+                  <Link to={`/admin/users`} aria-current="page">
+                    <FontAwesomeIcon className="fas" icon={faArrowLeft} />
+                    &nbsp;Back to Users
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </nav>
 
-    function onAdminUserAddError(apiErr) {
-        console.log("onAdminUserAddError: Starting...");
-        console.log("onAdminUserAddError: apiErr:", apiErr);
-        setErrors(apiErr);
+          {/* Modals */}
+          {/* None */}
 
-        // Add a temporary banner message in the app and then clear itself after 2 seconds.
-        setTopAlertMessage("Failed submitting");
-        setTopAlertStatus("danger");
-        setTimeout(() => {
-            // console.log("onAdminUserAddError: Delayed for 2 seconds.");
-            // console.log("onAdminUserAddError: topAlertMessage, topAlertStatus:", topAlertMessage, topAlertStatus);
-            setTopAlertMessage("");
-        }, 2000);
+          {/* Page */}
+          <nav class="box">
+            <div class={`modal ${showCancelWarning ? "is-active" : ""}`}>
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">Are you sure?</p>
+                  <button
+                    class="delete"
+                    aria-label="close"
+                    onClick={(e) => setShowCancelWarning(false)}
+                  ></button>
+                </header>
+                <section class="modal-card-body">
+                  Your user record will be cancelled and your work will be lost.
+                  This cannot be undone. Do you want to continue?
+                </section>
+                <footer class="modal-card-foot">
+                  {orgName !== undefined &&
+                  orgName !== null &&
+                  orgName !== "" ? (
+                    <Link
+                      class="button is-medium is-success"
+                      to={`/admin/store/${orgID}/users`}
+                    >
+                      Yes
+                    </Link>
+                  ) : (
+                    <Link
+                      class="button is-medium is-success"
+                      to={`/admin/users`}
+                    >
+                      Yes
+                    </Link>
+                  )}
+                  <button
+                    class="button is-medium"
+                    onClick={(e) => setShowCancelWarning(false)}
+                  >
+                    No
+                  </button>
+                </footer>
+              </div>
+            </div>
 
-        // The following code will cause the screen to scroll to the top of
-        // the page. Please see ``react-scroll`` for more information:
-        // https://github.com/fisshy/react-scroll
-        var scroll = Scroll.animateScroll;
-        scroll.scrollToTop();
-    }
+            <p class="title is-4">
+              <FontAwesomeIcon className="fas" icon={faPlus} />
+              &nbsp;New User
+            </p>
+            <FormErrorBox errors={errors} />
 
-    function onAdminUserAddDone() {
-        console.log("onAdminUserAddDone: Starting...");
-        setFetching(false);
-    }
+            {/* <p class="pb-4 has-text-grey">Please fill out all the required fields before submitting this form.</p> */}
 
-    function onStoreOptionListSuccess(response){
-        console.log("onStoreOptionListSuccess: Starting...");
-        if (response !== null) {
-            const selectOptions = [
-                {"value": 0, "label": "Please select"}, // Add empty options.
-                ...response
-            ]
-            setStoreSelectOptions(selectOptions);
-        }
-    }
+            {isFetching ? (
+              <PageLoadingContent displayMessage={"Submitting..."} />
+            ) : (
+              <>
+                <div class="container">
+                  <p class="subtitle is-6">
+                    <FontAwesomeIcon className="fas" icon={faCogs} />
+                    &nbsp;Settings
+                  </p>
+                  <hr />
 
-    function onStoreOptionListError(apiErr) {
-        console.log("onStoreOptionListError: Starting...");
-        console.log("onStoreOptionListError: apiErr:", apiErr);
-        setErrors(apiErr);
+                  <FormSelectField
+                    label="Store ID"
+                    name="storeID"
+                    placeholder="Pick"
+                    selectedValue={storeID}
+                    errorText={errors && errors.storeID}
+                    helpText="Pick the store this user belongs to and will be limited by"
+                    isRequired={true}
+                    onChange={(e) => setStoreID(e.target.value)}
+                    options={storeSelectOptions}
+                    disabled={storeSelectOptions.length === 0}
+                  />
+                  <FormRadioField
+                    label="Role"
+                    name="role"
+                    value={role}
+                    opt1Value={2}
+                    opt1Label="Store Owner/Manager"
+                    opt2Value={3}
+                    opt2Label="Customer"
+                    errorText={errors && errors.role}
+                    onChange={(e) => setRole(parseInt(e.target.value))}
+                    maxWidth="180px"
+                  />
 
-        // The following code will cause the screen to scroll to the top of
-        // the page. Please see ``react-scroll`` for more information:
-        // https://github.com/fisshy/react-scroll
-        var scroll = Scroll.animateScroll;
-        scroll.scrollToTop();
-    }
+                  <p class="subtitle is-6">
+                    <FontAwesomeIcon className="fas" icon={faIdCard} />
+                    &nbsp;Full Name
+                  </p>
+                  <hr />
 
-    function onStoreOptionListDone() {
-        console.log("onStoreOptionListDone: Starting...");
-        setFetching(false);
-    }
+                  <FormInputField
+                    label="First Name"
+                    name="firstName"
+                    placeholder="Text input"
+                    value={firstName}
+                    errorText={errors && errors.firstName}
+                    helpText=""
+                    onChange={(e) => setFirstName(e.target.value)}
+                    isRequired={true}
+                    maxWidth="380px"
+                  />
 
-    // --- All --- //
+                  <FormInputField
+                    label="Last Name"
+                    name="lastName"
+                    placeholder="Text input"
+                    value={lastName}
+                    errorText={errors && errors.lastName}
+                    helpText=""
+                    onChange={(e) => setLastName(e.target.value)}
+                    isRequired={true}
+                    maxWidth="380px"
+                  />
 
-    const onUnauthorized = () => {
-        setForceURL("/login?unauthorized=true"); // If token expired or user is not logged in, redirect back to login.
-    }
+                  <p class="subtitle is-6">
+                    <FontAwesomeIcon className="fas" icon={faContactCard} />
+                    &nbsp;Contact Information
+                  </p>
+                  <hr />
 
-    ////
-    //// Misc.
-    ////
+                  <FormInputField
+                    label="Email"
+                    name="email"
+                    placeholder="Text input"
+                    value={email}
+                    errorText={errors && errors.email}
+                    helpText=""
+                    onChange={(e) => setEmail(e.target.value)}
+                    isRequired={true}
+                    maxWidth="380px"
+                  />
 
-    useEffect(() => {
-        let mounted = true;
+                  <FormInputField
+                    label="Phone"
+                    name="phone"
+                    placeholder="Text input"
+                    value={phone}
+                    errorText={errors && errors.phone}
+                    helpText=""
+                    onChange={(e) => setPhone(e.target.value)}
+                    isRequired={true}
+                    maxWidth="150px"
+                  />
 
-        if (mounted) {
-            window.scrollTo(0, 0);  // Start the page at the top of the page.
-            let params = new Map();
-            getStoreSelectOptionListAPI(
-                params,
-                onStoreOptionListSuccess,
-                onStoreOptionListError,
-                onStoreOptionListDone,
-                onUnauthorized
-            );
-            setFetching(true);
-        }
+                  <FormCheckboxField
+                    label="Has shipping address different then billing address"
+                    name="hasShippingAddress"
+                    checked={hasShippingAddress}
+                    errorText={errors && errors.hasShippingAddress}
+                    onChange={(e) => setHasShippingAddress(!hasShippingAddress)}
+                    maxWidth="180px"
+                  />
 
-        return () => { mounted = false; }
-    }, []);
+                  <div class="columns">
+                    <div class="column">
+                      <p class="subtitle is-6">
+                        {hasShippingAddress ? (
+                          <p class="subtitle is-6">Billing Address</p>
+                        ) : (
+                          <p class="subtitle is-6">Address</p>
+                        )}
+                      </p>
+                      <FormCountryField
+                        priorityOptions={["CA", "US", "MX"]}
+                        label="Country (Optional)"
+                        name="country"
+                        placeholder="Text input"
+                        selectedCountry={country}
+                        errorText={errors && errors.country}
+                        helpText=""
+                        onChange={(value) => setCountry(value)}
+                        isRequired={true}
+                        maxWidth="160px"
+                      />
 
-    ////
-    //// Component rendering.
-    ////
+                      <FormRegionField
+                        label="Province/Territory (Optional)"
+                        name="region"
+                        placeholder="Text input"
+                        selectedCountry={country}
+                        selectedRegion={region}
+                        errorText={errors && errors.region}
+                        helpText=""
+                        onChange={(value) => setRegion(value)}
+                        isRequired={true}
+                        maxWidth="280px"
+                      />
 
-    if (forceURL !== "") {
-        return <Navigate to={forceURL}  />
-    }
+                      <FormInputField
+                        label="City (Optional)"
+                        name="city"
+                        placeholder="Text input"
+                        value={city}
+                        errorText={errors && errors.city}
+                        helpText=""
+                        onChange={(e) => setCity(e.target.value)}
+                        isRequired={true}
+                        maxWidth="380px"
+                      />
 
-    return (
-        <>
-            <div class="container">
-                <section class="section">
-                    {/* Desktop Breadcrumbs */}
-                    <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
-                        {orgName !== undefined && orgName !== null && orgName !== ""
-                            ?
-                            <ul>
-                                <li class=""><Link to="/admin/dashboard" aria-current="page"><FontAwesomeIcon className="fas" icon={faGauge} />&nbsp;Admin Dashboard</Link></li>
-                                <li class=""><Link to="/admin/stores" aria-current="page"><FontAwesomeIcon className="fas" icon={faBuilding} />&nbsp;Stores</Link></li>
-                                <li class=""><Link to={`/admin/store/${orgID}/users`} aria-current="page"><FontAwesomeIcon className="fas" icon={faEye} />&nbsp;Detail (Users)</Link></li>
-                                <li class="is-active"><Link aria-current="page"><FontAwesomeIcon className="fas" icon={faPlus} />&nbsp;New User</Link></li>
-                            </ul>
-                            :
-                            <ul>
-                                <li class=""><Link to="/admin/dashboard" aria-current="page"><FontAwesomeIcon className="fas" icon={faGauge} />&nbsp;Admin Dashboard</Link></li>
-                                <li class=""><Link to="/admin/users" aria-current="page"><FontAwesomeIcon className="fas" icon={faUsers} />&nbsp;Users</Link></li>
-                                <li class="is-active"><Link aria-current="page"><FontAwesomeIcon className="fas" icon={faPlus} />&nbsp;New</Link></li>
-                            </ul>
-                        }
-                    </nav>
+                      <FormInputField
+                        label="Address Line 1 (Optional)"
+                        name="addressLine1"
+                        placeholder="Text input"
+                        value={addressLine1}
+                        errorText={errors && errors.addressLine1}
+                        helpText=""
+                        onChange={(e) => setAddressLine1(e.target.value)}
+                        isRequired={true}
+                        maxWidth="380px"
+                      />
 
-                    {/* Mobile Breadcrumbs */}
-                    <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
-                        <ul>
-                            {orgName !== undefined && orgName !== null && orgName !== ""
-                                ?
-                                <li class=""><Link to={`/admin/store/${orgID}/users`} aria-current="page"><FontAwesomeIcon className="fas" icon={faArrowLeft} />&nbsp;Back to Detail (Users)</Link></li>
-                                :
-                                <li class=""><Link to={`/admin/users`} aria-current="page"><FontAwesomeIcon className="fas" icon={faArrowLeft} />&nbsp;Back to Users</Link></li>
-                            }
-                        </ul>
-                    </nav>
+                      <FormInputField
+                        label="Address Line 2 (Optional)"
+                        name="addressLine2"
+                        placeholder="Text input"
+                        value={addressLine2}
+                        errorText={errors && errors.addressLine2}
+                        helpText=""
+                        onChange={(e) => setAddressLine2(e.target.value)}
+                        isRequired={true}
+                        maxWidth="380px"
+                      />
 
-                    {/* Modals */}
-                    {/* None */}
+                      <FormInputField
+                        label="Postal Code (Optional)"
+                        name="postalCode"
+                        placeholder="Text input"
+                        value={postalCode}
+                        errorText={errors && errors.postalCode}
+                        helpText=""
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        isRequired={true}
+                        maxWidth="80px"
+                      />
+                    </div>
+                    {hasShippingAddress && (
+                      <div class="column">
+                        <p class="subtitle is-6">Shipping Address</p>
 
-                    {/* Page */}
-                    <nav class="box">
-                        <div class={`modal ${showCancelWarning ? 'is-active' : ''}`}>
-                            <div class="modal-background"></div>
-                            <div class="modal-card">
-                                <header class="modal-card-head">
-                                    <p class="modal-card-title">Are you sure?</p>
-                                    <button class="delete" aria-label="close" onClick={(e)=>setShowCancelWarning(false)}></button>
-                                </header>
-                                <section class="modal-card-body">
-                                    Your user record will be cancelled and your work will be lost. This cannot be undone. Do you want to continue?
-                                </section>
-                                <footer class="modal-card-foot">
-                                    {orgName !== undefined && orgName !== null && orgName !== ""
-                                        ?
-                                        <Link class="button is-medium is-success" to={`/admin/store/${orgID}/users`}>Yes</Link>
-                                        :
-                                        <Link class="button is-medium is-success" to={`/admin/users`}>Yes</Link>
-                                    }
-                                    <button class="button is-medium" onClick={(e)=>setShowCancelWarning(false)}>No</button>
-                                </footer>
-                            </div>
-                        </div>
+                        <FormInputField
+                          label="Name (Optional)"
+                          name="shippingName"
+                          placeholder="Text input"
+                          value={shippingName}
+                          errorText={errors && errors.shippingName}
+                          helpText="The name to contact for this shipping address"
+                          onChange={(e) => setShippingName(e.target.value)}
+                          isRequired={true}
+                          maxWidth="350px"
+                        />
 
-                        <p class="title is-4"><FontAwesomeIcon className="fas" icon={faPlus} />&nbsp;New User</p>
-                        <FormErrorBox errors={errors} />
+                        <FormInputField
+                          label="Phone (Optional)"
+                          name="shippingPhone"
+                          placeholder="Text input"
+                          value={shippingPhone}
+                          errorText={errors && errors.shippingPhone}
+                          helpText="The contact phone number for this shipping address"
+                          onChange={(e) => setShippingPhone(e.target.value)}
+                          isRequired={true}
+                          maxWidth="150px"
+                        />
 
-                        {/* <p class="pb-4 has-text-grey">Please fill out all the required fields before submitting this form.</p> */}
+                        <FormCountryField
+                          priorityOptions={["CA", "US", "MX"]}
+                          label="Country (Optional)"
+                          name="shippingCountry"
+                          placeholder="Text input"
+                          selectedCountry={shippingCountry}
+                          errorText={errors && errors.shippingCountry}
+                          helpText=""
+                          onChange={(value) => setShippingCountry(value)}
+                          isRequired={true}
+                          maxWidth="160px"
+                        />
 
-                        {isFetching
-                            ?
-                            <PageLoadingContent displayMessage={"Submitting..."} />
-                            :
-                            <>
-                                <div class="container">
+                        <FormRegionField
+                          label="Province/Territory (Optional)"
+                          name="shippingRegion"
+                          placeholder="Text input"
+                          selectedCountry={shippingCountry}
+                          selectedRegion={shippingRegion}
+                          errorText={errors && errors.shippingRegion}
+                          helpText=""
+                          onChange={(value) => setShippingRegion(value)}
+                          isRequired={true}
+                          maxWidth="280px"
+                        />
 
-                                    <p class="subtitle is-6"><FontAwesomeIcon className="fas" icon={faCogs} />&nbsp;Settings</p>
-                                    <hr />
+                        <FormInputField
+                          label="City (Optional)"
+                          name="shippingCity"
+                          placeholder="Text input"
+                          value={shippingCity}
+                          errorText={errors && errors.shippingCity}
+                          helpText=""
+                          onChange={(e) => setShippingCity(e.target.value)}
+                          isRequired={true}
+                          maxWidth="380px"
+                        />
 
-                                    <FormSelectField
-                                        label="Store ID"
-                                        name="storeID"
-                                        placeholder="Pick"
-                                        selectedValue={storeID}
-                                        errorText={errors && errors.storeID}
-                                        helpText="Pick the store this user belongs to and will be limited by"
-                                        isRequired={true}
-                                        onChange={(e)=>setStoreID(e.target.value)}
-                                        options={storeSelectOptions}
-                                        disabled={storeSelectOptions.length === 0}
-                                    />
-                                    <FormRadioField
-                                        label="Role"
-                                        name="role"
-                                        value={role}
-                                        opt1Value={2}
-                                        opt1Label="Store Owner/Manager"
-                                        opt2Value={3}
-                                        opt2Label="Customer"
-                                        errorText={errors && errors.role}
-                                        onChange={(e)=>setRole(parseInt(e.target.value))}
-                                        maxWidth="180px"
-                                    />
+                        <FormInputField
+                          label="Address Line 1 (Optional)"
+                          name="shippingAddressLine1"
+                          placeholder="Text input"
+                          value={shippingAddressLine1}
+                          errorText={errors && errors.shippingAddressLine1}
+                          helpText=""
+                          onChange={(e) =>
+                            setShippingAddressLine1(e.target.value)
+                          }
+                          isRequired={true}
+                          maxWidth="380px"
+                        />
 
-                                    <p class="subtitle is-6"><FontAwesomeIcon className="fas" icon={faIdCard} />&nbsp;Full Name</p>
-                                    <hr />
+                        <FormInputField
+                          label="Address Line 2 (Optional)"
+                          name="shippingAddressLine2"
+                          placeholder="Text input"
+                          value={shippingAddressLine2}
+                          errorText={errors && errors.shippingAddressLine2}
+                          helpText=""
+                          onChange={(e) =>
+                            setShippingAddressLine2(e.target.value)
+                          }
+                          isRequired={true}
+                          maxWidth="380px"
+                        />
 
-                                    <FormInputField
-                                        label="First Name"
-                                        name="firstName"
-                                        placeholder="Text input"
-                                        value={firstName}
-                                        errorText={errors && errors.firstName}
-                                        helpText=""
-                                        onChange={(e)=>setFirstName(e.target.value)}
-                                        isRequired={true}
-                                        maxWidth="380px"
-                                    />
+                        <FormInputField
+                          label="Postal Code (Optional)"
+                          name="shippingPostalCode"
+                          placeholder="Text input"
+                          value={shippingPostalCode}
+                          errorText={errors && errors.shippingPostalCode}
+                          helpText=""
+                          onChange={(e) =>
+                            setShippingPostalCode(e.target.value)
+                          }
+                          isRequired={true}
+                          maxWidth="80px"
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                                    <FormInputField
-                                        label="Last Name"
-                                        name="lastName"
-                                        placeholder="Text input"
-                                        value={lastName}
-                                        errorText={errors && errors.lastName}
-                                        helpText=""
-                                        onChange={(e)=>setLastName(e.target.value)}
-                                        isRequired={true}
-                                        maxWidth="380px"
-                                    />
+                  <p class="subtitle is-6">
+                    <FontAwesomeIcon className="fas" icon={faChartPie} />
+                    &nbsp;Metrics
+                  </p>
+                  <hr />
 
-                                    <p class="subtitle is-6"><FontAwesomeIcon className="fas" icon={faContactCard} />&nbsp;Contact Information</p>
-                                    <hr />
+                  <FormSelectField
+                    label="How did you hear about us?"
+                    name="howDidYouHearAboutUs"
+                    placeholder="Pick"
+                    selectedValue={howDidYouHearAboutUs}
+                    errorText={errors && errors.howDidYouHearAboutUs}
+                    helpText=""
+                    onChange={(e) =>
+                      setHowDidYouHearAboutUs(parseInt(e.target.value))
+                    }
+                    options={HOW_DID_YOU_HEAR_ABOUT_US_WITH_EMPTY_OPTIONS}
+                  />
 
-                                    <FormInputField
-                                        label="Email"
-                                        name="email"
-                                        placeholder="Text input"
-                                        value={email}
-                                        errorText={errors && errors.email}
-                                        helpText=""
-                                        onChange={(e)=>setEmail(e.target.value)}
-                                        isRequired={true}
-                                        maxWidth="380px"
-                                    />
+                  {howDidYouHearAboutUs === 1 && (
+                    <FormInputField
+                      label="Other (Please specify):"
+                      name="howDidYouHearAboutUsOther"
+                      placeholder="Text input"
+                      value={howDidYouHearAboutUsOther}
+                      errorText={(e) =>
+                        setHowDidYouHearAboutUsOther(e.target.value)
+                      }
+                      helpText=""
+                      onChange={(e) =>
+                        setHowDidYouHearAboutUsOther(e.target.value)
+                      }
+                      isRequired={true}
+                      maxWidth="380px"
+                    />
+                  )}
 
-                                    <FormInputField
-                                        label="Phone"
-                                        name="phone"
-                                        placeholder="Text input"
-                                        value={phone}
-                                        errorText={errors && errors.phone}
-                                        helpText=""
-                                        onChange={(e)=>setPhone(e.target.value)}
-                                        isRequired={true}
-                                        maxWidth="150px"
-                                    />
+                  <FormCheckboxField
+                    label="I agree to receive electronic updates from my local retailer and CPS"
+                    name="agreePromotionsEmail"
+                    checked={agreePromotionsEmail}
+                    errorText={errors && errors.agreePromotionsEmail}
+                    onChange={onAgreePromotionsEmailChange}
+                    maxWidth="180px"
+                  />
 
-                                    <FormCheckboxField
-                                        label="Has shipping address different then billing address"
-                                        name="hasShippingAddress"
-                                        checked={hasShippingAddress}
-                                        errorText={errors && errors.hasShippingAddress}
-                                        onChange={(e)=>setHasShippingAddress(!hasShippingAddress)}
-                                        maxWidth="180px"
-                                    />
-
-                                    <div class="columns">
-                                        <div class="column">
-                                            <p class="subtitle is-6">
-                                            {hasShippingAddress
-                                                ? <p class="subtitle is-6">Billing Address</p>
-                                                : <p class="subtitle is-6">Address</p>
-                                            }
-                                            </p>
-                                            <FormCountryField
-                                                priorityOptions={["CA","US","MX"]}
-                                                label="Country (Optional)"
-                                                name="country"
-                                                placeholder="Text input"
-                                                selectedCountry={country}
-                                                errorText={errors && errors.country}
-                                                helpText=""
-                                                onChange={(value)=>setCountry(value)}
-                                                isRequired={true}
-                                                maxWidth="160px"
-                                            />
-
-                                            <FormRegionField
-                                                label="Province/Territory (Optional)"
-                                                name="region"
-                                                placeholder="Text input"
-                                                selectedCountry={country}
-                                                selectedRegion={region}
-                                                errorText={errors && errors.region}
-                                                helpText=""
-                                                onChange={(value)=>setRegion(value)}
-                                                isRequired={true}
-                                                maxWidth="280px"
-                                            />
-
-                                            <FormInputField
-                                                label="City (Optional)"
-                                                name="city"
-                                                placeholder="Text input"
-                                                value={city}
-                                                errorText={errors && errors.city}
-                                                helpText=""
-                                                onChange={(e)=>setCity(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="380px"
-                                            />
-
-                                            <FormInputField
-                                                label="Address Line 1 (Optional)"
-                                                name="addressLine1"
-                                                placeholder="Text input"
-                                                value={addressLine1}
-                                                errorText={errors && errors.addressLine1}
-                                                helpText=""
-                                                onChange={(e)=>setAddressLine1(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="380px"
-                                            />
-
-                                            <FormInputField
-                                                label="Address Line 2 (Optional)"
-                                                name="addressLine2"
-                                                placeholder="Text input"
-                                                value={addressLine2}
-                                                errorText={errors && errors.addressLine2}
-                                                helpText=""
-                                                onChange={(e)=>setAddressLine2(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="380px"
-                                            />
-
-                                            <FormInputField
-                                                label="Postal Code (Optional)"
-                                                name="postalCode"
-                                                placeholder="Text input"
-                                                value={postalCode}
-                                                errorText={errors && errors.postalCode}
-                                                helpText=""
-                                                onChange={(e)=>setPostalCode(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="80px"
-                                            />
-                                        </div>
-                                        {hasShippingAddress &&<div class="column">
-                                            <p class="subtitle is-6">Shipping Address</p>
-
-                                            <FormInputField
-                                                label="Name (Optional)"
-                                                name="shippingName"
-                                                placeholder="Text input"
-                                                value={shippingName}
-                                                errorText={errors && errors.shippingName}
-                                                helpText="The name to contact for this shipping address"
-                                                onChange={(e)=>setShippingName(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="350px"
-                                            />
-
-                                            <FormInputField
-                                                label="Phone (Optional)"
-                                                name="shippingPhone"
-                                                placeholder="Text input"
-                                                value={shippingPhone}
-                                                errorText={errors && errors.shippingPhone}
-                                                helpText="The contact phone number for this shipping address"
-                                                onChange={(e)=>setShippingPhone(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="150px"
-                                            />
-
-                                            <FormCountryField
-                                                priorityOptions={["CA","US","MX"]}
-                                                label="Country (Optional)"
-                                                name="shippingCountry"
-                                                placeholder="Text input"
-                                                selectedCountry={shippingCountry}
-                                                errorText={errors && errors.shippingCountry}
-                                                helpText=""
-                                                onChange={(value)=>setShippingCountry(value)}
-                                                isRequired={true}
-                                                maxWidth="160px"
-                                            />
-
-                                            <FormRegionField
-                                                label="Province/Territory (Optional)"
-                                                name="shippingRegion"
-                                                placeholder="Text input"
-                                                selectedCountry={shippingCountry}
-                                                selectedRegion={shippingRegion}
-                                                errorText={errors && errors.shippingRegion}
-                                                helpText=""
-                                                onChange={(value)=>setShippingRegion(value)}
-                                                isRequired={true}
-                                                maxWidth="280px"
-                                            />
-
-                                            <FormInputField
-                                                label="City (Optional)"
-                                                name="shippingCity"
-                                                placeholder="Text input"
-                                                value={shippingCity}
-                                                errorText={errors && errors.shippingCity}
-                                                helpText=""
-                                                onChange={(e)=>setShippingCity(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="380px"
-                                            />
-
-                                            <FormInputField
-                                                label="Address Line 1 (Optional)"
-                                                name="shippingAddressLine1"
-                                                placeholder="Text input"
-                                                value={shippingAddressLine1}
-                                                errorText={errors && errors.shippingAddressLine1}
-                                                helpText=""
-                                                onChange={(e)=>setShippingAddressLine1(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="380px"
-                                            />
-
-                                            <FormInputField
-                                                label="Address Line 2 (Optional)"
-                                                name="shippingAddressLine2"
-                                                placeholder="Text input"
-                                                value={shippingAddressLine2}
-                                                errorText={errors && errors.shippingAddressLine2}
-                                                helpText=""
-                                                onChange={(e)=>setShippingAddressLine2(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="380px"
-                                            />
-
-                                            <FormInputField
-                                                label="Postal Code (Optional)"
-                                                name="shippingPostalCode"
-                                                placeholder="Text input"
-                                                value={shippingPostalCode}
-                                                errorText={errors && errors.shippingPostalCode}
-                                                helpText=""
-                                                onChange={(e)=>setShippingPostalCode(e.target.value)}
-                                                isRequired={true}
-                                                maxWidth="80px"
-                                            />
-
-                                        </div>}
-                                    </div>
-
-                                    <p class="subtitle is-6"><FontAwesomeIcon className="fas" icon={faChartPie} />&nbsp;Metrics</p>
-                                    <hr />
-
-                                    <FormSelectField
-                                        label="How did you hear about us?"
-                                        name="howDidYouHearAboutUs"
-                                        placeholder="Pick"
-                                        selectedValue={howDidYouHearAboutUs}
-                                        errorText={errors && errors.howDidYouHearAboutUs}
-                                        helpText=""
-                                        onChange={(e)=>setHowDidYouHearAboutUs(parseInt(e.target.value))}
-                                        options={HOW_DID_YOU_HEAR_ABOUT_US_WITH_EMPTY_OPTIONS}
-                                    />
-
-                                    {howDidYouHearAboutUs === 1 && <FormInputField
-                                        label="Other (Please specify):"
-                                        name="howDidYouHearAboutUsOther"
-                                        placeholder="Text input"
-                                        value={howDidYouHearAboutUsOther}
-                                        errorText={(e)=>setHowDidYouHearAboutUsOther(e.target.value)}
-                                        helpText=""
-                                        onChange={(e)=>setHowDidYouHearAboutUsOther(e.target.value)}
-                                        isRequired={true}
-                                        maxWidth="380px"
-                                    />}
-
-                                    <FormCheckboxField
-                                        label="I agree to receive electronic updates from my local retailer and CPS"
-                                        name="agreePromotionsEmail"
-                                        checked={agreePromotionsEmail}
-                                        errorText={errors && errors.agreePromotionsEmail}
-                                        onChange={onAgreePromotionsEmailChange}
-                                        maxWidth="180px"
-                                    />
-
-                                    {/*
+                  {/*
                                     <p class="subtitle is-6"><FontAwesomeIcon className="fas" icon={faCog} />&nbsp;Settings</p>
                                     <hr />
                                     */}
 
-                                    <div class="columns pt-5">
-                                        <div class="column is-half">
-                                            <button class="button is-medium is-hidden-touch" onClick={(e)=>setShowCancelWarning(true)}><FontAwesomeIcon className="fas" icon={faTimesCircle} />&nbsp;Cancel</button>
-                                            <button class="button is-medium is-fullwidth is-hidden-desktop" onClick={(e)=>setShowCancelWarning(true)}><FontAwesomeIcon className="fas" icon={faTimesCircle} />&nbsp;Cancel</button>
-                                        </div>
-                                        <div class="column is-half has-text-right">
-                                            <button class="button is-medium is-primary is-hidden-touch" onClick={onSubmitClick}><FontAwesomeIcon className="fas" icon={faCheckCircle} />&nbsp;Save</button>
-                                            <button class="button is-medium is-primary is-fullwidth is-hidden-desktop" onClick={onSubmitClick}><FontAwesomeIcon className="fas" icon={faCheckCircle} />&nbsp;Save</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </>
-                        }
-                    </nav>
-                </section>
-            </div>
-        </>
-    );
+                  <div class="columns pt-5">
+                    <div class="column is-half">
+                      <button
+                        class="button is-medium is-hidden-touch"
+                        onClick={(e) => setShowCancelWarning(true)}
+                      >
+                        <FontAwesomeIcon className="fas" icon={faTimesCircle} />
+                        &nbsp;Cancel
+                      </button>
+                      <button
+                        class="button is-medium is-fullwidth is-hidden-desktop"
+                        onClick={(e) => setShowCancelWarning(true)}
+                      >
+                        <FontAwesomeIcon className="fas" icon={faTimesCircle} />
+                        &nbsp;Cancel
+                      </button>
+                    </div>
+                    <div class="column is-half has-text-right">
+                      <button
+                        class="button is-medium is-primary is-hidden-touch"
+                        onClick={onSubmitClick}
+                      >
+                        <FontAwesomeIcon className="fas" icon={faCheckCircle} />
+                        &nbsp;Save
+                      </button>
+                      <button
+                        class="button is-medium is-primary is-fullwidth is-hidden-desktop"
+                        onClick={onSubmitClick}
+                      >
+                        <FontAwesomeIcon className="fas" icon={faCheckCircle} />
+                        &nbsp;Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </nav>
+        </section>
+      </div>
+    </>
+  );
 }
 
 export default AdminUserAdd;

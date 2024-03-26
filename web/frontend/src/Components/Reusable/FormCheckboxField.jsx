@@ -1,5 +1,5 @@
 import React from "react";
-import { startCase } from 'lodash';
+import { startCase } from "lodash";
 
 /*
 #################
@@ -86,54 +86,56 @@ return (
 */
 
 function FormCheckboxField({
-    label,          // The text to display the user.
-    name,           // The element HTML name.
-    checked,        // The value to use for option.
-    errorText,      // The error message to display
-    wasValidated,   // Boolean indicates if this element was successfully validated or not.
-    helpText,       // The special help task to include.
-    onChange,       // The function to call when a selection occurs.
-    disabled,
-    paddingBottom = "pb-4"
+  label, // The text to display the user.
+  name, // The element HTML name.
+  checked, // The value to use for option.
+  errorText, // The error message to display
+  wasValidated, // Boolean indicates if this element was successfully validated or not.
+  helpText, // The special help task to include.
+  onChange, // The function to call when a selection occurs.
+  disabled,
+  paddingBottom = "pb-4",
 }) {
-    return (
-        <div class={`field ${paddingBottom}`}>
-
-            <div class="control">
-
-                <label class="label checkbox">
-                    <input type="checkbox"
-                        checked={checked}
-                        name={name}
-                        disabled={disabled}
-                        onChange={onChange} />&nbsp;
-                    {errorText
-                        ? <span style={{ color: "#f14668" }} >{label}</span>
-                        : <>
-                            {disabled
-                            ?
-                            <>
-                                <span class="has-text-black">&nbsp;{label}</span>
-                            </>
-                            :
-                            <>
-                                {/* Non-disabled GUI */}
-                                <span style={wasValidated
-                                ? { color: "#48c78e" }
-                                : { color: "#363636" }}>&nbsp;<strong>{label}</strong></span>
-                            </>}
-
-                        </>
+  return (
+    <div class={`field ${paddingBottom}`}>
+      <div class="control">
+        <label class="label checkbox">
+          <input
+            type="checkbox"
+            checked={checked}
+            name={name}
+            disabled={disabled}
+            onChange={onChange}
+          />
+          &nbsp;
+          {errorText ? (
+            <span style={{ color: "#f14668" }}>{label}</span>
+          ) : (
+            <>
+              {disabled ? (
+                <>
+                  <span class="has-text-black">&nbsp;{label}</span>
+                </>
+              ) : (
+                <>
+                  {/* Non-disabled GUI */}
+                  <span
+                    style={
+                      wasValidated ? { color: "#48c78e" } : { color: "#363636" }
                     }
-                </label>
-
-            </div>
-            {errorText &&
-                <p class="help is-danger">{errorText}</p>
-            }
-            <p class="help">{helpText}</p>
-        </div>
-    );
+                  >
+                    &nbsp;<strong>{label}</strong>
+                  </span>
+                </>
+              )}
+            </>
+          )}
+        </label>
+      </div>
+      {errorText && <p class="help is-danger">{errorText}</p>}
+      <p class="help">{helpText}</p>
+    </div>
+  );
 }
 
 export default FormCheckboxField;

@@ -1,33 +1,50 @@
 import getCustomAxios from "../Helpers/customAxios";
-import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
+import { camelizeKeys, decamelizeKeys, decamelize } from "humps";
 import { DateTime } from "luxon";
 
 import {
-    CPS_CREDIT_CREATE_STRIPE_CHECKOUT_SESSION_FOR_COMIC_SUBMISSION_API_ENDPOINT,
-    CPS_CREDIT_COMPLETE_STRIPE_CHECKOUT_SESSION_API_ENDPOINT,
-    CPS_CREDIT_PAYMENT_PROCESSOR_STRIPE_INVOICES_API_ENDPOINT,
-    CPS_CREDIT_PAYMENT_PROCESSOR_SEND_SUBSCRIPTION_REQUEST_EMAIL_API_ENDPOINT
+  CPS_CREDIT_CREATE_STRIPE_CHECKOUT_SESSION_FOR_COMIC_SUBMISSION_API_ENDPOINT,
+  CPS_CREDIT_COMPLETE_STRIPE_CHECKOUT_SESSION_API_ENDPOINT,
+  CPS_CREDIT_PAYMENT_PROCESSOR_STRIPE_INVOICES_API_ENDPOINT,
+  CPS_CREDIT_PAYMENT_PROCESSOR_SEND_SUBSCRIPTION_REQUEST_EMAIL_API_ENDPOINT,
 } from "../Constants/API";
 
+export function postCreateStripeCheckoutSessionURLForComicSubmissionAPI(
+  comicSubmissionID,
+  onSuccessCallback,
+  onErrorCallback,
+  onDoneCallback,
+) {
+  const axios = getCustomAxios();
+  const postData = {};
 
-export function postCreateStripeCheckoutSessionURLForComicSubmissionAPI(comicSubmissionID, onSuccessCallback, onErrorCallback, onDoneCallback) {
-    const axios = getCustomAxios();
-    const postData = {};
+  axios
+    .post(
+      CPS_CREDIT_CREATE_STRIPE_CHECKOUT_SESSION_FOR_COMIC_SUBMISSION_API_ENDPOINT.replace(
+        "{id}",
+        comicSubmissionID,
+      ),
+      postData,
+    )
+    .then((successResponse) => {
+      const responseData = successResponse.data;
 
-    axios.post(CPS_CREDIT_CREATE_STRIPE_CHECKOUT_SESSION_FOR_COMIC_SUBMISSION_API_ENDPOINT.replace("{id}", comicSubmissionID), postData).then((successResponse) => {
-        const responseData = successResponse.data;
+      console.log(
+        "postCreateStripeCheckoutSessionURLForComicSubmissionAPI | response:",
+        responseData,
+      );
 
-        console.log("postCreateStripeCheckoutSessionURLForComicSubmissionAPI | response:", responseData );
+      // Snake-case from API to camel-case for React.
+      const data = camelizeKeys(responseData);
 
-        // Snake-case from API to camel-case for React.
-        const data = camelizeKeys(responseData);
-
-        // Return the callback data.
-        onSuccessCallback(data);
-    }).catch( (exception) => {
-        let errors = camelizeKeys(exception);
-        onErrorCallback(errors);
-    }).then(onDoneCallback);
+      // Return the callback data.
+      onSuccessCallback(data);
+    })
+    .catch((exception) => {
+      let errors = camelizeKeys(exception);
+      onErrorCallback(errors);
+    })
+    .then(onDoneCallback);
 }
 
 // export function getCompleteStripeSubscriptionCheckoutSessionAPI(sessionID, onSuccessCallback, onErrorCallback, onDoneCallback) {

@@ -224,8 +224,10 @@ function Login() {
                       <nav className="level">
                         <div className="level-item has-text-centered">
                           <figure className="image">
-                              <img src='/static/CPS logo 2023 GR.webp' style={{width:"256px"}} />
-
+                            <img
+                              src="/static/CPS logo 2023 GR.webp"
+                              style={{ width: "256px" }}
+                            />
                           </figure>
                         </div>
                       </nav>
@@ -324,19 +326,35 @@ function Login() {
                           </div>
                         </div>
                         <div class="level-item has-text-centered">
-                            <div>
-                                <Link to="/register" className="is-size-7-tablet">Create an Account</Link>
-                            </div>
+                          <div>
+                            <Link to="/register" className="is-size-7-tablet">
+                              Create an Account
+                            </Link>
+                          </div>
                         </div>
                       </nav>
                     </div>
                     {/* End box */}
 
                     <div className="has-text-centered">
-                        <p>Need help?</p>
-                        <p><Link to="Support@cpscapsule.com">Support@cpscapsule.com</Link></p>
-                        <p><a href="tel:+15199142685">(519) 914-2685</a></p>
-                        <p><Link to="/cpsrn-registry" className="">CPSRN Registry&nbsp;<FontAwesomeIcon className="fas" icon={faArrowRight} /></Link></p>
+                      <p>Need help?</p>
+                      <p>
+                        <Link to="Support@cpscapsule.com">
+                          Support@cpscapsule.com
+                        </Link>
+                      </p>
+                      <p>
+                        <a href="tel:+15199142685">(519) 914-2685</a>
+                      </p>
+                      <p>
+                        <Link to="/cpsrn-registry" className="">
+                          CPSRN Registry&nbsp;
+                          <FontAwesomeIcon
+                            className="fas"
+                            icon={faArrowRight}
+                          />
+                        </Link>
+                      </p>
                     </div>
                     {/* End suppoert text. */}
                   </div>

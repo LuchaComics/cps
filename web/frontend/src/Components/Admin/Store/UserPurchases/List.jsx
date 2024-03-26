@@ -3,22 +3,22 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faBuilding,
-    faShoppingCart,
-    faArrowLeft,
-    faUsers,
-    faEye,
-    faPencil,
-    faTrashCan,
-    faPlus,
-    faGauge,
-    faArrowRight,
-    faTable,
-    faArrowUpRightFromSquare,
-    faRefresh,
-    faFilter,
-    faSearch,
-    faFilterCircleXmark
+  faBuilding,
+  faShoppingCart,
+  faArrowLeft,
+  faUsers,
+  faEye,
+  faPencil,
+  faTrashCan,
+  faPlus,
+  faGauge,
+  faArrowRight,
+  faTable,
+  faArrowUpRightFromSquare,
+  faRefresh,
+  faFilter,
+  faSearch,
+  faFilterCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 
@@ -37,255 +37,297 @@ import {
 import PageLoadingContent from "../../../Reusable/PageLoadingContent";
 import FormSelectField from "../../../Reusable/FormSelectField";
 import FormInputFieldWithButton from "../../../Reusable/FormInputFieldWithButton";
-import { PAGE_SIZE_OPTIONS, OFFER_STATUS_OPTIONS } from "../../../../Constants/FieldOptions";
+import {
+  PAGE_SIZE_OPTIONS,
+  OFFER_STATUS_OPTIONS,
+} from "../../../../Constants/FieldOptions";
 import AdminStorePurchaseListDesktop from "./ListDesktop";
 import AdminStorePurchaseListMobile from "./ListMobile";
 
-
 function AdminStoreDetailForPurchaseList() {
-    ////
-    //// URL Parameters.
-    ////
+  ////
+  //// URL Parameters.
+  ////
 
-    const { id } = useParams()
+  const { id } = useParams();
 
-    ////
-    //// Global state.
-    ////
+  ////
+  //// Global state.
+  ////
 
-    const [topAlertMessage, setTopAlertMessage] = useRecoilState(topAlertMessageState);
-    const [topAlertStatus, setTopAlertStatus] = useRecoilState(topAlertStatusState);
-    const [currentUser] = useRecoilState(currentUserState);
-    const [showFilter, setShowFilter] = useRecoilState(offersFilterShowState);  // Filtering + Searching
-    const [temporarySearchText, setTemporarySearchText] = useRecoilState(offersFilterTemporarySearchTextState);  // Searching - The search field value as your writes their query.
-    const [actualSearchText, setActualSearchText] = useRecoilState(offersFilterActualSearchTextState); // Searching - The actual search query value to submit to the API.
-    const [status, setStatus] = useRecoilState(offersFilterStatusState);
+  const [topAlertMessage, setTopAlertMessage] =
+    useRecoilState(topAlertMessageState);
+  const [topAlertStatus, setTopAlertStatus] =
+    useRecoilState(topAlertStatusState);
+  const [currentUser] = useRecoilState(currentUserState);
+  const [showFilter, setShowFilter] = useRecoilState(offersFilterShowState); // Filtering + Searching
+  const [temporarySearchText, setTemporarySearchText] = useRecoilState(
+    offersFilterTemporarySearchTextState,
+  ); // Searching - The search field value as your writes their query.
+  const [actualSearchText, setActualSearchText] = useRecoilState(
+    offersFilterActualSearchTextState,
+  ); // Searching - The actual search query value to submit to the API.
+  const [status, setStatus] = useRecoilState(offersFilterStatusState);
 
-    ////
-    //// Component states.
-    ////
+  ////
+  //// Component states.
+  ////
 
-    const [errors, setErrors] = useState({});
-    const [forceURL, setForceURL] = useState("");
-    const [listData, setListData] = useState("");
-    const [isFetching, setFetching] = useState(false);
-    const [pageSize, setPageSize] = useState(10); // Pagination
-    const [previousCursors, setPreviousCursors] = useState([]); // Pagination
-    const [nextCursor, setNextCursor] = useState(""); // Pagination
-    const [currentCursor, setCurrentCursor] = useState(""); // Pagination
-    const [sortField, setSortField] = useState("created_at"); // Sorting
-    const [store, setStore] = useState({});
+  const [errors, setErrors] = useState({});
+  const [forceURL, setForceURL] = useState("");
+  const [listData, setListData] = useState("");
+  const [isFetching, setFetching] = useState(false);
+  const [pageSize, setPageSize] = useState(10); // Pagination
+  const [previousCursors, setPreviousCursors] = useState([]); // Pagination
+  const [nextCursor, setNextCursor] = useState(""); // Pagination
+  const [currentCursor, setCurrentCursor] = useState(""); // Pagination
+  const [sortField, setSortField] = useState("created_at"); // Sorting
+  const [store, setStore] = useState({});
 
-    ////
-    //// API.
-    ////
+  ////
+  //// API.
+  ////
 
-    function onUserPurchaseListSuccess(response) {
-        console.log("onUserPurchaseListSuccess: Starting...");
-        if (response.results !== null) {
-          setListData(response);
-          if (response.hasNextPage) {
-            setNextCursor(response.nextCursor); // For pagination purposes.
-          }
-        } else {
-          setListData([]);
-          setNextCursor("");
-        }
+  function onUserPurchaseListSuccess(response) {
+    console.log("onUserPurchaseListSuccess: Starting...");
+    if (response.results !== null) {
+      setListData(response);
+      if (response.hasNextPage) {
+        setNextCursor(response.nextCursor); // For pagination purposes.
+      }
+    } else {
+      setListData([]);
+      setNextCursor("");
+    }
+  }
+
+  function onUserPurchaseListError(apiErr) {
+    console.log("onUserPurchaseListError: Starting...");
+    setErrors(apiErr);
+
+    // The following code will cause the screen to scroll to the top of
+    // the page. Please see ``react-scroll`` for more information:
+    // https://github.com/fisshy/react-scroll
+    var scroll = Scroll.animateScroll;
+    scroll.scrollToTop();
+  }
+
+  function onUserPurchaseListDone() {
+    console.log("onUserPurchaseListDone: Starting...");
+    setFetching(false);
+  }
+
+  function onUserPurchaseListDone() {
+    console.log("onUserPurchaseListDone: Starting...");
+    setFetching(false);
+  }
+
+  function onStoreDetailSuccess(response) {
+    console.log("onStoreDetailSuccess: Starting...");
+    setStore(response);
+  }
+
+  function onStoreDetailError(apiErr) {
+    console.log("onStoreDetailError: Starting...");
+    setErrors(apiErr);
+
+    // The following code will cause the screen to scroll to the top of
+    // the page. Please see ``react-scroll`` for more information:
+    // https://github.com/fisshy/react-scroll
+    var scroll = Scroll.animateScroll;
+    scroll.scrollToTop();
+  }
+
+  function onStoreDetailDone() {
+    console.log("onStoreDetailDone: Starting...");
+    setFetching(false);
+  }
+
+  // --- All --- //
+
+  const onUnauthorized = () => {
+    setForceURL("/login?unauthorized=true"); // If token expired or user is not logged in, redirect back to login.
+  };
+
+  ////
+  //// Event handling.
+  ////
+
+  const fetchList = (cur, limit, keywords, status, sid) => {
+    setFetching(true);
+    setErrors({});
+
+    let params = new Map();
+    params.set("page_size", limit); // Pagination
+    params.set("sort_field", "created_at"); // Sorting
+    params.set("sort_order", -1); // Sorting - descending, meaning most recent start date to oldest start date.
+    params.set("status", status);
+
+    params.set("store_id", sid);
+
+    if (cur !== "") {
+      // Pagination
+      params.set("cursor", cur);
     }
 
-    function onUserPurchaseListError(apiErr) {
-        console.log("onUserPurchaseListError: Starting...");
-        setErrors(apiErr);
-
-        // The following code will cause the screen to scroll to the top of
-        // the page. Please see ``react-scroll`` for more information:
-        // https://github.com/fisshy/react-scroll
-        var scroll = Scroll.animateScroll;
-        scroll.scrollToTop();
+    // Filtering
+    if (keywords !== undefined && keywords !== null && keywords !== "") {
+      // Searhcing
+      params.set("search", keywords);
     }
 
-    function onUserPurchaseListDone() {
-        console.log("onUserPurchaseListDone: Starting...");
-        setFetching(false);
+    getUserPurchaseListAPI(
+      params,
+      onUserPurchaseListSuccess,
+      onUserPurchaseListError,
+      onUserPurchaseListDone,
+    );
+  };
+
+  const onNextClicked = (e) => {
+    console.log("onNextClicked");
+    let arr = [...previousCursors];
+    arr.push(currentCursor);
+    setPreviousCursors(arr);
+    setCurrentCursor(nextCursor);
+  };
+
+  const onPreviousClicked = (e) => {
+    console.log("onPreviousClicked");
+    let arr = [...previousCursors];
+    const previousCursor = arr.pop();
+    setPreviousCursors(arr);
+    setCurrentCursor(previousCursor);
+  };
+
+  const onSearchButtonClick = (e) => {
+    // Searching
+    console.log("Search button clicked...");
+    setActualSearchText(temporarySearchText);
+  };
+
+  // Function resets the filter state to its default state.
+  const onClearFilterClick = (e) => {
+    setShowFilter(false);
+    setActualSearchText("");
+    setTemporarySearchText("");
+    setStatus(2); // 1=Pending, 2=Active, 3=Archived
+  };
+
+  ////
+  //// Misc.
+  ////
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (mounted) {
+      window.scrollTo(0, 0); // Start the page at the top of the page.
+
+      fetchList(currentCursor, pageSize, actualSearchText, status, id);
+
+      getStoreDetailAPI(
+        id,
+        onStoreDetailSuccess,
+        onStoreDetailError,
+        onStoreDetailDone,
+        onUnauthorized,
+      );
     }
 
-    function onUserPurchaseListDone() {
-        console.log("onUserPurchaseListDone: Starting...");
-        setFetching(false);
-    }
-
-    function onStoreDetailSuccess(response){
-        console.log("onStoreDetailSuccess: Starting...");
-        setStore(response);
-    }
-
-    function onStoreDetailError(apiErr) {
-        console.log("onStoreDetailError: Starting...");
-        setErrors(apiErr);
-
-        // The following code will cause the screen to scroll to the top of
-        // the page. Please see ``react-scroll`` for more information:
-        // https://github.com/fisshy/react-scroll
-        var scroll = Scroll.animateScroll;
-        scroll.scrollToTop();
-    }
-
-    function onStoreDetailDone() {
-        console.log("onStoreDetailDone: Starting...");
-        setFetching(false);
-    }
-
-    // --- All --- //
-
-    const onUnauthorized = () => {
-        setForceURL("/login?unauthorized=true"); // If token expired or user is not logged in, redirect back to login.
-    }
-
-    ////
-    //// Event handling.
-    ////
-
-    const fetchList = (cur, limit, keywords, status, sid) => {
-        setFetching(true);
-        setErrors({});
-
-        let params = new Map();
-        params.set("page_size", limit); // Pagination
-        params.set("sort_field", "created_at"); // Sorting
-        params.set("sort_order", -1);         // Sorting - descending, meaning most recent start date to oldest start date.
-        params.set("status", status);
-
-        params.set("store_id", sid);
-
-        if (cur !== "") {
-          // Pagination
-          params.set("cursor", cur);
-        }
-
-        // Filtering
-        if (keywords !== undefined && keywords !== null && keywords !== "") {
-          // Searhcing
-          params.set("search", keywords);
-        }
-
-        getUserPurchaseListAPI(
-            params,
-            onUserPurchaseListSuccess,
-            onUserPurchaseListError,
-            onUserPurchaseListDone
-        );
+    return () => {
+      mounted = false;
     };
+  }, [currentCursor, pageSize, actualSearchText, status, id]);
 
-    const onNextClicked = (e) => {
-        console.log("onNextClicked");
-        let arr = [...previousCursors];
-        arr.push(currentCursor);
-        setPreviousCursors(arr);
-        setCurrentCursor(nextCursor);
-    };
+  ////
+  //// Component rendering.
+  ////
 
-    const onPreviousClicked = (e) => {
-        console.log("onPreviousClicked");
-        let arr = [...previousCursors];
-        const previousCursor = arr.pop();
-        setPreviousCursors(arr);
-        setCurrentCursor(previousCursor);
-    };
+  if (forceURL !== "") {
+    return <Navigate to={forceURL} />;
+  }
 
-    const onSearchButtonClick = (e) => {
-        // Searching
-        console.log("Search button clicked...");
-        setActualSearchText(temporarySearchText);
-    };
+  return (
+    <>
+      <div className="container">
+        <section className="section">
+          {/* Desktop Breadcrumbs */}
+          <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
+            <ul>
+              <li class="">
+                <Link to="/admin/dashboard" aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faGauge} />
+                  &nbsp;Admin Dashboard
+                </Link>
+              </li>
+              <li class="">
+                <Link to="/admin/stores" aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faBuilding} />
+                  &nbsp;Stores
+                </Link>
+              </li>
+              <li class="is-active">
+                <Link aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faEye} />
+                  &nbsp;Detail (Purchases)
+                </Link>
+              </li>
+            </ul>
+          </nav>
 
-    // Function resets the filter state to its default state.
-    const onClearFilterClick = (e) => {
-        setShowFilter(false);
-        setActualSearchText("");
-        setTemporarySearchText("");
-        setStatus(2); // 1=Pending, 2=Active, 3=Archived
-    }
+          {/* Mobile Breadcrumbs */}
+          <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
+            <ul>
+              <li class="">
+                <Link to={`/store`} aria-current="page">
+                  <FontAwesomeIcon className="fas" icon={faArrowLeft} />
+                  &nbsp;Back to Store
+                </Link>
+              </li>
+            </ul>
+          </nav>
 
-    ////
-    //// Misc.
-    ////
-
-    useEffect(() => {
-        let mounted = true;
-
-        if (mounted) {
-            window.scrollTo(0, 0); // Start the page at the top of the page.
-
-            fetchList(currentCursor, pageSize, actualSearchText, status, id);
-
-            getStoreDetailAPI(
-                id,
-                onStoreDetailSuccess,
-                onStoreDetailError,
-                onStoreDetailDone,
-                onUnauthorized
-            );
-        }
-
-        return () => {
-            mounted = false;
-        };
-    }, [currentCursor, pageSize, actualSearchText, status, id]);
-
-    ////
-    //// Component rendering.
-    ////
-
-    if (forceURL !== "") {
-        return <Navigate to={forceURL}  />
-    }
-
-    return (
-        <>
-          <div className="container">
-            <section className="section">
-
-             {/* Desktop Breadcrumbs */}
-             <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
-                 <ul>
-                     <li class=""><Link to="/admin/dashboard" aria-current="page"><FontAwesomeIcon className="fas" icon={faGauge} />&nbsp;Admin Dashboard</Link></li>
-                     <li class=""><Link to="/admin/stores" aria-current="page"><FontAwesomeIcon className="fas" icon={faBuilding} />&nbsp;Stores</Link></li>
-                     <li class="is-active"><Link aria-current="page"><FontAwesomeIcon className="fas" icon={faEye} />&nbsp;Detail (Purchases)</Link></li>
-                 </ul>
-             </nav>
-
-             {/* Mobile Breadcrumbs */}
-             <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
-                 <ul>
-                     <li class=""><Link to={`/store`} aria-current="page"><FontAwesomeIcon className="fas" icon={faArrowLeft} />&nbsp;Back to Store</Link></li>
-                 </ul>
-             </nav>
-
-              {/* Page */}
-              <nav className="box">
-
-                <div className="columns">
-                  <div className="column">
-                    <h1 className="title is-4">
-                      <FontAwesomeIcon className="fas" icon={faBuilding} />
-                      &nbsp;Store
-                    </h1>
-                  </div>
-                  <div className="column has-text-right">
-                      <button onClick={()=>fetchList(currentCursor, pageSize, actualSearchText, status, id)} class="is-fullwidth-mobile button is-link is-small" type="button">
-                          <FontAwesomeIcon className="mdi" icon={faRefresh} />&nbsp;<span class="is-hidden-desktop is-hidden-tablet">&nbsp;Refresh</span>
-                      </button>
-                      {/*
+          {/* Page */}
+          <nav className="box">
+            <div className="columns">
+              <div className="column">
+                <h1 className="title is-4">
+                  <FontAwesomeIcon className="fas" icon={faBuilding} />
+                  &nbsp;Store
+                </h1>
+              </div>
+              <div className="column has-text-right">
+                <button
+                  onClick={() =>
+                    fetchList(
+                      currentCursor,
+                      pageSize,
+                      actualSearchText,
+                      status,
+                      id,
+                    )
+                  }
+                  class="is-fullwidth-mobile button is-link is-small"
+                  type="button"
+                >
+                  <FontAwesomeIcon className="mdi" icon={faRefresh} />
+                  &nbsp;
+                  <span class="is-hidden-desktop is-hidden-tablet">
+                    &nbsp;Refresh
+                  </span>
+                </button>
+                {/*
                       &nbsp;
                       <button onClick={(e)=>setShowFilter(!showFilter)} class="is-fullwidth-mobile button is-small is-primary" type="button">
                           <FontAwesomeIcon className="mdi" icon={faFilter} />&nbsp;Filter
                       </button>
                       */}
-                  </div>
-                </div>
+              </div>
+            </div>
 
-                {/* FILTER */}
-                {/*
+            {/* FILTER */}
+            {/*
                 {showFilter && (
                   <div class="has-background-white-bis" style={{ borderRadius: "15px", padding: "20px" }}>
                     <div class="columns">
@@ -341,103 +383,107 @@ function AdminStoreDetailForPurchaseList() {
                 )}
                 */}
 
-                {isFetching ? (
-                  <PageLoadingContent displayMessage={"Please wait..."} />
-                ) : (
-                  <>
-                    <div class= "tabs is-medium is-size-7-mobile">
-                        <ul>
-                            <li>
-                                <Link>Detail</Link>
-                            </li>
-                            <li>
-                                <Link to={`/admin/store/${store.id}/users`}>Users</Link>
-                            </li>
-                            <li>
-                                <Link to={`/admin/store/${store.id}/comics`}>Comics</Link>
-                            </li>
-                            <li>
-                                <Link to={`/admin/store/${store.id}/comments`}>Comments</Link>
-                            </li>
-                            <li>
-                                <Link to={`/admin/store/${store.id}/attachments`}>Attachments</Link>
-                            </li>
-                            <li class="is-active">
-                                <Link to={`/admin/store/${store.id}/purchases`}><b>Purchases</b></Link>
-                            </li>
-                        </ul>
-                    </div>
-                    <FormErrorBox errors={errors} />
-                    {listData &&
-                    listData.results &&
-                    (listData.results.length > 0 || previousCursors.length > 0) ? (
-                      <div className="container">
-
-                        {/*
+            {isFetching ? (
+              <PageLoadingContent displayMessage={"Please wait..."} />
+            ) : (
+              <>
+                <div class="tabs is-medium is-size-7-mobile">
+                  <ul>
+                    <li>
+                      <Link>Detail</Link>
+                    </li>
+                    <li>
+                      <Link to={`/admin/store/${store.id}/users`}>Users</Link>
+                    </li>
+                    <li>
+                      <Link to={`/admin/store/${store.id}/comics`}>Comics</Link>
+                    </li>
+                    <li>
+                      <Link to={`/admin/store/${store.id}/comments`}>
+                        Comments
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={`/admin/store/${store.id}/attachments`}>
+                        Attachments
+                      </Link>
+                    </li>
+                    <li class="is-active">
+                      <Link to={`/admin/store/${store.id}/purchases`}>
+                        <b>Purchases</b>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                <FormErrorBox errors={errors} />
+                {listData &&
+                listData.results &&
+                (listData.results.length > 0 || previousCursors.length > 0) ? (
+                  <div className="container">
+                    {/*
                             ##################################################################
                             EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A DESKTOP SCREEN.
                             ##################################################################
                         */}
-                        <div class="is-hidden-touch" >
-                            <AdminStorePurchaseListDesktop
-                                listData={listData}
-                                setPageSize={setPageSize}
-                                pageSize={pageSize}
-                                previousCursors={previousCursors}
-                                onPreviousClicked={onPreviousClicked}
-                                onNextClicked={onNextClicked}
-                            />
-                        </div>
+                    <div class="is-hidden-touch">
+                      <AdminStorePurchaseListDesktop
+                        listData={listData}
+                        setPageSize={setPageSize}
+                        pageSize={pageSize}
+                        previousCursors={previousCursors}
+                        onPreviousClicked={onPreviousClicked}
+                        onNextClicked={onNextClicked}
+                      />
+                    </div>
 
-                        {/*
+                    {/*
                             ###########################################################################
                             EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A TABLET OR MOBILE SCREEN.
                             ###########################################################################
                         */}
-                        <div class="is-fullwidth is-hidden-desktop">
-                            <AdminStorePurchaseListMobile
-                                listData={listData}
-                                setPageSize={setPageSize}
-                                pageSize={pageSize}
-                                previousCursors={previousCursors}
-                                onPreviousClicked={onPreviousClicked}
-                                onNextClicked={onNextClicked}
-                            />
-                        </div>
-
-                      </div>
-                    ) : (
-                      <section className="hero is-medium has-background-white-ter">
-                        <div className="hero-body">
-                          <p className="title">
-                            <FontAwesomeIcon className="fas" icon={faTable} />
-                            &nbsp;No Purchases
-                          </p>
-                          <p className="subtitle">
-                            No purchases have been made
-                          </p>
-                        </div>
-                      </section>
-                    )}
-                  </>
-                )}
-
-                <div class="columns pt-5">
-                    <div class="column is-half">
-                        <Link class="button is-fullwidth-mobile" to={`/admin/stores`}><FontAwesomeIcon className="fas" icon={faArrowLeft} />&nbsp;Back to Stores</Link>
+                    <div class="is-fullwidth is-hidden-desktop">
+                      <AdminStorePurchaseListMobile
+                        listData={listData}
+                        setPageSize={setPageSize}
+                        pageSize={pageSize}
+                        previousCursors={previousCursors}
+                        onPreviousClicked={onPreviousClicked}
+                        onNextClicked={onNextClicked}
+                      />
                     </div>
-                    <div class="column is-half has-text-right">
-                        {/*
+                  </div>
+                ) : (
+                  <section className="hero is-medium has-background-white-ter">
+                    <div className="hero-body">
+                      <p className="title">
+                        <FontAwesomeIcon className="fas" icon={faTable} />
+                        &nbsp;No Purchases
+                      </p>
+                      <p className="subtitle">No purchases have been made</p>
+                    </div>
+                  </section>
+                )}
+              </>
+            )}
+
+            <div class="columns pt-5">
+              <div class="column is-half">
+                <Link class="button is-fullwidth-mobile" to={`/admin/stores`}>
+                  <FontAwesomeIcon className="fas" icon={faArrowLeft} />
+                  &nbsp;Back to Stores
+                </Link>
+              </div>
+              <div class="column is-half has-text-right">
+                {/*
                         <Link to={`/admin/offers/add`} class="button is-success is-fullwidth-mobile"><FontAwesomeIcon className="fas" icon={faPlus} />&nbsp;New</Link>
                         */}
-                    </div>
-                </div>
-
-              </nav>
-            </section>
-          </div>
-        </>
-    );
+              </div>
+            </div>
+          </nav>
+        </section>
+      </div>
+    </>
+  );
 }
 
 export default AdminStoreDetailForPurchaseList;

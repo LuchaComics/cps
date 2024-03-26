@@ -1,5 +1,5 @@
 import React from "react";
-import { useTimezoneSelect, allTimezones } from 'react-timezone-select'
+import { useTimezoneSelect, allTimezones } from "react-timezone-select";
 
 /*
     HOW TO USE:
@@ -24,39 +24,58 @@ import { useTimezoneSelect, allTimezones } from 'react-timezone-select'
 />
 
 */
-function FormTimezoneSelectField({ label, name, placeholder, selectedTimezone, setSelectedTimezone, errorText, validationText, helpText,  disabled, maxWidth }) {
-    // DEVELOPERS NOTE:
+function FormTimezoneSelectField({
+  label,
+  name,
+  placeholder,
+  selectedTimezone,
+  setSelectedTimezone,
+  errorText,
+  validationText,
+  helpText,
+  disabled,
+  maxWidth,
+}) {
+  // DEVELOPERS NOTE:
 
-    const labelStyle = 'original'
-    const timezones = {
-      ...allTimezones,
-      'America/Toronto': 'Toronto', // Add not included timezone which is still a valid timezone.
-    }
+  const labelStyle = "original";
+  const timezones = {
+    ...allTimezones,
+    "America/Toronto": "Toronto", // Add not included timezone which is still a valid timezone.
+  };
 
-    console.log("FormTimezoneSelectField | Input:", selectedTimezone);
+  console.log("FormTimezoneSelectField | Input:", selectedTimezone);
 
-    const { options, parseTimezone } = useTimezoneSelect({ labelStyle, timezones })
+  const { options, parseTimezone } = useTimezoneSelect({
+    labelStyle,
+    timezones,
+  });
 
-    return (
-        <div class="field pb-4">
-            <label class="label">{label}</label>
-            <div class="control" style={{maxWidth:maxWidth}}>
-                <span class="select">
-                <select onChange={e => setSelectedTimezone(parseTimezone(e.currentTarget.value).value)}>
-                    {options.map(option => (
-                        <option value={option.value} selected={selectedTimezone === option.value}>{option.label}</option>
-                    ))}
-                </select>
-                </span>
-            </div>
-            {helpText &&
-                <p class="help">{helpText}</p>
+  return (
+    <div class="field pb-4">
+      <label class="label">{label}</label>
+      <div class="control" style={{ maxWidth: maxWidth }}>
+        <span class="select">
+          <select
+            onChange={(e) =>
+              setSelectedTimezone(parseTimezone(e.currentTarget.value).value)
             }
-            {errorText &&
-                <p class="help is-danger">{errorText}</p>
-            }
-        </div>
-    );
+          >
+            {options.map((option) => (
+              <option
+                value={option.value}
+                selected={selectedTimezone === option.value}
+              >
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </span>
+      </div>
+      {helpText && <p class="help">{helpText}</p>}
+      {errorText && <p class="help is-danger">{errorText}</p>}
+    </div>
+  );
 }
 
 export default FormTimezoneSelectField;
