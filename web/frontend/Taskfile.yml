@@ -1,14 +1,23 @@
-version: '3'
+version: "3"
 
 tasks:
   desc: "start the project (for web-development only)"
   start:
     cmds:
-      - npm run start
+      - npm run start:dev
 
-  build:
-    desc: "build the project and move the production artifact into the deployment folder (for production only)"
+  # Note: Only executed by devops team.
+  buildprod:
+    desc: "build the production version of the project"
     cmds:
-      - npm run build --production
+      - npm run build:prod
+      - cp -Rf ./build/* ../../../cps-frontend-static
+      - rm -Rf ./build
+
+  # Note: Only executed by devops team.
+  buildqa:
+    desc: "build the quality assurance version of the project"
+    cmds:
+      - npm run build:qa
       - cp -Rf ./build/* ../../../cps-frontend-static
       - rm -Rf ./build
