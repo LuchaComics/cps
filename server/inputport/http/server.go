@@ -8,19 +8,19 @@ import (
 
 	"github.com/rs/cors"
 
-	attachment_http "github.com/LuchaComics/cps-backend/app/attachment/httptransport"
+	attachment "github.com/LuchaComics/cps-backend/app/attachment/httptransport"
+	comicsub "github.com/LuchaComics/cps-backend/app/comicsub/httptransport"
+	credit "github.com/LuchaComics/cps-backend/app/credit/httptransport"
+	customer "github.com/LuchaComics/cps-backend/app/customer/httptransport"
+	gateway "github.com/LuchaComics/cps-backend/app/gateway/httptransport"
+	offer "github.com/LuchaComics/cps-backend/app/offer/httptransport"
+	strpp "github.com/LuchaComics/cps-backend/app/paymentprocessor/httptransport/stripe"
+	receipt "github.com/LuchaComics/cps-backend/app/receipt/httptransport"
+	store "github.com/LuchaComics/cps-backend/app/store/httptransport"
+	user "github.com/LuchaComics/cps-backend/app/user/httptransport"
+	userpurchase "github.com/LuchaComics/cps-backend/app/userpurchase/httptransport"
 	"github.com/LuchaComics/cps-backend/config"
-	"github.com/LuchaComics/cps-backend/inputport/http/comicsub"
-	"github.com/LuchaComics/cps-backend/inputport/http/credit"
-	"github.com/LuchaComics/cps-backend/inputport/http/customer"
-	"github.com/LuchaComics/cps-backend/inputport/http/gateway"
 	"github.com/LuchaComics/cps-backend/inputport/http/middleware"
-	"github.com/LuchaComics/cps-backend/inputport/http/offer"
-	strpp "github.com/LuchaComics/cps-backend/inputport/http/paymentprocessor/stripe"
-	"github.com/LuchaComics/cps-backend/inputport/http/receipt"
-	"github.com/LuchaComics/cps-backend/inputport/http/store"
-	"github.com/LuchaComics/cps-backend/inputport/http/user"
-	"github.com/LuchaComics/cps-backend/inputport/http/userpurchase"
 )
 
 type InputPortServer interface {
@@ -38,7 +38,7 @@ type httpInputPort struct {
 	Store                  *store.Handler
 	ComicSubmission        *comicsub.Handler
 	Customer               *customer.Handler
-	Attachment             *attachment_http.Handler
+	Attachment             *attachment.Handler
 	Offer                  *offer.Handler
 	Receipt                *receipt.Handler
 	UserPurchase           *userpurchase.Handler
@@ -55,7 +55,7 @@ func NewInputPort(
 	org *store.Handler,
 	t *comicsub.Handler,
 	cust *customer.Handler,
-	att *attachment_http.Handler,
+	att *attachment.Handler,
 	off *offer.Handler,
 	inv *receipt.Handler,
 	usrp *userpurchase.Handler,

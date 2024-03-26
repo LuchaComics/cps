@@ -16,38 +16,38 @@ import (
 	"github.com/LuchaComics/cps-backend/adapter/templatedemailer"
 	controller6 "github.com/LuchaComics/cps-backend/app/attachment/controller"
 	datastore5 "github.com/LuchaComics/cps-backend/app/attachment/datastore"
-	"github.com/LuchaComics/cps-backend/app/attachment/httptransport"
+	httptransport6 "github.com/LuchaComics/cps-backend/app/attachment/httptransport"
 	controller4 "github.com/LuchaComics/cps-backend/app/comicsub/controller"
 	datastore3 "github.com/LuchaComics/cps-backend/app/comicsub/datastore"
+	httptransport4 "github.com/LuchaComics/cps-backend/app/comicsub/httptransport"
 	controller10 "github.com/LuchaComics/cps-backend/app/credit/controller"
 	datastore4 "github.com/LuchaComics/cps-backend/app/credit/datastore"
+	httptransport10 "github.com/LuchaComics/cps-backend/app/credit/httptransport"
 	controller5 "github.com/LuchaComics/cps-backend/app/customer/controller"
+	httptransport5 "github.com/LuchaComics/cps-backend/app/customer/httptransport"
 	datastore9 "github.com/LuchaComics/cps-backend/app/eventlog/datastore"
 	"github.com/LuchaComics/cps-backend/app/gateway/controller"
+	"github.com/LuchaComics/cps-backend/app/gateway/httptransport"
 	controller7 "github.com/LuchaComics/cps-backend/app/offer/controller"
 	datastore8 "github.com/LuchaComics/cps-backend/app/offer/datastore"
+	httptransport7 "github.com/LuchaComics/cps-backend/app/offer/httptransport"
 	stripe2 "github.com/LuchaComics/cps-backend/app/paymentprocessor/controller/stripe"
+	stripe3 "github.com/LuchaComics/cps-backend/app/paymentprocessor/httptransport/stripe"
 	controller8 "github.com/LuchaComics/cps-backend/app/receipt/controller"
 	datastore6 "github.com/LuchaComics/cps-backend/app/receipt/datastore"
+	httptransport8 "github.com/LuchaComics/cps-backend/app/receipt/httptransport"
 	controller3 "github.com/LuchaComics/cps-backend/app/store/controller"
 	datastore2 "github.com/LuchaComics/cps-backend/app/store/datastore"
+	httptransport3 "github.com/LuchaComics/cps-backend/app/store/httptransport"
 	controller2 "github.com/LuchaComics/cps-backend/app/user/controller"
 	"github.com/LuchaComics/cps-backend/app/user/datastore"
+	httptransport2 "github.com/LuchaComics/cps-backend/app/user/httptransport"
 	controller9 "github.com/LuchaComics/cps-backend/app/userpurchase/controller"
 	datastore7 "github.com/LuchaComics/cps-backend/app/userpurchase/datastore"
+	httptransport9 "github.com/LuchaComics/cps-backend/app/userpurchase/httptransport"
 	"github.com/LuchaComics/cps-backend/config"
 	"github.com/LuchaComics/cps-backend/inputport/http"
-	"github.com/LuchaComics/cps-backend/inputport/http/comicsub"
-	"github.com/LuchaComics/cps-backend/inputport/http/credit"
-	"github.com/LuchaComics/cps-backend/inputport/http/customer"
-	"github.com/LuchaComics/cps-backend/inputport/http/gateway"
 	"github.com/LuchaComics/cps-backend/inputport/http/middleware"
-	"github.com/LuchaComics/cps-backend/inputport/http/offer"
-	stripe3 "github.com/LuchaComics/cps-backend/inputport/http/paymentprocessor/stripe"
-	"github.com/LuchaComics/cps-backend/inputport/http/receipt"
-	"github.com/LuchaComics/cps-backend/inputport/http/store"
-	"github.com/LuchaComics/cps-backend/inputport/http/user"
-	"github.com/LuchaComics/cps-backend/inputport/http/userpurchase"
 	"github.com/LuchaComics/cps-backend/provider/cpsrn"
 	"github.com/LuchaComics/cps-backend/provider/jwt"
 	"github.com/LuchaComics/cps-backend/provider/kmutex"
@@ -81,17 +81,17 @@ func InitializeEvent() Application {
 	storeStorer := datastore2.NewDatastore(conf, slogLogger, client)
 	gatewayController := controller.NewController(conf, slogLogger, provider, jwtProvider, kmutexProvider, passwordProvider, cacher, client, templatedEmailer, paymentProcessor, userStorer, storeStorer)
 	middlewareMiddleware := middleware.NewMiddleware(conf, slogLogger, provider, timeProvider, jwtProvider, gatewayController)
-	handler := gateway.NewHandler(gatewayController)
+	handler := httptransport.NewHandler(gatewayController)
 	comicSubmissionStorer := datastore3.NewDatastore(conf, slogLogger, client)
 	creditStorer := datastore4.NewDatastore(conf, slogLogger, client)
 	attachmentStorer := datastore5.NewDatastore(conf, slogLogger, client)
 	receiptStorer := datastore6.NewDatastore(conf, slogLogger, client)
 	userPurchaseStorer := datastore7.NewDatastore(conf, slogLogger, client)
 	userController := controller2.NewController(conf, slogLogger, provider, passwordProvider, client, storeStorer, userStorer, comicSubmissionStorer, creditStorer, attachmentStorer, receiptStorer, userPurchaseStorer, templatedEmailer)
-	userHandler := user.NewHandler(userController)
+	httptransportHandler := httptransport2.NewHandler(userController)
 	s3Storager := s3.NewStorage(conf, slogLogger, provider)
 	storeController := controller3.NewController(conf, slogLogger, provider, s3Storager, emailer, templatedEmailer, client, storeStorer, userStorer, comicSubmissionStorer, creditStorer, attachmentStorer, receiptStorer, userPurchaseStorer)
-	storeHandler := store.NewHandler(storeController)
+	handler2 := httptransport3.NewHandler(storeController)
 	cpsrnProvider := cpsrn.NewProvider()
 	cbffBuilder := pdfbuilder.NewCBFFBuilder(conf, slogLogger, provider)
 	pcBuilder := pdfbuilder.NewPCBuilder(conf, slogLogger, provider)
@@ -100,24 +100,24 @@ func InitializeEvent() Application {
 	ccBuilder := pdfbuilder.NewCCBuilder(conf, slogLogger, provider)
 	ccugBuilder := pdfbuilder.NewCCUGBuilder(conf, slogLogger, provider)
 	comicSubmissionController := controller4.NewController(conf, slogLogger, provider, s3Storager, passwordProvider, kmutexProvider, cpsrnProvider, cbffBuilder, pcBuilder, ccimgBuilder, ccscBuilder, ccBuilder, ccugBuilder, emailer, client, templatedEmailer, userStorer, comicSubmissionStorer, storeStorer, creditStorer)
-	comicsubHandler := comicsub.NewHandler(slogLogger, comicSubmissionController)
+	handler3 := httptransport4.NewHandler(slogLogger, comicSubmissionController)
 	customerController := controller5.NewController(conf, slogLogger, provider, s3Storager, passwordProvider, paymentProcessor, cbffBuilder, templatedEmailer, client, userStorer, comicSubmissionStorer)
-	customerHandler := customer.NewHandler(customerController)
+	handler4 := httptransport5.NewHandler(customerController)
 	attachmentController := controller6.NewController(conf, slogLogger, provider, s3Storager, emailer, client, attachmentStorer, userStorer, comicSubmissionStorer)
-	httptransportHandler := httptransport.NewHandler(attachmentController)
+	handler5 := httptransport6.NewHandler(attachmentController)
 	offerStorer := datastore8.NewDatastore(conf, slogLogger, client)
 	offerontroller := controller7.NewController(conf, slogLogger, provider, client, storeStorer, offerStorer, userStorer)
-	offerHandler := offer.NewHandler(slogLogger, offerontroller)
+	handler6 := httptransport7.NewHandler(slogLogger, offerontroller)
 	receiptController := controller8.NewController(conf, slogLogger, provider, client, storeStorer, receiptStorer)
-	receiptHandler := receipt.NewHandler(slogLogger, receiptController)
+	handler7 := httptransport8.NewHandler(slogLogger, receiptController)
 	userPurchaseController := controller9.NewController(conf, slogLogger, provider, client, storeStorer, userPurchaseStorer)
-	userpurchaseHandler := userpurchase.NewHandler(slogLogger, userPurchaseController)
+	handler8 := httptransport9.NewHandler(slogLogger, userPurchaseController)
 	eventLogStorer := datastore9.NewDatastore(conf, slogLogger, client)
 	stripePaymentProcessorController := stripe2.NewController(conf, slogLogger, provider, s3Storager, passwordProvider, emailer, templatedEmailer, paymentProcessor, kmutexProvider, client, storeStorer, userStorer, receiptStorer, offerStorer, eventLogStorer, comicSubmissionStorer, userPurchaseStorer)
 	stripeHandler := stripe3.NewHandler(slogLogger, stripePaymentProcessorController)
 	creditController := controller10.NewController(conf, slogLogger, provider, client, storeStorer, creditStorer, userStorer, offerStorer)
-	creditHandler := credit.NewHandler(slogLogger, creditController)
-	inputPortServer := http.NewInputPort(conf, slogLogger, middlewareMiddleware, handler, userHandler, storeHandler, comicsubHandler, customerHandler, httptransportHandler, offerHandler, receiptHandler, userpurchaseHandler, stripeHandler, creditHandler)
+	handler9 := httptransport10.NewHandler(slogLogger, creditController)
+	inputPortServer := http.NewInputPort(conf, slogLogger, middlewareMiddleware, handler, httptransportHandler, handler2, handler3, handler4, handler5, handler6, handler7, handler8, stripeHandler, handler9)
 	application := NewApplication(slogLogger, inputPortServer)
 	return application
 }
