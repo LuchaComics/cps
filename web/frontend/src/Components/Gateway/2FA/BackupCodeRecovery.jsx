@@ -140,7 +140,7 @@ function TwoFactorAuthenticationBackupCodeRecovery() {
                           <figure className="image">
                             <Link to="/">
                               <img
-                                src="/img/workery-logo.jpeg"
+                                src="/static/CPS logo 2023 GR.webp"
                                 style={{ width: "256px" }}
                               />
                             </Link>

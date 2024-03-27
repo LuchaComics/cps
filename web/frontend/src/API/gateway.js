@@ -386,11 +386,17 @@ export function postGenerateOTP(
     .then((successResponse) => {
       const responseData = successResponse.data;
 
+
+      console.log("postGenerateOTP: responseData: ", responseData);
+
       // Snake-case from API to camel-case for React.
       const data = {
         base32: responseData.base32,
         optAuthURL: responseData.otpauth_url,
+        accountName: responseData.account_name,
       };
+
+      console.log("postGenerateOTP: data: ", data);
 
       // console.log("getTagListAPI | post-fix | results:", data);
 

@@ -48,7 +48,7 @@ function AccountEnableTwoFactorAuthenticationStep1() {
 
   function onGenerateOPTSuccess(response) {
     console.log("onGenerateOPTSuccess: Starting...");
-    console.log("response: ", response);
+    console.log("onGenerateOPTSuccess: response: ", response);
     setOtpResponse(response);
   }
 

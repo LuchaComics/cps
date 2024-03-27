@@ -58,7 +58,7 @@ function AccountEnableTwoFactorAuthenticationStep2() {
 
   function onGenerateOPTSuccess(response) {
     console.log("onGenerateOPTSuccess: Starting...");
-    console.log("response: ", response);
+    console.log("onGenerateOPTSuccess: response:", response);
     setOtpResponse(response);
   }
 
@@ -128,6 +128,8 @@ function AccountEnableTwoFactorAuthenticationStep2() {
       dashboardURL = "/dashboard";
     }
   }
+
+  console.log("otpResponse.accountName:", otpResponse.accountName);
 
   return (
     <>
@@ -233,8 +235,8 @@ function AccountEnableTwoFactorAuthenticationStep2() {
                         label="Account Name"
                         name="accountName"
                         placeholder="-"
-                        value={`${process.env.REACT_APP_WWW_DOMAIN}: ${currentUser.email}`}
-                        errorText={null}
+                        value={otpResponse.accountName}
+                        errorText={errors && errors.accountName}
                         onChange={null}
                         isRequired={true}
                         maxWidth="380px"

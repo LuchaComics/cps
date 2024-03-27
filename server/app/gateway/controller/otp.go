@@ -20,8 +20,9 @@ import (
 )
 
 type OTPGenerateResponseIDO struct {
-	Base32     string `json:"base32"`
-	OTPAuthURL string `json:"otpauth_url"`
+	Base32      string `json:"base32"`
+	OTPAuthURL  string `json:"otpauth_url"`
+	AccountName string `json:"account_name"`
 }
 
 // GenerateOTP function generates the time-based one-time password (TOTP) secret for the user. The user must use these values to generate a QR to present to the user.
@@ -109,14 +110,18 @@ func (impl *GatewayControllerImpl) GenerateOTP(ctx context.Context) (*OTPGenerat
 			// third-party authenticator app.
 			res.Base32 = key.Secret()
 			res.OTPAuthURL = key.URL()
+			res.AccountName = fmt.Sprintf("%s: %s", impl.TemplatedEmailer.GetFrontendDomainName(), u.Email)
 
-			impl.Logger.Debug("successfully generated opt secret and auth url", slog.Any("base_32", res.Base32), slog.Any("opt_auth_url", res.OTPAuthURL))
+			impl.Logger.Debug("successfully generated opt secret and auth url", slog.Any("base_32", res.Base32), slog.Any("opt_auth_url", res.OTPAuthURL), slog.Any("account_name", res.AccountName))
 		} else {
 			// Reuse the existing opt secret and auth url.
 			res.Base32 = u.OTPSecret
 			res.OTPAuthURL = u.OTPAuthURL
-			impl.Logger.Warn("reusing previously generated opt secret and auth url", slog.Any("base_32", res.Base32), slog.Any("opt_auth_url", res.OTPAuthURL))
+			res.AccountName = fmt.Sprintf("%s: %s", impl.TemplatedEmailer.GetFrontendDomainName(), u.Email)
+			impl.Logger.Warn("reusing previously generated opt secret and auth url", slog.Any("base_32", res.Base32), slog.Any("opt_auth_url", res.OTPAuthURL), slog.Any("account_name", res.AccountName))
 		}
+
+		impl.Logger.Debug("generated otp", slog.Any("res", res))
 
 		return res, nil
 	}
