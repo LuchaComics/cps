@@ -122,8 +122,8 @@ import RetailerCustomerAttachmentUpdate from "./Components/Retailer/Customer/Att
 //---------------//
 
 // Account
-import AccountDetail from "./Components/Profile/Detail";
-import AccountUpdate from "./Components/Profile/Update";
+import AccountDetail from "./Components/Profile/Detail/View";
+import AccountUpdate from "./Components/Profile/Update/View";
 import AccountChangePassword from "./Components/Profile/ChangePassword";
 import AccountTwoFactorAuthenticationDetail from "./Components/Profile/2FA/View";
 import AccountEnableTwoFactorAuthenticationStep1 from "./Components/Profile/2FA/EnableStep1View";
