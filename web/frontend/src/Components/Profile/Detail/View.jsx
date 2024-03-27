@@ -4,6 +4,7 @@ import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTasks,
+  faEllipsis,
   faTachometer,
   faKey,
   faArrowLeft,
@@ -130,6 +131,17 @@ function AccountDetail() {
     return <Navigate to={forceURL} />;
   }
 
+  // Generate URL's based on user role.
+  let dashboardURL = "";
+  if (currentUser) {
+    if (currentUser.role === 1) {
+      dashboardURL = "/admin/dashboard";
+    }
+    if (currentUser.role === 2) {
+      dashboardURL = "/dashboard";
+    }
+  }
+
   return (
     <>
       <div class="container">
@@ -138,7 +150,7 @@ function AccountDetail() {
           <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
             <ul>
               <li class="">
-                <Link to="/dashboard" aria-current="page">
+                <Link to={dashboardURL} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faGauge} />
                   &nbsp;Dashboard
                 </Link>
@@ -156,7 +168,7 @@ function AccountDetail() {
           <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
             <ul>
               <li class="">
-                <Link to={`/dashboard`} aria-current="page">
+                <Link to={dashboardURL} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                   &nbsp;Back to Dashboard
                 </Link>
@@ -175,23 +187,15 @@ function AccountDetail() {
                   </p>
                 </div>
                 <div class="column has-text-right">
-                  {/* Mobile Specific */}
                   <Link
                     to={`/account/change-password`}
-                    class="button is-medium is-success is-fullwidth is-hidden-desktop"
+                    class="button is-small is-success is-fullwidth-mobile"
                     type="button"
                   >
-                    <FontAwesomeIcon className="mdi" icon={faKey} />
-                    &nbsp;Change Password
-                  </Link>
-                  {/* Desktop Specific */}
-                  <Link
-                    to={`/account/change-password`}
-                    class="button is-medium is-success is-hidden-touch"
-                    type="button"
-                  >
-                    <FontAwesomeIcon className="mdi" icon={faKey} />
-                    &nbsp;Change Password
+                    <FontAwesomeIcon className="mdi" icon={faPencil} />
+                    <span className="is-hidden-desktop is-hidden-tablet">
+                      &nbsp;Edit
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -206,6 +210,28 @@ function AccountDetail() {
               <>
                 {currentUser && (
                   <div class="container">
+                    {/* Tab Navigation */}
+                    <div className="tabs is-medium is-size-7-mobile">
+                      <ul>
+                        <li className="is-active">
+                          <Link>Detail</Link>
+                        </li>
+                        <li>
+                          <Link to={`/account/2fa`}>2FA</Link>
+                        </li>
+                        <li>
+                          <Link to={`/account/more`}>
+                            More&nbsp;&nbsp;
+                            <FontAwesomeIcon
+                              className="mdi"
+                              icon={faEllipsis}
+                            />
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* Title */}
                     <p class="subtitle is-6">
                       <FontAwesomeIcon className="fas" icon={faIdCard} />
                       &nbsp;Full Name

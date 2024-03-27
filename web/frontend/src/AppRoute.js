@@ -124,12 +124,13 @@ import RetailerCustomerAttachmentUpdate from "./Components/Retailer/Customer/Att
 // Account
 import AccountDetail from "./Components/Profile/Detail/View";
 import AccountUpdate from "./Components/Profile/Update/View";
-import AccountChangePassword from "./Components/Profile/ChangePassword";
+import AccountMoreLaunchpad from "./Components/Profile/More/LaunchpadView";
 import AccountTwoFactorAuthenticationDetail from "./Components/Profile/2FA/View";
 import AccountEnableTwoFactorAuthenticationStep1 from "./Components/Profile/2FA/EnableStep1View";
 import AccountEnableTwoFactorAuthenticationStep2 from "./Components/Profile/2FA/EnableStep2View";
 import AccountEnableTwoFactorAuthenticationStep3 from "./Components/Profile/2FA/EnableStep3View";
 import AccountTwoFactorAuthenticationBackupCodeGenerate from "./Components/Profile/2FA/BackupCodeGenerateView";
+import AccountMoreOperationChangePassword from "./Components/Profile/More/Operation/ChangePassword/View";
 
 // Gateway
 import LogoutRedirector from "./Components/Gateway/LogoutRedirector";
@@ -657,8 +658,13 @@ function AppRoute() {
                   />
                   <Route
                     exact
-                    path="/account/change-password"
-                    element={<AccountChangePassword />}
+                    path="/account/more"
+                    element={<AccountMoreLaunchpad />}
+                  />
+                  <Route
+                    exact
+                    path="/account/more/change-password"
+                    element={<AccountMoreOperationChangePassword />}
                   />
                   <Route
                     exact

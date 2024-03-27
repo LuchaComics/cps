@@ -172,23 +172,6 @@ function AccountTwoFactorAuthentication() {
     return dashboardLink;
   };
 
-  const breadcrumbItems = {
-    items: [
-      {
-        text: "Dashboard",
-        link: generateBreadcrumbItemLink(currentUser),
-        isActive: false,
-        icon: faGauge,
-      },
-      { text: "Account", link: "/account", icon: faUserCircle, isActive: true },
-    ],
-    mobileBackLinkItems: {
-      link: generateBreadcrumbItemLink(currentUser),
-      text: "Back to Dashboard",
-      icon: faArrowLeft,
-    },
-  };
-
   ////
   //// Misc.
   ////
@@ -220,7 +203,16 @@ function AccountTwoFactorAuthentication() {
     return <Navigate to={forceURL} />;
   }
 
-  // showDisableOTPWarning, setShowDisableOTPWarning
+  // Generate URL's based on user role.
+  let dashboardURL = "";
+  if (currentUser) {
+    if (currentUser.role === 1) {
+      dashboardURL = "/admin/dashboard";
+    }
+    if (currentUser.role === 2) {
+      dashboardURL = "/dashboard";
+    }
+  }
 
   return (
     <>
@@ -263,57 +255,34 @@ function AccountTwoFactorAuthentication() {
       <div className="container">
         <section className="section">
           {/* Desktop Breadcrumbs */}
-          <nav
-            className="breadcrumb has-background-light is-hidden-touch p-4"
-            aria-label="breadcrumbs"
-          >
+          <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
             <ul>
-              <li className="">
-                <Link
-                  to={generateBreadcrumbItemLink(currentUser)}
-                  aria-current="page"
-                >
+              <li class="">
+                <Link to={dashboardURL} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faGauge} />
                   &nbsp;Dashboard
                 </Link>
               </li>
-              <li className="is-active">
+              <li class="is-active">
                 <Link aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faUserCircle} />
-                  &nbsp;Profile (2FA)
+                  &nbsp;Account&nbsp;(2FA)
                 </Link>
               </li>
             </ul>
           </nav>
 
           {/* Mobile Breadcrumbs */}
-          <nav
-            className="breadcrumb has-background-light is-hidden-desktop p-4"
-            aria-label="breadcrumbs"
-          >
+          <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
             <ul>
-              <li className="">
-                <Link
-                  to={generateBreadcrumbItemLink(currentUser)}
-                  aria-current="page"
-                >
+              <li class="">
+                <Link to={dashboardURL} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                   &nbsp;Back to Dashboard
                 </Link>
               </li>
             </ul>
           </nav>
-
-          {/* Page Title */}
-          <h1 className="title is-2">
-            <FontAwesomeIcon className="fas" icon={faUserCircle} />
-            &nbsp;Profile
-          </h1>
-          <h4 className="subtitle is-4">
-            <FontAwesomeIcon className="fas" icon={faEye} />
-            &nbsp;Detail
-          </h4>
-          <hr />
 
           {/* Page */}
           <nav className="box">
@@ -322,8 +291,8 @@ function AccountTwoFactorAuthentication() {
               <div className="columns">
                 <div className="column">
                   <p className="title is-4">
-                    <FontAwesomeIcon className="fas" icon={faTable} />
-                    &nbsp;Detail
+                    <FontAwesomeIcon className="fas" icon={faUserCircle} />
+                    &nbsp;Account
                   </p>
                 </div>
                 <div className="column has-text-right">
