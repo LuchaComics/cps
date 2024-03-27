@@ -13,9 +13,9 @@ import (
 )
 
 type ProfileChangePasswordRequestIDO struct {
-	OldPassword      string `json:"old_password"`
-	Password         string `json:"password"`
-	PasswordRepeated string `json:"password_repeated"`
+	OldPassword         string `json:"old_password"`
+	NewPassword         string `json:"new_password"`
+	NewPasswordRepeated string `json:"new_password_repeated"`
 }
 
 func ValidateProfileChangePassworRequest(dirtyData *ProfileChangePasswordRequestIDO) error {
@@ -24,15 +24,15 @@ func ValidateProfileChangePassworRequest(dirtyData *ProfileChangePasswordRequest
 	if dirtyData.OldPassword == "" {
 		e["old_password"] = "missing value"
 	}
-	if dirtyData.Password == "" {
-		e["password"] = "missing value"
+	if dirtyData.NewPassword == "" {
+		e["new_password"] = "missing value"
 	}
-	if dirtyData.PasswordRepeated == "" {
-		e["password_repeated"] = "missing value"
+	if dirtyData.NewPasswordRepeated == "" {
+		e["new_password_repeated"] = "missing value"
 	}
-	if dirtyData.PasswordRepeated != dirtyData.Password {
-		e["password"] = "does not match"
-		e["password_repeated"] = "does not match"
+	if dirtyData.NewPasswordRepeated != dirtyData.NewPassword {
+		e["new_password"] = "does not match"
+		e["new_password_repeated"] = "does not match"
 	}
 
 	if len(e) != 0 {
@@ -81,7 +81,7 @@ func (impl *GatewayControllerImpl) ProfileChangePassword(ctx context.Context, re
 			return nil, httperror.NewForBadRequestWithSingleField("old_password", "old password do not match with record of existing password")
 		}
 
-		passwordHash, err := impl.Password.GenerateHashFromPassword(req.Password)
+		passwordHash, err := impl.Password.GenerateHashFromPassword(req.NewPassword)
 		if err != nil {
 			impl.Logger.Error("hashing error", slog.Any("error", err))
 			return nil, err
