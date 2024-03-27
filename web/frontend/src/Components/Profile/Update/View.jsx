@@ -258,6 +258,17 @@ function AccountUpdate() {
     return <Navigate to={forceURL} />;
   }
 
+  // Generate URL's based on user role.
+  let dashboardURL = "/501";
+  if (currentUser) {
+    if (currentUser.role === 1) {
+      dashboardURL = "/admin/dashboard";
+    }
+    if (currentUser.role === 2) {
+      dashboardURL = "/dashboard";
+    }
+  }
+
   return (
     <>
       <div class="container">
@@ -266,7 +277,7 @@ function AccountUpdate() {
           <nav class="breadcrumb is-hidden-touch" aria-label="breadcrumbs">
             <ul>
               <li class="">
-                <Link to="/dashboard" aria-current="page">
+                <Link to={dashboardURL} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faGauge} />
                   &nbsp;Dashboard
                 </Link>

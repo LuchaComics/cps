@@ -102,7 +102,7 @@ function AccountMoreLaunchpad() {
   }
 
   // Generate URL's based on user role.
-  let dashboardURL = "";
+  let dashboardURL = "/501";
   if (currentUser) {
     if (currentUser.role === 1) {
       dashboardURL = "/admin/dashboard";

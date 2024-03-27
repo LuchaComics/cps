@@ -153,26 +153,6 @@ function AccountTwoFactorAuthentication() {
   };
 
   ////
-  //// BREADCRUMB
-  ////
-
-  const generateBreadcrumbItemLink = (currentUser) => {
-    let dashboardLink;
-    switch (currentUser.role) {
-      case 1:
-        dashboardLink = "/admin/dashboard";
-        break;
-      case 2:
-        dashboardLink = "/dashboard";
-        break;
-      default:
-        dashboardLink = "/501"; // Default or error handling
-        break;
-    }
-    return dashboardLink;
-  };
-
-  ////
   //// Misc.
   ////
 
@@ -204,7 +184,7 @@ function AccountTwoFactorAuthentication() {
   }
 
   // Generate URL's based on user role.
-  let dashboardURL = "";
+  let dashboardURL = "/501";
   if (currentUser) {
     if (currentUser.role === 1) {
       dashboardURL = "/admin/dashboard";
@@ -403,7 +383,7 @@ function AccountTwoFactorAuthentication() {
                       <div className="column is-half">
                         <Link
                           className="button is-medium is-fullwidth-mobile"
-                          to={generateBreadcrumbItemLink(currentUser)}
+                          to={dashboardURL}
                         >
                           <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                           &nbsp;Back to Dashboard

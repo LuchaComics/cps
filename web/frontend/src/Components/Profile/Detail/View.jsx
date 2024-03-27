@@ -132,7 +132,7 @@ function AccountDetail() {
   }
 
   // Generate URL's based on user role.
-  let dashboardURL = "";
+  let dashboardURL = "/501";
   if (currentUser) {
     if (currentUser.role === 1) {
       dashboardURL = "/admin/dashboard";
@@ -391,7 +391,7 @@ function AccountDetail() {
                       <div class="column is-half">
                         <Link
                           class="button is-medium is-fullwidth-mobile"
-                          to={"/dashboard"}
+                          to={dashboardURL}
                         >
                           <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                           &nbsp;Back to Dashboard
