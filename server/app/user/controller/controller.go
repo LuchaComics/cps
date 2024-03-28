@@ -32,6 +32,7 @@ type UserController interface {
 	UpdateByID(ctx context.Context, request *UserUpdateRequestIDO) (*user_s.User, error)
 	CreateComment(ctx context.Context, customerID primitive.ObjectID, content string) (*user_s.User, error)
 	Star(ctx context.Context, id primitive.ObjectID) (*user_s.User, error)
+	ChangePassword(ctx context.Context, req *UserOperationChangePasswordRequest) error
 	//TODO: Add more...
 }
 

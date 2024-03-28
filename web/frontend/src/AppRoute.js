@@ -74,6 +74,7 @@ import AdminUserDetailMore from "./Components/Admin/User/Detail/More/View";
 import AdminUserArchiveOperation from  "./Components/Admin/User/Detail/More/Archive/View";
 import AdminUserUnarchiveOperation from  "./Components/Admin/User/Detail/More/Unarchive/View";
 import AdminUserDeleteOperation from  "./Components/Admin/User/Detail/More/Delete/View";
+import AdminUserMoreOperationChangePassword from  "./Components/Admin/User/Detail/More/ChangePassword/View";
 import AdminUserUpdate from "./Components/Admin/User/Update/View";
 
 //-----------------//
@@ -485,6 +486,11 @@ function AppRoute() {
                     exact
                     path="/admin/user/:id/more/permadelete"
                     element={<AdminUserDeleteOperation />}
+                  />
+                  <Route
+                    exact
+                    path="/admin/user/:id/more/change-password"
+                    element={<AdminUserMoreOperationChangePassword />}
                   />
                   <Route
                     exact
