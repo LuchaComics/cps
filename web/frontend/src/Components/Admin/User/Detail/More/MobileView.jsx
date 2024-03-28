@@ -35,7 +35,7 @@ import {
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 
-const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
+const AdminClientDetailMoreMobile = ({ id, user, currentUser }) => {
   return (
     <>
       <div
@@ -51,7 +51,7 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
           <tbody>
             {/* ---------------------------------------------------------------------- */}
 
-            {user && user.status === 2 ? (
+            {user && user.status === 100 ? (
               <tr>
                 <td>
                   <FontAwesomeIcon className="fas" icon={faBoxOpen} />
@@ -60,7 +60,7 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
                 <td>
                   <div className="buttons is-right">
                     <Link
-                      to={`/admin/user/${cid}/unarchive`}
+                      to={`/admin/user/${id}/more/unarchive`}
                       className="is-small"
                     >
                       View&nbsp;
@@ -78,7 +78,7 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
                 <td>
                   <div className="buttons is-right">
                     <Link
-                      to={`/admin/user/${cid}/archive`}
+                      to={`/admin/user/${id}/more/archive`}
                       className="is-small"
                     >
                       View&nbsp;
@@ -99,7 +99,7 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
               <td>
                 <div className="buttons is-right">
                   <Link
-                    to={`/admin/user/${cid}/permadelete`}
+                    to={`/admin/user/${id}/more/permadelete`}
                     className="is-small"
                   >
                     View&nbsp;
@@ -120,7 +120,7 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
               <td>
                 <div className="buttons is-right">
                   <Link
-                    to={`/admin/user/${cid}/change-password`}
+                    to={`/admin/user/${id}/more/change-password`}
                     className="is-small"
                   >
                     View&nbsp;
@@ -141,7 +141,7 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
               <td>
                 <div className="buttons is-right">
                   <Link
-                    to={`/admin/user/${cid}/change-2fa`}
+                    to={`/admin/user/${id}/more/change-2fa`}
                     className="is-small"
                   >
                     View&nbsp;

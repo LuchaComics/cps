@@ -71,6 +71,8 @@ import AdminUserCreditAdd from "./Components/Admin/User/Detail/Credit/Add";
 import AdminUserCreditDetail from "./Components/Admin/User/Detail/Credit/Detail";
 import AdminUserCreditUpdate from "./Components/Admin/User/Detail/Credit/Update";
 import AdminUserDetailMore from "./Components/Admin/User/Detail/More/View";
+import AdminUserArchiveOperation from  "./Components/Admin/User/Detail/More/Archive/View";
+import AdminUserUnarchiveOperation from  "./Components/Admin/User/Detail/More/Unarchive/View";
 import AdminUserUpdate from "./Components/Admin/User/Update/View";
 
 //-----------------//
@@ -468,7 +470,16 @@ function AppRoute() {
                     path="/admin/user/:id/more"
                     element={<AdminUserDetailMore />}
                   />
-
+                  <Route
+                    exact
+                    path="/admin/user/:id/more/archive"
+                    element={<AdminUserArchiveOperation />}
+                  />
+                  <Route
+                    exact
+                    path="/admin/user/:id/more/unarchive"
+                    element={<AdminUserUnarchiveOperation />}
+                  />
                   <Route
                     exact
                     path="/admin/dashboard"

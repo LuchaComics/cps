@@ -238,6 +238,8 @@ func (port *httpInputPort) HandleRequests(w http.ResponseWriter, r *http.Request
 		port.User.OperationCreateComment(w, r)
 	case n == 5 && p[1] == "v1" && p[2] == "users" && p[3] == "operation" && p[4] == "star" && r.Method == http.MethodPost:
 		port.User.OperationStar(w, r)
+	case n == 5 && p[1] == "v1" && p[2] == "users" && p[3] == "operation" && p[4] == "archive" && r.Method == http.MethodPost:
+		port.User.OperationArchive(w, r)
 	case n == 4 && p[1] == "v1" && p[2] == "users" && p[3] == "select-options" && r.Method == http.MethodGet:
 		port.User.ListAsSelectOptions(w, r)
 

@@ -95,3 +95,15 @@ export const CPS_2FA_DISABLED_OTP_API_ENDPOINT =
   HTTP_API_SERVER + "/api/v1/otp/disable";
 export const CPS_2FA_RECOVERY_OTP_API_ENDPOINT =
   HTTP_API_SERVER + "/api/v1/otp/recovery";
+export const CPS_USER_ARCHIVE_OPERATION_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/users/operation/archive";
+export const CPS_USER_UPGRADE_OPERATION_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/users/operation/upgrade";
+export const CPS_USER_DOWNGRADE_OPERATION_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/users/operation/downgrade";
+export const CPS_USER_AVATAR_OPERATION_API_ENDPOINT =
+  HTTP_API_SERVER + "/api/v1/users/operation/avatar";
+export const CPS_USER_CHANGE_2FA_OPERATION_API_URL =
+  HTTP_API_SERVER + "/api/v1/users/operations/change-2fa";
+  export const CPS_USER_CHANGE_PASSWORD_OPERATION_API_ENDPOINT =
+    HTTP_API_SERVER + "/api/v1/users/operations/change-password";

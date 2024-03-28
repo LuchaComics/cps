@@ -35,7 +35,7 @@ import {
 
 import BubbleLink from "../../../../Reusable/EveryPage/BubbleLink";
 
-const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
+const AdminClientDetailMoreDesktop = ({ id, user, currentUser }) => {
   return (
     <>
       <section className="hero is-hidden-mobile">
@@ -48,7 +48,7 @@ const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
                         title={`Photo`}
                         subtitle={`Upload a photo of the user`}
                         faIcon={faImage}
-                        url={`/admin/user/${cid}/avatar`}
+                        url={`/admin/user/${id}/avatar`}
                         bgColour={`has-background-danger-dark`}
                     />
                 </div>
@@ -56,13 +56,13 @@ const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
 
               {/* ---------------------------------------------------------------------- */}
 
-              {user.status === 2 ? (
+              {user.status === 100 ? (
                 <div className="column">
                   <BubbleLink
                     title={`Unarchive`}
                     subtitle={`Make user visible in list and search results`}
                     faIcon={faBoxOpen}
-                    url={`/admin/user/${cid}/unarchive`}
+                    url={`/admin/user/${id}/more/unarchive`}
                     bgColour={`has-background-success-dark`}
                   />
                 </div>
@@ -72,7 +72,7 @@ const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
                     title={`Archive`}
                     subtitle={`Make user hidden from list and search results`}
                     faIcon={faArchive}
-                    url={`/admin/user/${cid}/archive`}
+                    url={`/admin/user/${id}/more/archive`}
                     bgColour={`has-background-success-dark`}
                   />
                 </div>
@@ -85,7 +85,7 @@ const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
                   title={`Delete`}
                   subtitle={`Permanently delete this user and all associated data`}
                   faIcon={faTrashCan}
-                  url={`/admin/user/${cid}/permadelete`}
+                  url={`/admin/user/${id}/more/permadelete`}
                   bgColour={`has-background-danger`}
                 />
               </div>
@@ -95,7 +95,7 @@ const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
                   title={`Password`}
                   subtitle={`Change or reset the user\'s password`}
                   faIcon={faKey}
-                  url={`/admin/user/${cid}/change-password`}
+                  url={`/admin/user/${id}/more/change-password`}
                   bgColour={`has-background-danger-dark`}
                 />
               </div>
@@ -104,7 +104,7 @@ const AdminClientDetailMoreDesktop = ({ cid, user, currentUser }) => {
                   title={`2FA`}
                   subtitle={`Enable or disable two-factor authentication`}
                   faIcon={faMobile}
-                  url={`/admin/user/${cid}/change-2fa`}
+                  url={`/admin/user/${id}/more/change-2fa`}
                   bgColour={`has-background-dark`}
                 />
               </div>
