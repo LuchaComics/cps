@@ -16,34 +16,33 @@ import {
   faArrowRight,
   faTrashCan,
   faArrowUpRightFromSquare,
-  faFile,
-  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 import {
-  ATTACHMENT_STATES,
+  SUBMISSION_STATES,
   PAGE_SIZE_OPTIONS,
-} from "../../../Constants/FieldOptions";
+} from "../../../../../Constants/FieldOptions";
 
-import { getUserDetailAPI } from "../../../API/user";
+import useLocalStorage from "../../../../../Hooks/useLocalStorage";
+import { getUserDetailAPI } from "../../../../../API/user";
 import {
-  getAttachmentListAPI,
-  deleteAttachmentAPI,
-} from "../../../API/Attachment";
-import FormErrorBox from "../../Reusable/FormErrorBox";
-import FormInputField from "../../Reusable/FormInputField";
-import FormTextareaField from "../../Reusable/FormTextareaField";
-import FormRadioField from "../../Reusable/FormRadioField";
-import FormMultiSelectField from "../../Reusable/FormMultiSelectField";
-import FormSelectField from "../../Reusable/FormSelectField";
-import FormCheckboxField from "../../Reusable/FormCheckboxField";
-import PageLoadingContent from "../../Reusable/PageLoadingContent";
-import { topAlertMessageState, topAlertStatusState } from "../../../AppState";
-import AdminUserDetailForAttachmentListDesktop from "./DetailForAttachmentListDektop";
-import AdminUserDetailForAttachmentListMobile from "./DetailForAttachmentListMobile";
+  getComicSubmissionListAPI,
+  deleteComicSubmissionAPI,
+} from "../../../../../API/ComicSubmission";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
+import FormInputField from "../../../../Reusable/FormInputField";
+import FormTextareaField from "../../../../Reusable/FormTextareaField";
+import FormRadioField from "../../../../Reusable/FormRadioField";
+import FormMultiSelectField from "../../../../Reusable/FormMultiSelectField";
+import FormSelectField from "../../../../Reusable/FormSelectField";
+import FormCheckboxField from "../../../../Reusable/FormCheckboxField";
+import PageLoadingContent from "../../../../Reusable/PageLoadingContent";
+import { topAlertMessageState, topAlertStatusState } from "../../../../../AppState";
+import AdminUserDetailForComicSubmissionListDesktop from "./DetailForComicSubmissionListDesktop";
+import AdminUserDetailForComicSubmissionListMobile from "./DetailForComicSubmissionListMobile";
 
-function AdminUserDetailForAttachmentList() {
+function AdminUserDetailForComicSubmissionList() {
   ////
   //// URL Parameters.
   ////
@@ -68,9 +67,11 @@ function AdminUserDetailForAttachmentList() {
   const [forceURL, setForceURL] = useState("");
   const [user, setUser] = useState({});
   const [tabIndex, setTabIndex] = useState(1);
-  const [attachments, setAttachments] = useState("");
-  const [selectedAttachmentForDeletion, setSelectedAttachmentForDeletion] =
-    useState("");
+  const [submissions, setComicSubmissions] = useState("");
+  const [
+    selectedComicSubmissionForDeletion,
+    setSelectedComicSubmissionForDeletion,
+  ] = useState("");
   const [pageSize, setPageSize] = useState(10); // Pagination
   const [previousCursors, setPreviousCursors] = useState([]); // Pagination
   const [nextCursor, setNextCursor] = useState(""); // Pagination
@@ -80,23 +81,22 @@ function AdminUserDetailForAttachmentList() {
   //// Event handling.
   ////
 
-  const fetchAttachmentList = (cur, userID, limit) => {
+  const fetchSubmissionList = (cur, userID, limit) => {
     setFetching(true);
     setErrors({});
 
     let params = new Map();
-    params.set("ownership_id", id);
-    params.set("ownership_role", 1); // 1=User or User.
+    params.set("user_id", id);
     params.set("page_size", limit);
     if (cur !== "") {
       params.set("cursor", cur);
     }
 
-    getAttachmentListAPI(
+    getComicSubmissionListAPI(
       params,
-      onAttachmentListSuccess,
-      onAttachmentListError,
-      onAttachmentListDone,
+      onComicSubmissionListSuccess,
+      onComicSubmissionListError,
+      onComicSubmissionListDone,
       onUnauthorized,
     );
   };
@@ -117,27 +117,27 @@ function AdminUserDetailForAttachmentList() {
     setCurrentCursor(previousCursor);
   };
 
-  const onSelectAttachmentForDeletion = (e, attachment) => {
-    console.log("onSelectAttachmentForDeletion", attachment);
-    setSelectedAttachmentForDeletion(attachment);
+  const onSelectComicSubmissionForDeletion = (e, submission) => {
+    console.log("onSelectComicSubmissionForDeletion", submission);
+    setSelectedComicSubmissionForDeletion(submission);
   };
 
-  const onDeselectAttachmentForDeletion = (e) => {
-    console.log("onDeselectAttachmentForDeletion");
-    setSelectedAttachmentForDeletion("");
+  const onDeselectComicSubmissionForDeletion = (e) => {
+    console.log("onDeselectComicSubmissionForDeletion");
+    setSelectedComicSubmissionForDeletion("");
   };
 
   const onDeleteConfirmButtonClick = (e) => {
     console.log("onDeleteConfirmButtonClick"); // For debugging purposes only.
 
-    deleteAttachmentAPI(
-      selectedAttachmentForDeletion.id,
-      onAttachmentDeleteSuccess,
-      onAttachmentDeleteError,
-      onAttachmentDeleteDone,
+    deleteComicSubmissionAPI(
+      selectedComicSubmissionForDeletion.id,
+      onComicSubmissionDeleteSuccess,
+      onComicSubmissionDeleteError,
+      onComicSubmissionDeleteDone,
       onUnauthorized,
     );
-    setSelectedAttachmentForDeletion("");
+    setSelectedComicSubmissionForDeletion("");
   };
 
   ////
@@ -149,6 +149,7 @@ function AdminUserDetailForAttachmentList() {
   function onUserDetailSuccess(response) {
     console.log("onUserDetailSuccess: Starting...");
     setUser(response);
+    fetchSubmissionList(response.id, pageSize);
   }
 
   function onUserDetailError(apiErr) {
@@ -167,20 +168,20 @@ function AdminUserDetailForAttachmentList() {
     setFetching(false);
   }
 
-  // Attachment list.
+  // ComicSubmission list.
 
-  function onAttachmentListSuccess(response) {
-    console.log("onAttachmentListSuccess: Starting...");
+  function onComicSubmissionListSuccess(response) {
+    console.log("onComicSubmissionListSuccess: Starting...");
     if (response.results !== null) {
-      setAttachments(response);
+      setComicSubmissions(response);
       if (response.hasNextPage) {
         setNextCursor(response.nextCursor); // For pagination purposes.
       }
     }
   }
 
-  function onAttachmentListError(apiErr) {
-    console.log("onAttachmentListError: Starting...");
+  function onComicSubmissionListError(apiErr) {
+    console.log("onComicSubmissionListError: Starting...");
     setErrors(apiErr);
 
     // The following code will cause the screen to scroll to the top of
@@ -190,19 +191,19 @@ function AdminUserDetailForAttachmentList() {
     scroll.scrollToTop();
   }
 
-  function onAttachmentListDone() {
-    console.log("onAttachmentListDone: Starting...");
+  function onComicSubmissionListDone() {
+    console.log("onComicSubmissionListDone: Starting...");
     setFetching(false);
   }
 
-  // Attachment delete.
+  // ComicSubmission delete.
 
-  function onAttachmentDeleteSuccess(response) {
-    console.log("onAttachmentDeleteSuccess: Starting..."); // For debugging purposes only.
+  function onComicSubmissionDeleteSuccess(response) {
+    console.log("onComicSubmissionDeleteSuccess: Starting..."); // For debugging purposes only.
 
     // Update notification.
     setTopAlertStatus("success");
-    setTopAlertMessage("Attachment deleted");
+    setTopAlertMessage("ComicSubmission deleted");
     setTimeout(() => {
       console.log(
         "onDeleteConfirmButtonClick: topAlertMessage, topAlertStatus:",
@@ -213,11 +214,11 @@ function AdminUserDetailForAttachmentList() {
     }, 2000);
 
     // Fetch again an updated list.
-    fetchAttachmentList(currentCursor, id, pageSize);
+    fetchSubmissionList(currentCursor, id, pageSize);
   }
 
-  function onAttachmentDeleteError(apiErr) {
-    console.log("onAttachmentDeleteError: Starting..."); // For debugging purposes only.
+  function onComicSubmissionDeleteError(apiErr) {
+    console.log("onComicSubmissionDeleteError: Starting..."); // For debugging purposes only.
     setErrors(apiErr);
 
     // Update notification.
@@ -225,7 +226,7 @@ function AdminUserDetailForAttachmentList() {
     setTopAlertMessage("Failed deleting");
     setTimeout(() => {
       console.log(
-        "onAttachmentDeleteError: topAlertMessage, topAlertStatus:",
+        "onComicSubmissionDeleteError: topAlertMessage, topAlertStatus:",
         topAlertMessage,
         topAlertStatus,
       );
@@ -239,12 +240,10 @@ function AdminUserDetailForAttachmentList() {
     scroll.scrollToTop();
   }
 
-  function onAttachmentDeleteDone() {
-    console.log("onAttachmentDeleteDone: Starting...");
+  function onComicSubmissionDeleteDone() {
+    console.log("onComicSubmissionDeleteDone: Starting...");
     setFetching(false);
   }
-
-  // --- All --- //
 
   const onUnauthorized = () => {
     setForceURL("/login?unauthorized=true"); // If token expired or user is not logged in, redirect back to login.
@@ -259,7 +258,6 @@ function AdminUserDetailForAttachmentList() {
 
     if (mounted) {
       window.scrollTo(0, 0); // Start the page at the top of the page.
-
       setFetching(true);
       getUserDetailAPI(
         id,
@@ -268,7 +266,7 @@ function AdminUserDetailForAttachmentList() {
         onUserDetailDone,
         onUnauthorized,
       );
-      fetchAttachmentList(currentCursor, id, pageSize);
+      fetchSubmissionList(currentCursor, id, pageSize);
     }
 
     return () => {
@@ -306,7 +304,7 @@ function AdminUserDetailForAttachmentList() {
               <li class="is-active">
                 <Link aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faEye} />
-                  &nbsp;Detail (Attachments)
+                  &nbsp;Detail
                 </Link>
               </li>
             </ul>
@@ -325,11 +323,8 @@ function AdminUserDetailForAttachmentList() {
           </nav>
 
           {/* Modals */}
-          {/* None */}
-
-          {/* Page */}
           <div
-            class={`modal ${selectedAttachmentForDeletion ? "is-active" : ""}`}
+            class={`modal ${selectedComicSubmissionForDeletion ? "is-active" : ""}`}
           >
             <div class="modal-background"></div>
             <div class="modal-card">
@@ -338,11 +333,11 @@ function AdminUserDetailForAttachmentList() {
                 <button
                   class="delete"
                   aria-label="close"
-                  onClick={onDeselectAttachmentForDeletion}
+                  onClick={onDeselectComicSubmissionForDeletion}
                 ></button>
               </header>
               <section class="modal-card-body">
-                You are about to <b>archive</b> this attachment; it will no
+                You are about to <b>archive</b> this submission; it will no
                 longer appear on your dashboard This action can be undone but
                 you'll need to contact the system administrator. Are you sure
                 you would like to continue?
@@ -356,13 +351,15 @@ function AdminUserDetailForAttachmentList() {
                 </button>
                 <button
                   class="button"
-                  onClick={onDeselectAttachmentForDeletion}
+                  onClick={onDeselectComicSubmissionForDeletion}
                 >
                   Cancel
                 </button>
               </footer>
             </div>
           </div>
+
+          {/* Page */}
           <nav class="box">
             <div class="columns">
               <div class="column">
@@ -371,18 +368,16 @@ function AdminUserDetailForAttachmentList() {
                   &nbsp;User
                 </p>
               </div>
-              {user && (
-                <div class="column has-text-right">
-                  <Link
-                    to={`/admin/user/${id}/attachments/add`}
-                    class="button is-small is-success is-fullwidth-mobile"
-                    type="button"
-                  >
-                    <FontAwesomeIcon className="mdi" icon={faPlus} />
-                    &nbsp;Add Attachment
-                  </Link>
-                </div>
-              )}
+              <div class="column has-text-right">
+                <Link
+                  to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
+                  class="button is-small is-success is-fullwidth-mobile"
+                  type="button"
+                >
+                  <FontAwesomeIcon className="mdi" icon={faPlus} />
+                  &nbsp;CPS
+                </Link>
+              </div>
             </div>
             <FormErrorBox errors={errors} />
 
@@ -399,9 +394,9 @@ function AdminUserDetailForAttachmentList() {
                         <li>
                           <Link to={`/admin/user/${user.id}`}>Detail</Link>
                         </li>
-                        <li>
-                          <Link to={`/admin/user/${user.id}/comics`}>
-                            Comics
+                        <li class="is-active">
+                          <Link>
+                            <b>Comics</b>
                           </Link>
                         </li>
                         <li>
@@ -409,9 +404,9 @@ function AdminUserDetailForAttachmentList() {
                             Comments
                           </Link>
                         </li>
-                        <li class="is-active">
+                        <li>
                           <Link to={`/admin/user/${user.id}/attachments`}>
-                            <b>Attachments</b>
+                            Attachments
                           </Link>
                         </li>
                         <li>
@@ -423,9 +418,9 @@ function AdminUserDetailForAttachmentList() {
                     </div>
 
                     {!isFetching &&
-                    attachments &&
-                    attachments.results &&
-                    (attachments.results.length > 0 ||
+                    submissions &&
+                    submissions.results &&
+                    (submissions.results.length > 0 ||
                       previousCursors.length > 0) ? (
                       <div class="container">
                         {/*
@@ -434,16 +429,15 @@ function AdminUserDetailForAttachmentList() {
                                                 ##################################################################
                                             */}
                         <div class="is-hidden-touch">
-                          <AdminUserDetailForAttachmentListDesktop
-                            userID={id}
-                            listData={attachments}
+                          <AdminUserDetailForComicSubmissionListDesktop
+                            listData={submissions}
                             setPageSize={setPageSize}
                             pageSize={pageSize}
                             previousCursors={previousCursors}
                             onPreviousClicked={onPreviousClicked}
                             onNextClicked={onNextClicked}
-                            onSelectAttachmentForDeletion={
-                              onSelectAttachmentForDeletion
+                            onSelectComicSubmissionForDeletion={
+                              onSelectComicSubmissionForDeletion
                             }
                           />
                         </div>
@@ -454,16 +448,15 @@ function AdminUserDetailForAttachmentList() {
                                                 ###########################################################################
                                             */}
                         <div class="is-fullwidth is-hidden-desktop">
-                          <AdminUserDetailForAttachmentListMobile
-                            userID={id}
-                            listData={attachments}
+                          <AdminUserDetailForComicSubmissionListMobile
+                            listData={submissions}
                             setPageSize={setPageSize}
                             pageSize={pageSize}
                             previousCursors={previousCursors}
                             onPreviousClicked={onPreviousClicked}
                             onNextClicked={onNextClicked}
-                            onSelectAttachmentForDeletion={
-                              onSelectAttachmentForDeletion
+                            onSelectComicSubmissionForDeletion={
+                              onSelectComicSubmissionForDeletion
                             }
                           />
                         </div>
@@ -472,9 +465,11 @@ function AdminUserDetailForAttachmentList() {
                       <div class="container">
                         <article class="message is-dark">
                           <div class="message-body">
-                            No attachments.{" "}
+                            No submissions.{" "}
                             <b>
-                              <Link to={`/admin/user/${id}/attachments/add`}>
+                              <Link
+                                to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
+                              >
                                 Click here&nbsp;
                                 <FontAwesomeIcon
                                   className="mdi"
@@ -482,7 +477,7 @@ function AdminUserDetailForAttachmentList() {
                                 />
                               </Link>
                             </b>{" "}
-                            to get started creating a new attachment.
+                            to get started creating a new submission.
                           </div>
                         </article>
                       </div>
@@ -490,18 +485,21 @@ function AdminUserDetailForAttachmentList() {
 
                     <div class="columns pt-5">
                       <div class="column is-half">
-                        <Link class="button is-fullwidth-mobile" to={`/users`}>
+                        <Link
+                          class="button is-fullwidth-mobile"
+                          to={`/admin/users`}
+                        >
                           <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                           &nbsp;Back to Users
                         </Link>
                       </div>
                       <div class="column is-half has-text-right">
                         <Link
-                          to={`/admin/user/${id}/attachments/add`}
+                          to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
                           class="button is-primary is-fullwidth-mobile"
                         >
                           <FontAwesomeIcon className="fas" icon={faPlus} />
-                          &nbsp;Add Attachment
+                          &nbsp;CPS
                         </Link>
                       </div>
                     </div>
@@ -516,4 +514,4 @@ function AdminUserDetailForAttachmentList() {
   );
 }
 
-export default AdminUserDetailForAttachmentList;
+export default AdminUserDetailForComicSubmissionList;

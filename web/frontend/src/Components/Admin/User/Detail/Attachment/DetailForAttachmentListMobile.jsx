@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faDownload,
   faCalendarMinus,
   faCalendarPlus,
   faDumbbell,
@@ -24,24 +25,25 @@ import {
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
-import FormErrorBox from "../../Reusable/FormErrorBox";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
 import {
   PAGE_SIZE_OPTIONS,
-  SUBMISSION_STATES,
-} from "../../../Constants/FieldOptions";
+  ATTACHMENT_STATES,
+} from "../../../../../Constants/FieldOptions";
 
 /*
 Display for both tablet and mobile.
 */
-function AdminUserDetailForComicSubmissionListMobile(props) {
+function AdminUserDetailForAttachmentListMobile(props) {
   const {
+    userID,
     listData,
     setPageSize,
     pageSize,
     previousCursors,
     onPreviousClicked,
     onNextClicked,
-    onSelectComicSubmissionForDeletion,
+    onSelectAttachmentForDeletion,
   } = props;
   return (
     <>
@@ -51,53 +53,47 @@ function AdminUserDetailForComicSubmissionListMobile(props) {
           return (
             <div class="mb-5">
               {i !== 0 && <hr />}
-              <strong>Title:</strong>&nbsp;{datum.seriesTitle}
+              <strong>Name:</strong>&nbsp;{datum.name}
               <br />
               <br />
-              <strong>Vol:</strong>&nbsp;{datum.issueVol}
-              <br />
-              <br />
-              <strong>No:</strong>&nbsp;{datum.issueNo}
-              <br />
-              <br />
-              <strong>Status:</strong>&nbsp;{SUBMISSION_STATES[datum.status]}
+              <strong>Status:</strong>&nbsp;{ATTACHMENT_STATES[datum.status]}
               <br />
               <br />
               <strong>Created:</strong>&nbsp;{datum.createdAt}
+              <br />
+              <br />
+              <strong>File:</strong>&nbsp;
+              <a
+                href={datum.objectUrl}
+                target="_blank"
+                rel="noreferrer"
+                class=""
+              >
+                <FontAwesomeIcon className="mdi" icon={faDownload} />
+                &nbsp;Download File
+              </a>
               <br />
               <br />
               {/* Tablet only */}
               <div class="is-hidden-mobile pt-2">
                 <div className="buttons is-right">
                   <Link
-                    to={`/admin/submissions/comic/${datum.id}`}
-                    target="_blank"
-                    rel="noreferrer"
+                    to={`/admin/user/${userID}/attachment/${datum.id}`}
                     class="button is-small is-primary"
                     type="button"
                   >
-                    View&nbsp;
-                    <FontAwesomeIcon
-                      className="fas"
-                      icon={faArrowUpRightFromSquare}
-                    />
+                    View
                   </Link>
                   <Link
-                    to={`/admin/submissions/comic/${datum.id}/edit`}
-                    target="_blank"
-                    rel="noreferrer"
+                    to={`/admin/user/${userID}/attachment/${datum.id}/edit`}
                     class="button is-small is-warning"
                     type="button"
                   >
-                    Edit&nbsp;
-                    <FontAwesomeIcon
-                      className="fas"
-                      icon={faArrowUpRightFromSquare}
-                    />
+                    Edit
                   </Link>
                   <button
                     onClick={(e, ses) =>
-                      onSelectComicSubmissionForDeletion(e, datum)
+                      onSelectAttachmentForDeletion(e, datum)
                     }
                     class="button is-small is-danger"
                     type="button"
@@ -112,38 +108,26 @@ function AdminUserDetailForComicSubmissionListMobile(props) {
                 <div class="columns is-mobile">
                   <div class="column">
                     <Link
-                      to={`/admin/submissions/comic/${datum.id}`}
-                      target="_blank"
-                      rel="noreferrer"
+                      to={`/admin/user/${userID}/attachment/${datum.id}`}
                       class="button is-small is-primary is-fullwidth"
                       type="button"
                     >
-                      View&nbsp;
-                      <FontAwesomeIcon
-                        className="fas"
-                        icon={faArrowUpRightFromSquare}
-                      />
+                      View
                     </Link>
                   </div>
                   <div class="column">
                     <Link
-                      to={`/admin/submissions/comic/${datum.id}/edit`}
-                      target="_blank"
-                      rel="noreferrer"
+                      to={`/admin/user/${userID}/attachment/${datum.id}/edit`}
                       class="button is-small is-warning is-fullwidth"
                       type="button"
                     >
-                      Edit&nbsp;
-                      <FontAwesomeIcon
-                        className="fas"
-                        icon={faArrowUpRightFromSquare}
-                      />
+                      Edit
                     </Link>
                   </div>
                   <div class="column">
                     <button
                       onClick={(e, ses) =>
-                        onSelectComicSubmissionForDeletion(e, datum)
+                        onSelectAttachmentForDeletion(e, datum)
                       }
                       class="button is-small is-danger is-fullwidth"
                       type="button"
@@ -198,4 +182,4 @@ function AdminUserDetailForComicSubmissionListMobile(props) {
   );
 }
 
-export default AdminUserDetailForComicSubmissionListMobile;
+export default AdminUserDetailForAttachmentListMobile;

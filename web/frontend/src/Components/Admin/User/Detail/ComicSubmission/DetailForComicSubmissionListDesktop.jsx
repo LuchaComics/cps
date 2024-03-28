@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faDownload,
   faCalendarMinus,
   faCalendarPlus,
   faDumbbell,
@@ -25,22 +24,21 @@ import {
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
-import FormErrorBox from "../../Reusable/FormErrorBox";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
 import {
   PAGE_SIZE_OPTIONS,
-  ATTACHMENT_STATES,
-} from "../../../Constants/FieldOptions";
+  SUBMISSION_STATES,
+} from "../../../../../Constants/FieldOptions";
 
-function AdminUserDetailForAttachmentListDesktop(props) {
+function AdminUserDetailForComicSubmissionListDesktop(props) {
   const {
-    userID,
     listData,
     setPageSize,
     pageSize,
     previousCursors,
     onPreviousClicked,
     onNextClicked,
-    onSelectAttachmentForDeletion,
+    onSelectComicSubmissionForDeletion,
   } = props;
   return (
     <div class="b-table">
@@ -48,54 +46,58 @@ function AdminUserDetailForAttachmentListDesktop(props) {
         <table class="is-fullwidth is-striped is-hoverable is-fullwidth table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Title</th>
+              <th>Vol</th>
+              <th>No</th>
               <th>Status</th>
               <th>Created</th>
-              <th>File</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {listData &&
               listData.results &&
-              listData.results.map(function (attachment, i) {
+              listData.results.map(function (submission, i) {
                 return (
                   <tr>
-                    <td data-label="Title">{attachment.name}</td>
+                    <td data-label="Title">{submission.seriesTitle}</td>
+                    <td data-label="Vol">{submission.issueVol}</td>
+                    <td data-label="No">{submission.issueNo}</td>
                     <td data-label="State">
-                      {ATTACHMENT_STATES[attachment.status]}
+                      {SUBMISSION_STATES[submission.status]}
                     </td>
-                    <td data-label="Created">{attachment.createdAt}</td>
-                    <td data-label="File">
-                      <a
-                        href={attachment.objectUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        class=""
-                      >
-                        <FontAwesomeIcon className="mdi" icon={faDownload} />
-                        &nbsp;Download File
-                      </a>
-                    </td>
+                    <td data-label="Created">{submission.createdAt}</td>
                     <td class="is-actions-cell">
                       <div class="buttons is-right">
                         <Link
-                          to={`/admin/user/${userID}/attachment/${attachment.id}`}
+                          to={`/admin/submissions/comic/${submission.id}`}
+                          target="_blank"
+                          rel="noreferrer"
                           class="button is-small is-primary"
                           type="button"
                         >
-                          View
+                          View&nbsp;
+                          <FontAwesomeIcon
+                            className="fas"
+                            icon={faArrowUpRightFromSquare}
+                          />
                         </Link>
                         <Link
-                          to={`/admin/user/${userID}/attachment/${attachment.id}/edit`}
+                          to={`/admin/submissions/comic/${submission.id}/edit`}
+                          target="_blank"
+                          rel="noreferrer"
                           class="button is-small is-warning"
                           type="button"
                         >
-                          Edit
+                          Edit&nbsp;
+                          <FontAwesomeIcon
+                            className="fas"
+                            icon={faArrowUpRightFromSquare}
+                          />
                         </Link>
                         <button
                           onClick={(e, ses) =>
-                            onSelectAttachmentForDeletion(e, attachment)
+                            onSelectComicSubmissionForDeletion(e, submission)
                           }
                           class="button is-small is-danger"
                           type="button"
@@ -152,4 +154,4 @@ function AdminUserDetailForAttachmentListDesktop(props) {
   );
 }
 
-export default AdminUserDetailForAttachmentListDesktop;
+export default AdminUserDetailForComicSubmissionListDesktop;

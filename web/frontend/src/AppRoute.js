@@ -60,9 +60,9 @@ import AdminSubmissionLaunchpad from "./Components/Admin/Submission/Launchpad";
 import AdminUserList from "./Components/Admin/User/List/View";
 import AdminUserAdd from "./Components/Admin/User/Add/View";
 import AdminUserDetail from "./Components/Admin/User/Detail/View";
-import AdminUserDetailForComicSubmissionList from "./Components/Admin/User/DetailForComicSubmissionList"; //TODO
-import AdminUserDetailForCommentList from "./Components/Admin/User/DetailForCommentList";//TODO
-import AdminUserDetailForAttachmentList from "./Components/Admin/User/DetailForAttachmentList";//TODO
+import AdminUserDetailForComicSubmissionList from "./Components/Admin/User/Detail/ComicSubmission/ListView";
+import AdminUserDetailForCommentList from "./Components/Admin/User/Detail/Comment/View";
+import AdminUserDetailForAttachmentList from "./Components/Admin/User/Detail/Attachment/ListView";
 import AdminUserAttachmentAdd from "./Components/Admin/User/Detail/Attachment/Add";
 import AdminUserAttachmentDetail from "./Components/Admin/User/Detail/Attachment/Detail";
 import AdminUserAttachmentUpdate from "./Components/Admin/User/Detail/Attachment/Update";
