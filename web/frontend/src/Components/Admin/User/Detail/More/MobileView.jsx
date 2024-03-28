@@ -91,78 +91,69 @@ const AdminClientDetailMoreMobile = ({ cid, user, currentUser }) => {
 
             {/* ---------------------------------------------------------------------- */}
 
-            {user && user.status === 1 && (
-              <>
-                {/* ---------------------------------------------------------------------- */}
-
-                {(currentUser.role === 1 || currentUser.role === 2) && (
-                  <>
-                    <tr>
-                      <td>
-                        <FontAwesomeIcon className="fas" icon={faTrashCan} />
-                        &nbsp;Delete
-                      </td>
-                      <td>
-                        <div className="buttons is-right">
-                          <Link
-                            to={`/admin/user/${cid}/permadelete`}
-                            className="is-small"
-                          >
-                            View&nbsp;
-                            <FontAwesomeIcon
-                              className="mdi"
-                              icon={faChevronRight}
-                            />
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <FontAwesomeIcon className="fas" icon={faKey} />
-                        &nbsp;Password
-                      </td>
-                      <td>
-                        <div className="buttons is-right">
-                          <Link
-                            to={`/admin/user/${cid}/change-password`}
-                            className="is-small"
-                          >
-                            View&nbsp;
-                            <FontAwesomeIcon
-                              className="mdi"
-                              icon={faChevronRight}
-                            />
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <FontAwesomeIcon className="fas" icon={faMobile} />
-                        &nbsp;2FA
-                      </td>
-                      <td>
-                        <div className="buttons is-right">
-                          <Link
-                            to={`/admin/user/${cid}/change-2fa`}
-                            className="is-small"
-                          >
-                            View&nbsp;
-                            <FontAwesomeIcon
-                              className="mdi"
-                              icon={faChevronRight}
-                            />
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  </>
-                )}
-
-                {/* ---------------------------------------------------------------------- */}
-              </>
-            )}
+            <tr>
+              <td>
+                <FontAwesomeIcon className="fas" icon={faTrashCan} />
+                &nbsp;Delete
+              </td>
+              <td>
+                <div className="buttons is-right">
+                  <Link
+                    to={`/admin/user/${cid}/permadelete`}
+                    className="is-small"
+                  >
+                    View&nbsp;
+                    <FontAwesomeIcon
+                      className="mdi"
+                      icon={faChevronRight}
+                    />
+                  </Link>
+                </div>
+              </td>
+            </tr>
+            {/* ---------------------------------------------------------------------- */}
+            <tr>
+              <td>
+                <FontAwesomeIcon className="fas" icon={faKey} />
+                &nbsp;Password
+              </td>
+              <td>
+                <div className="buttons is-right">
+                  <Link
+                    to={`/admin/user/${cid}/change-password`}
+                    className="is-small"
+                  >
+                    View&nbsp;
+                    <FontAwesomeIcon
+                      className="mdi"
+                      icon={faChevronRight}
+                    />
+                  </Link>
+                </div>
+              </td>
+            </tr>
+            {/* ---------------------------------------------------------------------- */}
+            <tr>
+              <td>
+                <FontAwesomeIcon className="fas" icon={faMobile} />
+                &nbsp;2FA
+              </td>
+              <td>
+                <div className="buttons is-right">
+                  <Link
+                    to={`/admin/user/${cid}/change-2fa`}
+                    className="is-small"
+                  >
+                    View&nbsp;
+                    <FontAwesomeIcon
+                      className="mdi"
+                      icon={faChevronRight}
+                    />
+                  </Link>
+                </div>
+              </td>
+            </tr>
+            {/* ---------------------------------------------------------------------- */}
           </tbody>
         </table>
       </div>
