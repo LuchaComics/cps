@@ -75,6 +75,7 @@ import AdminUserArchiveOperation from  "./Components/Admin/User/Detail/More/Arch
 import AdminUserUnarchiveOperation from  "./Components/Admin/User/Detail/More/Unarchive/View";
 import AdminUserDeleteOperation from  "./Components/Admin/User/Detail/More/Delete/View";
 import AdminUserMoreOperationChangePassword from  "./Components/Admin/User/Detail/More/ChangePassword/View";
+import AdminUserMoreOperation2FAToggle from  "./Components/Admin/User/Detail/More/2FA/View";
 import AdminUserUpdate from "./Components/Admin/User/Update/View";
 
 //-----------------//
@@ -491,6 +492,11 @@ function AppRoute() {
                     exact
                     path="/admin/user/:id/more/change-password"
                     element={<AdminUserMoreOperationChangePassword />}
+                  />
+                  <Route
+                    exact
+                    path="/admin/user/:id/more/change-2fa"
+                    element={<AdminUserMoreOperation2FAToggle />}
                   />
                   <Route
                     exact

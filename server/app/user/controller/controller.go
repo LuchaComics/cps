@@ -33,6 +33,7 @@ type UserController interface {
 	CreateComment(ctx context.Context, customerID primitive.ObjectID, content string) (*user_s.User, error)
 	Star(ctx context.Context, id primitive.ObjectID) (*user_s.User, error)
 	ChangePassword(ctx context.Context, req *UserOperationChangePasswordRequest) error
+	ChangeTwoFactorAuthentication(ctx context.Context, req *UserOperationChangeTwoFactorAuthenticationRequest) error
 	//TODO: Add more...
 }
 
