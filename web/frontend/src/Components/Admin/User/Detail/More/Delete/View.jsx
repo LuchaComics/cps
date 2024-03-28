@@ -25,22 +25,21 @@ import {
   faBuilding,
   faEllipsis,
   faArchive,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 
-import {
-  getUserDetailAPI,
-  postArchiveUserAPI,
-} from "../../../../../../API/user";
+import { getUserDetailAPI, deleteUserAPI } from "../../../../../../API/user";
 import FormErrorBox from "../../../../../Reusable/FormErrorBox";
+import AlertBanner from "../../../../../Reusable/EveryPage/AlertBanner";
 import PageLoadingContent from "../../../../../Reusable/PageLoadingContent";
 import {
   topAlertMessageState,
   topAlertStatusState,
 } from "../../../../../../AppState";
 
-function AdminUserArchiveOperation() {
+function AdminUserDeleteOperation() {
   ////
   //// URL Parameters.
   ////
@@ -72,11 +71,11 @@ function AdminUserArchiveOperation() {
   const onSubmitClick = () => {
     setErrors({});
     setFetching(true);
-    postArchiveUserAPI(
+    deleteUserAPI(
       id,
-      onArchiveSuccess,
-      onArchiveError,
-      onArchiveDone,
+      onDeleteSuccess,
+      onDeleteError,
+      onDeleteDone,
       onUnauthorized,
     );
   };
@@ -108,13 +107,13 @@ function AdminUserArchiveOperation() {
     setFetching(false);
   }
 
-  // --- Archive --- //
+  // --- Delete --- //
 
-  function onArchiveSuccess(response) {
-    console.log("onArchiveSuccess: Starting...");
+  function onDeleteSuccess(response) {
+    console.log("onDeleteSuccess: Starting...");
 
     // Add a temporary banner message in the app and then clear itself after 2 seconds.
-    setTopAlertMessage("User archived");
+    setTopAlertMessage("User deleted");
     setTopAlertStatus("success");
     setTimeout(() => {
       console.log("onSuccess: Delayed for 2 seconds.");
@@ -129,8 +128,8 @@ function AdminUserArchiveOperation() {
     setForceURL("/admin/users");
   }
 
-  function onArchiveError(apiErr) {
-    console.log("onArchiveError: Starting...");
+  function onDeleteError(apiErr) {
+    console.log("onDeleteError: Starting...");
     setErrors(apiErr);
 
     // The following code will cause the screen to scroll to the top of
@@ -140,8 +139,8 @@ function AdminUserArchiveOperation() {
     scroll.scrollToTop();
   }
 
-  function onArchiveDone() {
-    console.log("onArchiveDone: Starting...");
+  function onDeleteDone() {
+    console.log("onDeleteDone: Starting...");
     setFetching(false);
   }
 
@@ -206,8 +205,8 @@ function AdminUserArchiveOperation() {
               </li>
               <li className="is-active">
                 <Link aria-current="page">
-                  <FontAwesomeIcon className="fas" icon={faArchive} />
-                  &nbsp;Archive
+                  <FontAwesomeIcon className="fas" icon={faTrashCan} />
+                  &nbsp;Delete
                 </Link>
               </li>
             </ul>
@@ -228,6 +227,11 @@ function AdminUserArchiveOperation() {
             </ul>
           </nav>
 
+          {/* Page banner */}
+          {user && user.status === 2 && (
+            <AlertBanner message="Archived" status="info" />
+          )}
+
           {/* Page Title */}
           <h1 className="title is-2">
             <FontAwesomeIcon className="fas" icon={faUserCircle} />
@@ -246,8 +250,8 @@ function AdminUserArchiveOperation() {
               <div className="columns">
                 <div className="column">
                   <p className="title is-4">
-                    <FontAwesomeIcon className="fas" icon={faArchive} />
-                    &nbsp;Archive User - Are you sure?
+                    <FontAwesomeIcon className="fas" icon={faTrashCan} />
+                    &nbsp;Delete User - Are you sure?
                   </p>
                 </div>
                 <div className="column has-text-right"></div>
@@ -265,10 +269,10 @@ function AdminUserArchiveOperation() {
                 {user && (
                   <div className="container">
                     <p>
-                      You are about to <b>archive</b> this user; it will no
-                      longer exist in list. This action can be undone but you'll
-                      need to contact the system administrator. Are you sure you
-                      would like to continue?
+                      You are about to <b>permanently delete</b> this user; it
+                      will no longer exist in our database. This action can be
+                      undone but you'll need to contact the system
+                      administrator. Are you sure you would like to continue?
                     </p>
 
                     {/* Bottom Navigation */}
@@ -286,14 +290,13 @@ function AdminUserArchiveOperation() {
                         <button
                           className="button is-danger is-fullwidth-mobile"
                           onClick={onSubmitClick}
-                          type="button"
                         >
                           <FontAwesomeIcon
                             className="fas"
                             icon={faCheckCircle}
                             type="button"
                           />
-                          &nbsp;Confirm and Archive
+                          &nbsp;Confirm and Delete
                         </button>
                       </div>
                     </div>
@@ -308,4 +311,4 @@ function AdminUserArchiveOperation() {
   );
 }
 
-export default AdminUserArchiveOperation;
+export default AdminUserDeleteOperation;

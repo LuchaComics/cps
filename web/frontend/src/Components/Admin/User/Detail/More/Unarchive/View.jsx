@@ -183,19 +183,19 @@ function AdminUserUnarchiveOperation() {
         <section className="section">
           {/* Desktop Breadcrumbs */}
           <nav
-            className="breadcrumb has-background-light is-hidden-touch p-4"
+            className="breadcrumb is-hidden-touch"
             aria-label="breadcrumbs"
           >
             <ul>
               <li className="">
                 <Link to="/admin/dashboard" aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faGauge} />
-                  &nbsp;Dashboard
+                  &nbsp;Admin Dashboard
                 </Link>
               </li>
               <li className="">
                 <Link to="/admin/users" aria-current="page">
-                  <FontAwesomeIcon className="fas" icon={faUserCircle} />
+                  <FontAwesomeIcon className="fas" icon={faUsers} />
                   &nbsp;Users
                 </Link>
               </li>
