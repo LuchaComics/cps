@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faEllipsis,
   faTasks,
   faTachometer,
   faPlus,
@@ -39,7 +40,10 @@ import FormMultiSelectField from "../../../../Reusable/FormMultiSelectField";
 import FormSelectField from "../../../../Reusable/FormSelectField";
 import FormCheckboxField from "../../../../Reusable/FormCheckboxField";
 import PageLoadingContent from "../../../../Reusable/PageLoadingContent";
-import { topAlertMessageState, topAlertStatusState } from "../../../../../AppState";
+import {
+  topAlertMessageState,
+  topAlertStatusState,
+} from "../../../../../AppState";
 import AdminUserDetailForAttachmentListDesktop from "./DetailForAttachmentListDektop";
 import AdminUserDetailForAttachmentListMobile from "./DetailForAttachmentListMobile";
 
@@ -417,6 +421,15 @@ function AdminUserDetailForAttachmentList() {
                         <li>
                           <Link to={`/admin/user/${user.id}/credits`}>
                             Credits
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to={`/admin/user/${user.id}/more`}>
+                            More&nbsp;&nbsp;
+                            <FontAwesomeIcon
+                              className="mdi"
+                              icon={faEllipsis}
+                            />
                           </Link>
                         </li>
                       </ul>

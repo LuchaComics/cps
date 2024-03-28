@@ -25,7 +25,7 @@ import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
 import FormErrorBox from "../../../Reusable/FormErrorBox";
-import { PAGE_SIZE_OPTIONS } from "../../../../Constants/FieldOptions";
+import { PAGE_SIZE_OPTIONS, USER_ROLES } from "../../../../Constants/FieldOptions";
 
 /*
 Display for both tablet and mobile.
@@ -62,7 +62,27 @@ function AdminUserListMobile(props) {
               )}
               <br />
               <br />
-              <strong>Created:</strong>&nbsp;{datum.createdAt}
+              <strong>Store:</strong>&nbsp;
+              {datum.storeId !== "000000000000000000000000" && (
+                <Link
+                  to={`/admin/store/${datum.storeId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="is-small"
+                >
+                  {datum.storeName}&nbsp;
+                  <FontAwesomeIcon
+                    className="fas"
+                    icon={faArrowUpRightFromSquare}
+                  />
+                </Link>
+              )}
+              <br />
+              <br />
+              <strong>Role:</strong>&nbsp;{USER_ROLES[datum.role]}
+              <br />
+              <br />
+              <strong>Joined:</strong>&nbsp;{datum.createdAt}
               <br />
               <br />
               {/* Tablet only */}

@@ -70,6 +70,7 @@ import AdminUserCreditList from "./Components/Admin/User/Detail/Credit/List";
 import AdminUserCreditAdd from "./Components/Admin/User/Detail/Credit/Add";
 import AdminUserCreditDetail from "./Components/Admin/User/Detail/Credit/Detail";
 import AdminUserCreditUpdate from "./Components/Admin/User/Detail/Credit/Update";
+import AdminUserDetailMore from "./Components/Admin/User/Detail/More/View";
 import AdminUserUpdate from "./Components/Admin/User/Update/View";
 
 //-----------------//
@@ -462,6 +463,12 @@ function AppRoute() {
                     path="/admin/user/:id/credit/:cid/edit"
                     element={<AdminUserCreditUpdate />}
                   />
+                  <Route
+                    exact
+                    path="/admin/user/:id/more"
+                    element={<AdminUserDetailMore />}
+                  />
+
                   <Route
                     exact
                     path="/admin/dashboard"

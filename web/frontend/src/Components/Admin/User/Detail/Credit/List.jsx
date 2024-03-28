@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faEllipsis,
   faTasks,
   faTachometer,
   faPlus,
@@ -405,6 +406,15 @@ function AdminUserCreditList() {
                         <li class="is-active">
                           <Link to={`/admin/user/${user.id}/credits`}>
                             <b>Credits</b>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to={`/admin/user/${user.id}/more`}>
+                            More&nbsp;&nbsp;
+                            <FontAwesomeIcon
+                              className="mdi"
+                              icon={faEllipsis}
+                            />
                           </Link>
                         </li>
                       </ul>

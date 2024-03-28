@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faEllipsis,
   faTasks,
   faTachometer,
   faPlus,
@@ -46,7 +47,10 @@ import {
   CPS_PERCENTAGE_GRADE_OPTIONS,
   HOW_DID_YOU_HEAR_ABOUT_US_WITH_EMPTY_OPTIONS,
 } from "../../../../../Constants/FieldOptions";
-import { topAlertMessageState, topAlertStatusState } from "../../../../../AppState";
+import {
+  topAlertMessageState,
+  topAlertStatusState,
+} from "../../../../../AppState";
 
 function AdminUserDetailForCommentList() {
   ////
@@ -343,6 +347,15 @@ function AdminUserDetailForCommentList() {
                         <li>
                           <Link to={`/admin/user/${user.id}/credits`}>
                             Credits
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to={`/admin/user/${user.id}/more`}>
+                            More&nbsp;&nbsp;
+                            <FontAwesomeIcon
+                              className="mdi"
+                              icon={faEllipsis}
+                            />
                           </Link>
                         </li>
                       </ul>
