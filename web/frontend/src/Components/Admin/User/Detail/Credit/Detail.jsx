@@ -24,20 +24,20 @@ import {
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 
-import { getCreditDetailAPI } from "../../../../API/Credit";
-import FormErrorBox from "../../../Reusable/FormErrorBox";
-import PageLoadingContent from "../../../Reusable/PageLoadingContent";
+import { getCreditDetailAPI } from "../../../../../API/Credit";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
+import PageLoadingContent from "../../../../Reusable/PageLoadingContent";
 import {
   topAlertMessageState,
   topAlertStatusState,
-} from "../../../../AppState";
-import DataDisplayRowSelect from "../../../Reusable/DataDisplayRowSelect";
-import DataDisplayRowOffer from "../../../Reusable/DataDisplayRowOffer";
-import DataDisplayRowText from "../../../Reusable/DataDisplayRowText";
+} from "../../../../../AppState";
+import DataDisplayRowSelect from "../../../../Reusable/DataDisplayRowSelect";
+import DataDisplayRowOffer from "../../../../Reusable/DataDisplayRowOffer";
+import DataDisplayRowText from "../../../../Reusable/DataDisplayRowText";
 import {
   CREDIT_BUSINESS_FUNCTION_WITH_EMPTY_OPTIONS,
   CREDIT_STATUS_WITH_EMPTY_OPTIONS,
-} from "../../../../Constants/FieldOptions";
+} from "../../../../../Constants/FieldOptions";
 
 function AdminUserCreditDetail() {
   ////

@@ -25,12 +25,12 @@ import {
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
-import FormErrorBox from "../../../Reusable/FormErrorBox";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
 import {
   PAGE_SIZE_OPTIONS,
   CREDIT_STATUS_STATES,
   CREDIT_BUSINESS_FUNCTION_STATES,
-} from "../../../../Constants/FieldOptions";
+} from "../../../../../Constants/FieldOptions";
 
 /*
 Display for both tablet and mobile.

@@ -57,20 +57,20 @@ import AdminComicSubmissionUpdatePickCustomerWithSearch from "./Components/Admin
 import AdminSubmissionLaunchpad from "./Components/Admin/Submission/Launchpad";
 
 // Users
-import AdminUserList from "./Components/Admin/User/List";
-import AdminUserAdd from "./Components/Admin/User/Add";
-import AdminUserDetail from "./Components/Admin/User/Detail";
-import AdminUserDetailForComicSubmissionList from "./Components/Admin/User/DetailForComicSubmissionList";
-import AdminUserDetailForCommentList from "./Components/Admin/User/DetailForCommentList";
-import AdminUserDetailForAttachmentList from "./Components/Admin/User/DetailForAttachmentList";
-import AdminUserAttachmentAdd from "./Components/Admin/User/Attachment/Add";
-import AdminUserAttachmentDetail from "./Components/Admin/User/Attachment/Detail";
-import AdminUserAttachmentUpdate from "./Components/Admin/User/Attachment/Update";
-import AdminUserCreditList from "./Components/Admin/User/Credit/List";
-import AdminUserCreditAdd from "./Components/Admin/User/Credit/Add";
-import AdminUserCreditDetail from "./Components/Admin/User/Credit/Detail";
-import AdminUserCreditUpdate from "./Components/Admin/User/Credit/Update";
-import AdminUserUpdate from "./Components/Admin/User/Update";
+import AdminUserList from "./Components/Admin/User/List/View";
+import AdminUserAdd from "./Components/Admin/User/Add/View";
+import AdminUserDetail from "./Components/Admin/User/Detail/View";
+import AdminUserDetailForComicSubmissionList from "./Components/Admin/User/DetailForComicSubmissionList"; //TODO
+import AdminUserDetailForCommentList from "./Components/Admin/User/DetailForCommentList";//TODO
+import AdminUserDetailForAttachmentList from "./Components/Admin/User/DetailForAttachmentList";//TODO
+import AdminUserAttachmentAdd from "./Components/Admin/User/Detail/Attachment/Add";
+import AdminUserAttachmentDetail from "./Components/Admin/User/Detail/Attachment/Detail";
+import AdminUserAttachmentUpdate from "./Components/Admin/User/Detail/Attachment/Update";
+import AdminUserCreditList from "./Components/Admin/User/Detail/Credit/List";
+import AdminUserCreditAdd from "./Components/Admin/User/Detail/Credit/Add";
+import AdminUserCreditDetail from "./Components/Admin/User/Detail/Credit/Detail";
+import AdminUserCreditUpdate from "./Components/Admin/User/Detail/Credit/Update";
+import AdminUserUpdate from "./Components/Admin/User/Update/View";
 
 //-----------------//
 // Retailer Portal //

@@ -19,36 +19,32 @@ import {
   faCogs,
   faEye,
   faArrowLeft,
-  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 
-import useLocalStorage from "../../../../Hooks/useLocalStorage";
-import {
-  putAttachmentUpdateAPI,
-  getAttachmentDetailAPI,
-} from "../../../../API/Attachment";
-import FormErrorBox from "../../../Reusable/FormErrorBox";
-import FormInputField from "../../../Reusable/FormInputField";
-import FormTextareaField from "../../../Reusable/FormTextareaField";
-import FormRadioField from "../../../Reusable/FormRadioField";
-import FormMultiSelectField from "../../../Reusable/FormMultiSelectField";
-import FormSelectField from "../../../Reusable/FormSelectField";
-import FormCheckboxField from "../../../Reusable/FormCheckboxField";
-import FormCountryField from "../../../Reusable/FormCountryField";
-import FormRegionField from "../../../Reusable/FormRegionField";
-import PageLoadingContent from "../../../Reusable/PageLoadingContent";
+import useLocalStorage from "../../../../../Hooks/useLocalStorage";
+import { postAttachmentCreateAPI } from "../../../../../API/Attachment";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
+import FormInputField from "../../../../Reusable/FormInputField";
+import FormTextareaField from "../../../../Reusable/FormTextareaField";
+import FormRadioField from "../../../../Reusable/FormRadioField";
+import FormMultiSelectField from "../../../../Reusable/FormMultiSelectField";
+import FormSelectField from "../../../../Reusable/FormSelectField";
+import FormCheckboxField from "../../../../Reusable/FormCheckboxField";
+import FormCountryField from "../../../../Reusable/FormCountryField";
+import FormRegionField from "../../../../Reusable/FormRegionField";
+import PageLoadingContent from "../../../../Reusable/PageLoadingContent";
 import {
   topAlertMessageState,
   topAlertStatusState,
-} from "../../../../AppState";
+} from "../../../../../AppState";
 
-function AdminUserAttachmentUpdate() {
+function AdminUserAttachmentAdd() {
   ////
   //// URL Parameters.
   ////
 
-  const { id, aid } = useParams();
+  const { id } = useParams();
 
   ////
   //// Global state.
@@ -69,7 +65,6 @@ function AdminUserAttachmentUpdate() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [objectUrl, setObjectUrl] = useState("");
 
   ////
   //// Event handling.
@@ -85,19 +80,17 @@ function AdminUserAttachmentUpdate() {
     setErrors({});
 
     const formData = new FormData();
-    formData.append("id", aid);
     formData.append("file", selectedFile);
     formData.append("name", name);
     formData.append("description", description);
     formData.append("ownership_id", id);
     formData.append("ownership_type", 1); // 1=Customer or User.
 
-    putAttachmentUpdateAPI(
-      id,
+    postAttachmentCreateAPI(
       formData,
-      onAdminUserAttachmentUpdateSuccess,
-      onAdminUserAttachmentUpdateError,
-      onAdminUserAttachmentUpdateDone,
+      onAdminUserAttachmentAddSuccess,
+      onAdminUserAttachmentAddError,
+      onAdminUserAttachmentAddDone,
       onUnauthorized,
     );
     console.log("onSubmitClick: Finished.");
@@ -107,18 +100,18 @@ function AdminUserAttachmentUpdate() {
   //// API.
   ////
 
-  function onAdminUserAttachmentUpdateSuccess(response) {
+  function onAdminUserAttachmentAddSuccess(response) {
     // For debugging purposes only.
-    console.log("onAdminUserAttachmentUpdateSuccess: Starting...");
+    console.log("onAdminUserAttachmentAddSuccess: Starting...");
     console.log(response);
 
     // Add a temporary banner message in the app and then clear itself after 2 seconds.
     setTopAlertMessage("User created");
     setTopAlertStatus("success");
     setTimeout(() => {
-      console.log("onAdminUserAttachmentUpdateSuccess: Delayed for 2 seconds.");
+      console.log("onAdminUserAttachmentAddSuccess: Delayed for 2 seconds.");
       console.log(
-        "onAdminUserAttachmentUpdateSuccess: topAlertMessage, topAlertStatus:",
+        "onAdminUserAttachmentAddSuccess: topAlertMessage, topAlertStatus:",
         topAlertMessage,
         topAlertStatus,
       );
@@ -129,17 +122,17 @@ function AdminUserAttachmentUpdate() {
     setForceURL("/admin/user/" + id + "/attachments");
   }
 
-  function onAdminUserAttachmentUpdateError(apiErr) {
-    console.log("onAdminUserAttachmentUpdateError: Starting...");
+  function onAdminUserAttachmentAddError(apiErr) {
+    console.log("onAdminUserAttachmentAddError: Starting...");
     setErrors(apiErr);
 
     // Add a temporary banner message in the app and then clear itself after 2 seconds.
     setTopAlertMessage("Failed submitting");
     setTopAlertStatus("danger");
     setTimeout(() => {
-      console.log("onAdminUserAttachmentUpdateError: Delayed for 2 seconds.");
+      console.log("onAdminUserAttachmentAddError: Delayed for 2 seconds.");
       console.log(
-        "onAdminUserAttachmentUpdateError: topAlertMessage, topAlertStatus:",
+        "onAdminUserAttachmentAddError: topAlertMessage, topAlertStatus:",
         topAlertMessage,
         topAlertStatus,
       );
@@ -153,46 +146,8 @@ function AdminUserAttachmentUpdate() {
     scroll.scrollToTop();
   }
 
-  function onAdminUserAttachmentUpdateDone() {
-    console.log("onAdminUserAttachmentUpdateDone: Starting...");
-    setFetching(false);
-  }
-
-  function onAdminUserAttachmentDetailSuccess(response) {
-    // For debugging purposes only.
-    console.log("onAdminUserAttachmentDetailSuccess: Starting...");
-    console.log(response);
-    setName(response.name);
-    setDescription(response.description);
-    setObjectUrl(response.objectUrl);
-  }
-
-  function onAdminUserAttachmentDetailError(apiErr) {
-    console.log("onAdminUserAttachmentDetailError: Starting...");
-    setErrors(apiErr);
-
-    // Add a temporary banner message in the app and then clear itself after 2 seconds.
-    setTopAlertMessage("Failed submitting");
-    setTopAlertStatus("danger");
-    setTimeout(() => {
-      console.log("onAdminUserAttachmentDetailError: Delayed for 2 seconds.");
-      console.log(
-        "onAdminUserAttachmentDetailError: topAlertMessage, topAlertStatus:",
-        topAlertMessage,
-        topAlertStatus,
-      );
-      setTopAlertMessage("");
-    }, 2000);
-
-    // The following code will cause the screen to scroll to the top of
-    // the page. Please see ``react-scroll`` for more information:
-    // https://github.com/fisshy/react-scroll
-    var scroll = Scroll.animateScroll;
-    scroll.scrollToTop();
-  }
-
-  function onAdminUserAttachmentDetailDone() {
-    console.log("onAdminUserAttachmentDetailDone: Starting...");
+  function onAdminUserAttachmentAddDone() {
+    console.log("onAdminUserAttachmentAddDone: Starting...");
     setFetching(false);
   }
 
@@ -211,20 +166,13 @@ function AdminUserAttachmentUpdate() {
 
     if (mounted) {
       window.scrollTo(0, 0); // Start the page at the top of the page.
-
-      getAttachmentDetailAPI(
-        aid,
-        onAdminUserAttachmentDetailSuccess,
-        onAdminUserAttachmentDetailError,
-        onAdminUserAttachmentDetailDone,
-        onUnauthorized,
-      );
     }
 
     return () => {
       mounted = false;
     };
-  }, [aid]);
+  }, []);
+
   ////
   //// Component rendering.
   ////
@@ -258,19 +206,10 @@ function AdminUserAttachmentUpdate() {
                   &nbsp;Detail (Attachments)
                 </Link>
               </li>
-              <li class="">
-                <Link
-                  to={`/admin/user/${id}/attachment/${aid}`}
-                  aria-current="page"
-                >
-                  <FontAwesomeIcon className="fas" icon={faFile} />
-                  &nbsp;Attachment
-                </Link>
-              </li>
               <li class="is-active">
                 <Link aria-current="page">
-                  <FontAwesomeIcon className="fas" icon={faPencil} />
-                  &nbsp;Edit
+                  <FontAwesomeIcon className="fas" icon={faPlus} />
+                  &nbsp;New
                 </Link>
               </li>
             </ul>
@@ -280,12 +219,9 @@ function AdminUserAttachmentUpdate() {
           <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
             <ul>
               <li class="">
-                <Link
-                  to={`/admin/user/${id}/attachment/${aid}`}
-                  aria-current="page"
-                >
+                <Link to={`/admin/user/${id}`} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faArrowLeft} />
-                  &nbsp;Back to Attachment
+                  &nbsp;Back to Detail
                 </Link>
               </li>
             </ul>
@@ -297,9 +233,10 @@ function AdminUserAttachmentUpdate() {
           {/* Page */}
           <nav class="box">
             <p class="title is-4">
-              <FontAwesomeIcon className="fas" icon={faPencil} />
-              &nbsp;Edit Attachment
+              <FontAwesomeIcon className="fas" icon={faPlus} />
+              &nbsp;New Attachment
             </p>
+            <FormErrorBox errors={errors} />
 
             {/* <p class="pb-4 has-text-grey">Please fill out all the required fields before submitting this form.</p> */}
 
@@ -307,15 +244,7 @@ function AdminUserAttachmentUpdate() {
               <PageLoadingContent displayMessage={"Submitting..."} />
             ) : (
               <>
-                <FormErrorBox errors={errors} />
                 <div class="container">
-                  <article class="message is-warning">
-                    <div class="message-body">
-                      <strong>Warning:</strong> Submitting with new uploaded
-                      file will delete previous upload.
-                    </div>
-                  </article>
-
                   <FormInputField
                     label="Name"
                     name="name"
@@ -352,14 +281,14 @@ function AdminUserAttachmentUpdate() {
                   <div class="columns pt-5">
                     <div class="column is-half">
                       <Link
-                        to={`/admin/user/${id}/attachment/${aid}`}
+                        to={`/admin/user/${id}/attachments`}
                         class="button is-hidden-touch"
                       >
                         <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                         &nbsp;Back
                       </Link>
                       <Link
-                        to={`/admin/user/${id}/attachment/${aid}`}
+                        to={`/admin/user/${id}/attachments`}
                         class="button is-fullwidth is-hidden-desktop"
                       >
                         <FontAwesomeIcon className="fas" icon={faArrowLeft} />
@@ -393,4 +322,4 @@ function AdminUserAttachmentUpdate() {
   );
 }
 
-export default AdminUserAttachmentUpdate;
+export default AdminUserAttachmentAdd;

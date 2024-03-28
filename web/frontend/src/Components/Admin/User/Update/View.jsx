@@ -23,24 +23,24 @@ import {
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 
-import { getUserDetailAPI, putUserUpdateAPI } from "../../../API/user";
-import { getStoreSelectOptionListAPI } from "../../../API/store";
-import FormErrorBox from "../../Reusable/FormErrorBox";
-import FormInputField from "../../Reusable/FormInputField";
-import FormTextareaField from "../../Reusable/FormTextareaField";
-import FormRadioField from "../../Reusable/FormRadioField";
-import FormMultiSelectField from "../../Reusable/FormMultiSelectField";
-import FormSelectField from "../../Reusable/FormSelectField";
-import FormCheckboxField from "../../Reusable/FormCheckboxField";
-import FormCountryField from "../../Reusable/FormCountryField";
-import FormRegionField from "../../Reusable/FormRegionField";
-import PageLoadingContent from "../../Reusable/PageLoadingContent";
+import { getUserDetailAPI, putUserUpdateAPI } from "../../../../API/user";
+import { getStoreSelectOptionListAPI } from "../../../../API/store";
+import FormErrorBox from "../../../Reusable/FormErrorBox";
+import FormInputField from "../../../Reusable/FormInputField";
+import FormTextareaField from "../../../Reusable/FormTextareaField";
+import FormRadioField from "../../../Reusable/FormRadioField";
+import FormMultiSelectField from "../../../Reusable/FormMultiSelectField";
+import FormSelectField from "../../../Reusable/FormSelectField";
+import FormCheckboxField from "../../../Reusable/FormCheckboxField";
+import FormCountryField from "../../../Reusable/FormCountryField";
+import FormRegionField from "../../../Reusable/FormRegionField";
+import PageLoadingContent from "../../../Reusable/PageLoadingContent";
 import {
   HOW_DID_YOU_HEAR_ABOUT_US_WITH_EMPTY_OPTIONS,
   HOW_LONG_HAS_YOUR_STORE_BEEN_OPERATING_FOR_WITH_EMPTY_OPTIONS,
   USER_SPECIAL_COLLECTION_WITH_EMPTY_OPTIONS,
-} from "../../../Constants/FieldOptions";
-import { topAlertMessageState, topAlertStatusState } from "../../../AppState";
+} from "../../../../Constants/FieldOptions";
+import { topAlertMessageState, topAlertStatusState } from "../../../../AppState";
 
 function AdminUserUpdate() {
   ////

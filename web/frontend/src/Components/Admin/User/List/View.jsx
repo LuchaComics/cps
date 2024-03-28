@@ -21,7 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 
-import { getUserListAPI, deleteUserAPI } from "../../../API/user";
+import { getUserListAPI, deleteUserAPI } from "../../../../API/user";
 import {
   topAlertMessageState,
   topAlertStatusState,
@@ -32,18 +32,18 @@ import {
   userFilterStatusState,
   userFilterRoleState,
   userFilterJoinedAfterState,
-} from "../../../AppState";
-import FormErrorBox from "../../Reusable/FormErrorBox";
-import PageLoadingContent from "../../Reusable/PageLoadingContent";
-import FormInputFieldWithButton from "../../Reusable/FormInputFieldWithButton";
-import FormSelectField from "../../Reusable/FormSelectField";
-import FormDateField from "../../Reusable/FormDateField";
+} from "../../../../AppState";
+import FormErrorBox from "../../../Reusable/FormErrorBox";
+import PageLoadingContent from "../../../Reusable/PageLoadingContent";
+import FormInputFieldWithButton from "../../../Reusable/FormInputFieldWithButton";
+import FormSelectField from "../../../Reusable/FormSelectField";
+import FormDateField from "../../../Reusable/FormDateField";
 import {
   USER_ROLES,
   PAGE_SIZE_OPTIONS,
   USER_STATUS_LIST_OPTIONS,
   USER_ROLE_LIST_OPTIONS,
-} from "../../../Constants/FieldOptions";
+} from "../../../../Constants/FieldOptions";
 import AdminUserListDesktop from "./ListDesktop";
 import AdminUserListMobile from "./ListMobile";
 

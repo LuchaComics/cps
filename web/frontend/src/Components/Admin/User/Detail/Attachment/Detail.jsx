@@ -19,32 +19,34 @@ import {
   faCogs,
   faEye,
   faArrowLeft,
+  faFile,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 
-import useLocalStorage from "../../../../Hooks/useLocalStorage";
-import { postAttachmentCreateAPI } from "../../../../API/Attachment";
-import FormErrorBox from "../../../Reusable/FormErrorBox";
-import FormInputField from "../../../Reusable/FormInputField";
-import FormTextareaField from "../../../Reusable/FormTextareaField";
-import FormRadioField from "../../../Reusable/FormRadioField";
-import FormMultiSelectField from "../../../Reusable/FormMultiSelectField";
-import FormSelectField from "../../../Reusable/FormSelectField";
-import FormCheckboxField from "../../../Reusable/FormCheckboxField";
-import FormCountryField from "../../../Reusable/FormCountryField";
-import FormRegionField from "../../../Reusable/FormRegionField";
-import PageLoadingContent from "../../../Reusable/PageLoadingContent";
+import { getAttachmentDetailAPI } from "../../../../../API/Attachment";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
+import FormInputField from "../../../../Reusable/FormInputField";
+import FormTextareaField from "../../../../Reusable/FormTextareaField";
+import FormRadioField from "../../../../Reusable/FormRadioField";
+import FormMultiSelectField from "../../../../Reusable/FormMultiSelectField";
+import FormSelectField from "../../../../Reusable/FormSelectField";
+import FormCheckboxField from "../../../../Reusable/FormCheckboxField";
+import FormCountryField from "../../../../Reusable/FormCountryField";
+import FormRegionField from "../../../../Reusable/FormRegionField";
+import PageLoadingContent from "../../../../Reusable/PageLoadingContent";
 import {
   topAlertMessageState,
   topAlertStatusState,
-} from "../../../../AppState";
+} from "../../../../../AppState";
+import FormRowText from "../../../../Reusable/FormRowText";
 
-function AdminUserAttachmentAdd() {
+function AdminUserAttachmentDetail() {
   ////
   //// URL Parameters.
   ////
 
-  const { id } = useParams();
+  const { id, aid } = useParams();
 
   ////
   //// Global state.
@@ -65,74 +67,36 @@ function AdminUserAttachmentAdd() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [objectUrl, setObjectUrl] = useState("");
 
   ////
   //// Event handling.
   ////
 
-  const onHandleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const onSubmitClick = (e) => {
-    console.log("onSubmitClick: Starting...");
-    setFetching(true);
-    setErrors({});
-
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("ownership_id", id);
-    formData.append("ownership_type", 1); // 1=Customer or User.
-
-    postAttachmentCreateAPI(
-      formData,
-      onAdminUserAttachmentAddSuccess,
-      onAdminUserAttachmentAddError,
-      onAdminUserAttachmentAddDone,
-      onUnauthorized,
-    );
-    console.log("onSubmitClick: Finished.");
-  };
-
   ////
   //// API.
   ////
 
-  function onAdminUserAttachmentAddSuccess(response) {
+  function onAdminUserAttachmentDetailSuccess(response) {
     // For debugging purposes only.
-    console.log("onAdminUserAttachmentAddSuccess: Starting...");
+    console.log("onAdminUserAttachmentDetailSuccess: Starting...");
     console.log(response);
-
-    // Add a temporary banner message in the app and then clear itself after 2 seconds.
-    setTopAlertMessage("User created");
-    setTopAlertStatus("success");
-    setTimeout(() => {
-      console.log("onAdminUserAttachmentAddSuccess: Delayed for 2 seconds.");
-      console.log(
-        "onAdminUserAttachmentAddSuccess: topAlertMessage, topAlertStatus:",
-        topAlertMessage,
-        topAlertStatus,
-      );
-      setTopAlertMessage("");
-    }, 2000);
-
-    // Redirect the user to the user attachments page.
-    setForceURL("/admin/user/" + id + "/attachments");
+    setName(response.name);
+    setDescription(response.description);
+    setObjectUrl(response.objectUrl);
   }
 
-  function onAdminUserAttachmentAddError(apiErr) {
-    console.log("onAdminUserAttachmentAddError: Starting...");
+  function onAdminUserAttachmentDetailError(apiErr) {
+    console.log("onAdminUserAttachmentDetailError: Starting...");
     setErrors(apiErr);
 
     // Add a temporary banner message in the app and then clear itself after 2 seconds.
     setTopAlertMessage("Failed submitting");
     setTopAlertStatus("danger");
     setTimeout(() => {
-      console.log("onAdminUserAttachmentAddError: Delayed for 2 seconds.");
+      console.log("onAdminUserAttachmentDetailError: Delayed for 2 seconds.");
       console.log(
-        "onAdminUserAttachmentAddError: topAlertMessage, topAlertStatus:",
+        "onAdminUserAttachmentDetailError: topAlertMessage, topAlertStatus:",
         topAlertMessage,
         topAlertStatus,
       );
@@ -146,8 +110,8 @@ function AdminUserAttachmentAdd() {
     scroll.scrollToTop();
   }
 
-  function onAdminUserAttachmentAddDone() {
-    console.log("onAdminUserAttachmentAddDone: Starting...");
+  function onAdminUserAttachmentDetailDone() {
+    console.log("onAdminUserAttachmentDetailDone: Starting...");
     setFetching(false);
   }
 
@@ -166,12 +130,20 @@ function AdminUserAttachmentAdd() {
 
     if (mounted) {
       window.scrollTo(0, 0); // Start the page at the top of the page.
+
+      getAttachmentDetailAPI(
+        aid,
+        onAdminUserAttachmentDetailSuccess,
+        onAdminUserAttachmentDetailError,
+        onAdminUserAttachmentDetailDone,
+        onUnauthorized,
+      );
     }
 
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [aid]);
 
   ////
   //// Component rendering.
@@ -208,8 +180,8 @@ function AdminUserAttachmentAdd() {
               </li>
               <li class="is-active">
                 <Link aria-current="page">
-                  <FontAwesomeIcon className="fas" icon={faPlus} />
-                  &nbsp;New
+                  <FontAwesomeIcon className="fas" icon={faFile} />
+                  &nbsp;Attachment
                 </Link>
               </li>
             </ul>
@@ -219,9 +191,9 @@ function AdminUserAttachmentAdd() {
           <nav class="breadcrumb is-hidden-desktop" aria-label="breadcrumbs">
             <ul>
               <li class="">
-                <Link to={`/admin/user/${id}`} aria-current="page">
+                <Link to={`/admin/user/${id}/attachments`} aria-current="page">
                   <FontAwesomeIcon className="fas" icon={faArrowLeft} />
-                  &nbsp;Back to Detail
+                  &nbsp;Back to Detail (Attachments)
                 </Link>
               </li>
             </ul>
@@ -233,10 +205,9 @@ function AdminUserAttachmentAdd() {
           {/* Page */}
           <nav class="box">
             <p class="title is-4">
-              <FontAwesomeIcon className="fas" icon={faPlus} />
-              &nbsp;New Attachment
+              <FontAwesomeIcon className="fas" icon={faFile} />
+              &nbsp;Attachment
             </p>
-            <FormErrorBox errors={errors} />
 
             {/* <p class="pb-4 has-text-grey">Please fill out all the required fields before submitting this form.</p> */}
 
@@ -244,72 +215,97 @@ function AdminUserAttachmentAdd() {
               <PageLoadingContent displayMessage={"Submitting..."} />
             ) : (
               <>
+                <FormErrorBox errors={errors} />
                 <div class="container">
-                  <FormInputField
-                    label="Name"
-                    name="name"
-                    placeholder="Text input"
-                    value={name}
-                    errorText={errors && errors.name}
-                    helpText=""
-                    onChange={(e) => setName(e.target.value)}
-                    isRequired={true}
-                    maxWidth="150px"
-                  />
+                  <p class="subtitle is-4 pt-4">
+                    <FontAwesomeIcon className="fas" icon={faEye} />
+                    &nbsp;Meta Information
+                  </p>
+                  <hr />
 
-                  <FormInputField
+                  <FormRowText label="Name" value={name} helpText="" />
+
+                  <FormRowText
                     label="Description"
-                    name="description"
-                    type="text"
-                    placeholder="Text input"
                     value={description}
-                    errorText={errors && errors.description}
                     helpText=""
-                    onChange={(e) => setDescription(e.target.value)}
-                    isRequired={true}
-                    maxWidth="485px"
                   />
 
-                  <input
-                    name="file"
-                    type="file"
-                    onChange={onHandleFileChange}
-                  />
-                  <br />
-                  <br />
+                  <p class="subtitle is-4 pt-4">
+                    <FontAwesomeIcon className="fas" icon={faFile} />
+                    &nbsp;Data
+                  </p>
+                  <hr />
+                  <p class="has-text-grey pb-4">
+                    Click the following "Download File" button to start
+                    downloading a copy of the attachment to your computer.
+                  </p>
+
+                  <section class="hero has-background-white-ter">
+                    <div class="hero-body">
+                      <p class="subtitle">
+                        <div class="has-text-centered">
+                          <a
+                            href={objectUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            class="button is-large is-success is-hidden-touch"
+                          >
+                            <FontAwesomeIcon
+                              className="fas"
+                              icon={faDownload}
+                            />
+                            &nbsp;Download File
+                          </a>
+                          <a
+                            href={objectUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            class="button is-large is-success is-fullwidth is-hidden-desktop"
+                          >
+                            <FontAwesomeIcon
+                              className="fas"
+                              icon={faDownload}
+                            />
+                            &nbsp;Download File
+                          </a>
+                        </div>
+                      </p>
+                    </div>
+                  </section>
 
                   <div class="columns pt-5">
                     <div class="column is-half">
                       <Link
                         to={`/admin/user/${id}/attachments`}
-                        class="button is-hidden-touch"
+                        class="button is-medium is-hidden-touch"
                       >
                         <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                         &nbsp;Back
                       </Link>
                       <Link
                         to={`/admin/user/${id}/attachments`}
-                        class="button is-fullwidth is-hidden-desktop"
+                        class="button is-medium is-fullwidth is-hidden-desktop"
                       >
                         <FontAwesomeIcon className="fas" icon={faArrowLeft} />
                         &nbsp;Back
                       </Link>
                     </div>
                     <div class="column is-half has-text-right">
-                      <button
-                        class="button is-medium is-primary is-hidden-touch"
-                        onClick={onSubmitClick}
+                      <Link
+                        to={`/admin/user/${id}/attachment/${aid}/edit`}
+                        class="button is-medium is-warning is-hidden-touch"
                       >
-                        <FontAwesomeIcon className="fas" icon={faCheckCircle} />
-                        &nbsp;Save
-                      </button>
-                      <button
-                        class="button is-medium is-primary is-fullwidth is-hidden-desktop"
-                        onClick={onSubmitClick}
+                        <FontAwesomeIcon className="fas" icon={faPencil} />
+                        &nbsp;Edit
+                      </Link>
+                      <Link
+                        to={`/admin/user/${id}/attachment/${aid}/edit`}
+                        class="button is-medium is-warning is-fullwidth is-hidden-desktop"
                       >
-                        <FontAwesomeIcon className="fas" icon={faCheckCircle} />
-                        &nbsp;Save
-                      </button>
+                        <FontAwesomeIcon className="fas" icon={faPencil} />
+                        &nbsp;Edit
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -322,4 +318,4 @@ function AdminUserAttachmentAdd() {
   );
 }
 
-export default AdminUserAttachmentAdd;
+export default AdminUserAttachmentDetail;

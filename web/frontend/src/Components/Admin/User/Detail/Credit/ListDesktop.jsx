@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faChevronRight,
   faCalendarMinus,
   faCalendarPlus,
   faDumbbell,
@@ -24,10 +25,14 @@ import {
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
-import FormErrorBox from "../../Reusable/FormErrorBox";
-import { PAGE_SIZE_OPTIONS, USER_ROLES } from "../../../Constants/FieldOptions";
+import FormErrorBox from "../../../../Reusable/FormErrorBox";
+import {
+  PAGE_SIZE_OPTIONS,
+  CREDIT_STATUS_STATES,
+  CREDIT_BUSINESS_FUNCTION_STATES,
+} from "../../../../../Constants/FieldOptions";
 
-function AdminUserListDesktop(props) {
+function AdminUserCreditListDesktop(props) {
   const {
     listData,
     setPageSize,
@@ -35,6 +40,7 @@ function AdminUserListDesktop(props) {
     previousCursors,
     onPreviousClicked,
     onNextClicked,
+    onSelectComicSubmissionForDeletion,
   } = props;
   return (
     <div class="b-table">
@@ -42,55 +48,39 @@ function AdminUserListDesktop(props) {
         <table class="is-fullwidth is-striped is-hoverable is-fullwidth table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Store</th>
-              <th>Role</th>
-              <th>Joined</th>
+              <th>Business Function</th>
+              <th>Offer</th>
+              <th>Status</th>
+              <th>Created</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {listData &&
               listData.results &&
-              listData.results.map(function (user, i) {
+              listData.results.map(function (datum, i) {
                 return (
                   <tr>
-                    <td data-label="Name">{user.name}</td>
-                    <td data-label="Email">
-                      <Link to={`mailto:${user.email}`}>{user.email}</Link>
+                    <td data-label="Business Function">
+                      {CREDIT_BUSINESS_FUNCTION_STATES[datum.businessFunction]}
                     </td>
-                    <td data-label="Phone">
-                      <Link to={`tel:${user.phone}`}>{user.phone}</Link>
+                    <td data-label="Offer">{datum.offerName}</td>
+                    <td data-label="Status">
+                      {CREDIT_STATUS_STATES[datum.status]}
                     </td>
-                    <td data-label="Store">
-                      {user.storeId !== "000000000000000000000000" && (
-                        <Link
-                          to={`/admin/store/${user.storeId}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          class="is-small"
-                        >
-                          {user.storeName}&nbsp;
-                          <FontAwesomeIcon
-                            className="fas"
-                            icon={faArrowUpRightFromSquare}
-                          />
-                        </Link>
-                      )}
-                    </td>
-                    <td data-label="Role">{USER_ROLES[user.role]}</td>
-                    <td data-label="Joined">{user.createdAt}</td>
+                    <td data-label="Created">{datum.createdAt}</td>
                     <td class="is-actions-cell">
                       <div class="buttons is-right">
                         <Link
-                          to={`/admin/user/${user.id}`}
+                          to={`/admin/user/${datum.userId}/credit/${datum.id}`}
                           class="button is-small is-primary"
                           type="button"
                         >
-                          <FontAwesomeIcon className="mdi" icon={faEye} />
-                          &nbsp;View
+                          View&nbsp;
+                          <FontAwesomeIcon
+                            className="fas"
+                            icon={faChevronRight}
+                          />
                         </Link>
                       </div>
                     </td>
@@ -141,4 +131,4 @@ function AdminUserListDesktop(props) {
   );
 }
 
-export default AdminUserListDesktop;
+export default AdminUserCreditListDesktop;

@@ -24,8 +24,8 @@ import {
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
 
-import FormErrorBox from "../../Reusable/FormErrorBox";
-import { PAGE_SIZE_OPTIONS } from "../../../Constants/FieldOptions";
+import FormErrorBox from "../../../Reusable/FormErrorBox";
+import { PAGE_SIZE_OPTIONS } from "../../../../Constants/FieldOptions";
 
 /*
 Display for both tablet and mobile.
