@@ -45,6 +45,7 @@ import {
 } from "../../../../../AppState";
 import AdminUserDetailForComicSubmissionListDesktop from "./DetailForComicSubmissionListDesktop";
 import AdminUserDetailForComicSubmissionListMobile from "./DetailForComicSubmissionListMobile";
+import AlertBanner from "../../../../Reusable/EveryPage/AlertBanner";
 
 function AdminUserDetailForComicSubmissionList() {
   ////
@@ -363,6 +364,11 @@ function AdminUserDetailForComicSubmissionList() {
             </div>
           </div>
 
+          {/* Page banner */}
+          {user && user.status === 100 && (
+            <AlertBanner message="Archived" status="info" />
+          )}
+
           {/* Page */}
           <nav class="box">
             <div class="columns">
@@ -373,14 +379,14 @@ function AdminUserDetailForComicSubmissionList() {
                 </p>
               </div>
               <div class="column has-text-right">
-                <Link
+                {user && user.status === 1 && <Link
                   to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
                   class="button is-small is-success is-fullwidth-mobile"
                   type="button"
                 >
                   <FontAwesomeIcon className="mdi" icon={faPlus} />
                   &nbsp;CPS
-                </Link>
+                </Link>}
               </div>
             </div>
             <FormErrorBox errors={errors} />
@@ -437,10 +443,10 @@ function AdminUserDetailForComicSubmissionList() {
                       previousCursors.length > 0) ? (
                       <div class="container">
                         {/*
-                                                ##################################################################
-                                                EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A DESKTOP SCREEN.
-                                                ##################################################################
-                                            */}
+                            ##################################################################
+                            EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A DESKTOP SCREEN.
+                            ##################################################################
+                        */}
                         <div class="is-hidden-touch">
                           <AdminUserDetailForComicSubmissionListDesktop
                             listData={submissions}
@@ -456,10 +462,10 @@ function AdminUserDetailForComicSubmissionList() {
                         </div>
 
                         {/*
-                                                ###########################################################################
-                                                EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A TABLET OR MOBILE SCREEN.
-                                                ###########################################################################
-                                            */}
+                            ###########################################################################
+                            EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A TABLET OR MOBILE SCREEN.
+                            ###########################################################################
+                        */}
                         <div class="is-fullwidth is-hidden-desktop">
                           <AdminUserDetailForComicSubmissionListMobile
                             listData={submissions}
@@ -507,13 +513,13 @@ function AdminUserDetailForComicSubmissionList() {
                         </Link>
                       </div>
                       <div class="column is-half has-text-right">
-                        <Link
+                        {user && user.status === 1 && <Link
                           to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
                           class="button is-primary is-fullwidth-mobile"
                         >
                           <FontAwesomeIcon className="fas" icon={faPlus} />
                           &nbsp;CPS
-                        </Link>
+                        </Link>}
                       </div>
                     </div>
                   </div>

@@ -25,18 +25,17 @@ type UserPaginationListFilter struct {
 	SortOrder int8 // 1=ascending | -1=descending
 
 	// Filter related.
-	StoreID         primitive.ObjectID
-	Role            int8
-	Status          int8
-	UUIDs           []string
-	ExcludeArchived bool
-	SearchText      string
-	FirstName       string
-	LastName        string
-	Email           string
-	Phone           string
-	CreatedAtGTE    time.Time
-	IsStarred       int8 //0=All, 1=True, 2=False
+	StoreID      primitive.ObjectID
+	Role         int8
+	Status       int8
+	UUIDs        []string
+	SearchText   string
+	FirstName    string
+	LastName     string
+	Email        string
+	Phone        string
+	CreatedAtGTE time.Time
+	IsStarred    int8 //0=All, 1=True, 2=False
 }
 
 // UserPaginationListResult represents the paginated list results for

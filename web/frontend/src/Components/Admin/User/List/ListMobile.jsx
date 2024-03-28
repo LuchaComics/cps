@@ -20,6 +20,8 @@ import {
   faRefresh,
   faCalendarCheck,
   faUsers,
+  faCircleCheck,
+  faArchive
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
@@ -83,6 +85,9 @@ function AdminUserListMobile(props) {
               <br />
               <br />
               <strong>Joined:</strong>&nbsp;{datum.createdAt}
+              <br />
+              <br />
+              <strong>Status:</strong>&nbsp;{datum.status === 1 ? <><FontAwesomeIcon className="mdi" icon={faCircleCheck} />&nbsp;Active</> : <><FontAwesomeIcon className="mdi" icon={faArchive} />&nbsp;Archived</>}
               <br />
               <br />
               {/* Tablet only */}

@@ -51,6 +51,7 @@ import {
   topAlertMessageState,
   topAlertStatusState,
 } from "../../../../../AppState";
+import AlertBanner from "../../../../Reusable/EveryPage/AlertBanner";
 
 function AdminUserDetailForCommentList() {
   ////
@@ -298,6 +299,11 @@ function AdminUserDetailForCommentList() {
           {/* Modals */}
           {/* None */}
 
+          {/* Page banner */}
+          {user && user.status === 100 && (
+            <AlertBanner message="Archived" status="info" />
+          )}
+
           {/* Page */}
           <nav class="box">
             <div class="columns">
@@ -308,14 +314,14 @@ function AdminUserDetailForCommentList() {
                 </p>
               </div>
               <div class="column has-text-right">
-                <Link
+                 {user && user.status === 1 && <Link
                   to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
                   class="button is-small is-success is-fullwidth-mobile"
                   type="button"
                 >
                   <FontAwesomeIcon className="mdi" icon={faPlus} />
                   &nbsp;CPS
-                </Link>
+                </Link>}
               </div>
             </div>
             <FormErrorBox errors={errors} />
@@ -418,13 +424,13 @@ function AdminUserDetailForCommentList() {
                         </Link>
                       </div>
                       <div class="column is-half has-text-right">
-                        <button
+                         {user && user.status === 1 && <button
                           onClick={onSubmitClick}
                           class="button is-primary is-fullwidth-mobile"
                         >
                           <FontAwesomeIcon className="fas" icon={faPlus} />
                           &nbsp;Add Comment
-                        </button>
+                        </button>}
                       </div>
                     </div>
                   </div>

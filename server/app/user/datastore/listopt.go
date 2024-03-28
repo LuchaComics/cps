@@ -54,8 +54,8 @@ func (impl UserStorerImpl) ListAsSelectOptionByFilter(ctx context.Context, f *Us
 		query["_id"] = bson.M{"$gt": cursor.Lookup("_id").ObjectID()}
 	}
 
-	if f.ExcludeArchived {
-		query["status"] = bson.M{"$ne": UserStatusArchived} // Do not list archived items! This code
+	if f.Status != 0 {
+		query["status"] = f.Status
 	}
 
 	// Full-text search

@@ -46,6 +46,7 @@ import {
 } from "../../../../../AppState";
 import AdminUserDetailForAttachmentListDesktop from "./DetailForAttachmentListDektop";
 import AdminUserDetailForAttachmentListMobile from "./DetailForAttachmentListMobile";
+import AlertBanner from "../../../../Reusable/EveryPage/AlertBanner";
 
 function AdminUserDetailForAttachmentList() {
   ////
@@ -331,6 +332,11 @@ function AdminUserDetailForAttachmentList() {
           {/* Modals */}
           {/* None */}
 
+          {/* Page banner */}
+          {user && user.status === 100 && (
+            <AlertBanner message="Archived" status="info" />
+          )}
+
           {/* Page */}
           <div
             class={`modal ${selectedAttachmentForDeletion ? "is-active" : ""}`}
@@ -375,7 +381,7 @@ function AdminUserDetailForAttachmentList() {
                   &nbsp;User
                 </p>
               </div>
-              {user && (
+              {user && user.status === 1 && (
                 <div class="column has-text-right">
                   <Link
                     to={`/admin/user/${id}/attachments/add`}
@@ -509,13 +515,13 @@ function AdminUserDetailForAttachmentList() {
                         </Link>
                       </div>
                       <div class="column is-half has-text-right">
-                        <Link
+                        {user && user.status === 1 && <Link
                           to={`/admin/user/${id}/attachments/add`}
                           class="button is-primary is-fullwidth-mobile"
                         >
                           <FontAwesomeIcon className="fas" icon={faPlus} />
                           &nbsp;Add Attachment
-                        </Link>
+                        </Link>}
                       </div>
                     </div>
                   </div>

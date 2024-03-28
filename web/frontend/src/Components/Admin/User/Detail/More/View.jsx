@@ -193,7 +193,7 @@ function AdminUserDetailMore() {
           </nav>
 
           {/* Page banner */}
-          {user && user.status === 2 && (
+          {user && user.status === 100 && (
             <AlertBanner message="Archived" status="info" />
           )}
 

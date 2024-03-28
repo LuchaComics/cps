@@ -15,12 +15,12 @@ func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	f := &sub_s.UserPaginationListFilter{
-		Cursor:          "",
-		PageSize:        25,
-		SortField:       "created_at",
-		SortOrder:       -1, // 1=ascending | -1=descending
-		ExcludeArchived: true,
-		IsStarred:       0, // 0=All, 1=Yes, 2=No
+		Cursor:    "",
+		PageSize:  25,
+		SortField: "created_at",
+		SortOrder: -1, // 1=ascending | -1=descending
+		Status:    0,  // All
+		IsStarred: 0,  // 0=All, 1=Yes, 2=No
 	}
 
 	// Here is where you extract url parameters.
@@ -94,6 +94,12 @@ func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	case "2", "false", "False", "no", "No":
 		f.IsStarred = 2
 		break
+	}
+
+	statusStr := query.Get("status")
+	if statusStr != "" {
+		status, _ := strconv.ParseInt(statusStr, 10, 64)
+		f.Status = int8(status)
 	}
 
 	// Perform our database operation.

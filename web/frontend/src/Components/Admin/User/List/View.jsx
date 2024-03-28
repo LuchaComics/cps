@@ -449,10 +449,10 @@ function AdminUserList() {
                 (users.results.length > 0 || previousCursors.length > 0) ? (
                   <div class="container">
                     {/*
-                                            ##################################################################
-                                            EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A DESKTOP SCREEN.
-                                            ##################################################################
-                                        */}
+                        ##################################################################
+                        EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A DESKTOP SCREEN.
+                        ##################################################################
+                    */}
                     <div class="is-hidden-touch">
                       <AdminUserListDesktop
                         listData={users}
@@ -465,10 +465,10 @@ function AdminUserList() {
                     </div>
 
                     {/*
-                                            ###########################################################################
-                                            EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A TABLET OR MOBILE SCREEN.
-                                            ###########################################################################
-                                        */}
+                        ###########################################################################
+                        EVERYTHING INSIDE HERE WILL ONLY BE DISPLAYED ON A TABLET OR MOBILE SCREEN.
+                        ###########################################################################
+                    */}
                     <div class="is-fullwidth is-hidden-desktop">
                       <AdminUserListMobile
                         listData={users}

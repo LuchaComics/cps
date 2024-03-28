@@ -26,8 +26,7 @@ func (c *UserControllerImpl) ListByFilter(ctx context.Context, f *user_s.UserPag
 		slog.Int("SortOrder", int(f.SortOrder)),
 		slog.Any("Status", f.Status),
 		slog.String("SearchText", f.SearchText),
-		slog.Time("CreatedAtGTE", f.CreatedAtGTE),
-		slog.Bool("ExcludeArchived", f.ExcludeArchived))
+		slog.Time("CreatedAtGTE", f.CreatedAtGTE))
 
 	// Filtering the database.
 	m, err := c.UserStorer.ListByFilter(ctx, f)

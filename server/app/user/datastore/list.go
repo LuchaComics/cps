@@ -37,9 +37,6 @@ func (impl UserStorerImpl) ListByFilter(ctx context.Context, f *UserPaginationLi
 	if f.Phone != "" {
 		filter["phone"] = f.Phone
 	}
-	if f.ExcludeArchived {
-		filter["status"] = bson.M{"$ne": UserStatusArchived} // Do not list archived items! This code
-	}
 	if f.Status != 0 {
 		filter["status"] = f.Status
 	}

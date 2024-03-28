@@ -3,6 +3,7 @@ package httptransport
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	sub_s "github.com/LuchaComics/cps-backend/app/user/datastore"
 	"github.com/LuchaComics/cps-backend/utils/httperror"
@@ -13,11 +14,11 @@ func (h *Handler) ListAsSelectOptions(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	f := &sub_s.UserPaginationListFilter{
-		Cursor:          "",
-		PageSize:        1_000_000,
-		SortField:       "name",
-		SortOrder:       1, // 1=ascending | -1=descending
-		ExcludeArchived: true,
+		Cursor:    "",
+		PageSize:  1_000_000,
+		SortField: "name",
+		SortOrder: 1, // 1=ascending | -1=descending
+		Status:    0, // All
 	}
 
 	// Here is where you extract url parameters.
@@ -45,6 +46,11 @@ func (h *Handler) ListAsSelectOptions(w http.ResponseWriter, r *http.Request) {
 	phone := query.Get("phone")
 	if phone != "" {
 		f.Phone = phone
+	}
+	statusStr := query.Get("status")
+	if statusStr != "" {
+		status, _ := strconv.ParseInt(statusStr, 10, 64)
+		f.Status = int8(status)
 	}
 	storeID := query.Get("store_id")
 	if storeID != "" {

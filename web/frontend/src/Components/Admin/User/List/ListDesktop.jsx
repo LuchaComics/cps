@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Scroll from "react-scroll";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+faCircleCheck,
   faCalendarMinus,
   faCalendarPlus,
   faDumbbell,
@@ -20,6 +21,7 @@ import {
   faRefresh,
   faCalendarCheck,
   faUsers,
+  faArchive
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { DateTime } from "luxon";
@@ -48,6 +50,7 @@ function AdminUserListDesktop(props) {
               <th>Store</th>
               <th>Role</th>
               <th>Joined</th>
+              <th>Status</th>
               <th></th>
             </tr>
           </thead>
@@ -82,6 +85,9 @@ function AdminUserListDesktop(props) {
                     </td>
                     <td data-label="Role">{USER_ROLES[user.role]}</td>
                     <td data-label="Joined">{user.createdAt}</td>
+                    <td data-label="Status" className="has-text-centered">
+                        {user.status === 1 ? <FontAwesomeIcon className="mdi" icon={faCircleCheck} /> : <FontAwesomeIcon className="mdi" icon={faArchive} />}
+                    </td>
                     <td class="is-actions-cell">
                       <div class="buttons is-right">
                         <Link

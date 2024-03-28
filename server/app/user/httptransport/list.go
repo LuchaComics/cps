@@ -15,11 +15,11 @@ func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	f := &sub_s.UserPaginationListFilter{
-		Cursor:          "",
-		PageSize:        25,
-		SortField:       "name",
-		SortOrder:       1, // 1=ascending | -1=descending
-		ExcludeArchived: true,
+		Cursor:    "",
+		PageSize:  25,
+		SortField: "name",
+		SortOrder: 1, // 1=ascending | -1=descending
+		Status:    0, // All
 	}
 
 	// Here is where you extract url parameters.

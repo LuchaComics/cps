@@ -80,34 +80,36 @@ const AdminClientDetailMoreDesktop = ({ id, user, currentUser }) => {
 
               {/* ---------------------------------------------------------------------- */}
 
-              <div className="column">
-                <BubbleLink
-                  title={`Delete`}
-                  subtitle={`Permanently delete this user and all associated data`}
-                  faIcon={faTrashCan}
-                  url={`/admin/user/${id}/more/permadelete`}
-                  bgColour={`has-background-danger`}
-                />
-              </div>
+              {user && user.status === 1 && <>
+                  <div className="column">
+                    <BubbleLink
+                      title={`Delete`}
+                      subtitle={`Permanently delete this user and all associated data`}
+                      faIcon={faTrashCan}
+                      url={`/admin/user/${id}/more/permadelete`}
+                      bgColour={`has-background-danger`}
+                    />
+                  </div>
 
-              <div className="column">
-                <BubbleLink
-                  title={`Password`}
-                  subtitle={`Change or reset the user\'s password`}
-                  faIcon={faKey}
-                  url={`/admin/user/${id}/more/change-password`}
-                  bgColour={`has-background-danger-dark`}
-                />
-              </div>
-              <div className="column">
-                <BubbleLink
-                  title={`2FA`}
-                  subtitle={`Enable or disable two-factor authentication`}
-                  faIcon={faMobile}
-                  url={`/admin/user/${id}/more/change-2fa`}
-                  bgColour={`has-background-dark`}
-                />
-              </div>
+                  <div className="column">
+                    <BubbleLink
+                      title={`Password`}
+                      subtitle={`Change or reset the user\'s password`}
+                      faIcon={faKey}
+                      url={`/admin/user/${id}/more/change-password`}
+                      bgColour={`has-background-danger-dark`}
+                    />
+                  </div>
+                  <div className="column">
+                    <BubbleLink
+                      title={`2FA`}
+                      subtitle={`Enable or disable two-factor authentication`}
+                      faIcon={faMobile}
+                      url={`/admin/user/${id}/more/change-2fa`}
+                      bgColour={`has-background-dark`}
+                    />
+                  </div>
+               </>}
 
               {/* ---------------------------------------------------------------------- */}
             </div>

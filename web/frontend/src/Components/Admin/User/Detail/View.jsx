@@ -56,6 +56,7 @@ import {
   HOW_LONG_HAS_YOUR_STORE_BEEN_OPERATING_FOR_WITH_EMPTY_OPTIONS,
   USER_SPECIAL_COLLECTION_WITH_EMPTY_OPTIONS,
 } from "../../../../Constants/FieldOptions";
+import AlertBanner from "../../../Reusable/EveryPage/AlertBanner";
 
 function AdminUserDetail() {
   ////
@@ -349,6 +350,11 @@ function AdminUserDetail() {
             </div>
           </div>
 
+          {/* Page banner */}
+          {user && user.status === 100 && (
+            <AlertBanner message="Archived" status="info" />
+          )}
+
           {/* Page */}
           <nav class="box">
             {user && (
@@ -359,7 +365,7 @@ function AdminUserDetail() {
                     &nbsp;User
                   </p>
                 </div>
-                <div class="column has-text-right">
+                {user && user.status === 1 && <div class="column has-text-right">
                   <Link
                     to={`/admin/submissions/pick-type-for-add?user_id=${id}&user_name=${user.name}`}
                     class="button is-small is-success is-fullwidth-mobile"
@@ -408,7 +414,7 @@ function AdminUserDetail() {
                       </span>
                     </Link>
                   )}
-                </div>
+                </div>}
               </div>
             )}
             <FormErrorBox errors={errors} />
@@ -668,13 +674,13 @@ function AdminUserDetail() {
                         </Link>
                       </div>
                       <div class="column is-half has-text-right">
-                        <Link
+                        {user && user.status === 1 && <Link
                           to={`/admin/user/${id}/edit`}
                           class="button is-primary is-fullwidth-mobile"
                         >
                           <FontAwesomeIcon className="fas" icon={faPencil} />
                           &nbsp;Edit
-                        </Link>
+                        </Link>}
                       </div>
                     </div>
                   </div>
