@@ -241,11 +241,15 @@ export default (props) => {
 
             <p class="menu-label has-text-grey-light">Account</p>
             <ul class="menu-list">
-              {/* <li>
-                                <Link to={`/admin/account`} class={`has-text-grey-light ${location.pathname.includes("account") && "is-active"}`}>
-                                    <FontAwesomeIcon className="fas" icon={faUserCircle} />&nbsp;Account
-                                </Link>
-                            </li>*/}
+              <li>
+                <Link
+                  to={`/account`}
+                  class={`has-text-grey-light ${location.pathname.includes("account") && "is-active"}`}
+                >
+                  <FontAwesomeIcon className="fas" icon={faUserCircle} />
+                  &nbsp;Account
+                </Link>
+              </li>
               <li>
                 <Link
                   onClick={onLinkClickCloseHamburgerMenuIfMobile}

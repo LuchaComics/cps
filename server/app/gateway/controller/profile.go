@@ -90,24 +90,26 @@ func (impl *GatewayControllerImpl) ProfileUpdate(ctx context.Context, nu *user_s
 			return nil, err
 		}
 
-		if "Stripe, Inc." == impl.PaymentProcessor.GetName() {
-			err = impl.PaymentProcessor.UpdateCustomer(
-				ou.PaymentProcessorCustomerID,
-				fmt.Sprintf("%s %s", ou.FirstName, ou.LastName),
-				ou.Email,
-				"", // description...
-				fmt.Sprintf("%s %s Shipping Address", ou.FirstName, ou.LastName),
-				ou.Phone,
-				ou.ShippingCity, ou.ShippingCountry, ou.ShippingAddressLine1, ou.ShippingAddressLine2, ou.ShippingPostalCode, ou.ShippingRegion, // Shipping
-				ou.City, ou.Country, ou.AddressLine1, ou.AddressLine2, ou.PostalCode, ou.Region, // Billing
-			)
-			if err != nil {
-				impl.Logger.Error("updated customer from payment processor error", slog.Any("error", err))
-				return nil, err
+		if ou.Role != user_s.UserRoleRoot {
+			if "Stripe, Inc." == impl.PaymentProcessor.GetName() {
+				err = impl.PaymentProcessor.UpdateCustomer(
+					ou.PaymentProcessorCustomerID,
+					fmt.Sprintf("%s %s", ou.FirstName, ou.LastName),
+					ou.Email,
+					"", // description...
+					fmt.Sprintf("%s %s Shipping Address", ou.FirstName, ou.LastName),
+					ou.Phone,
+					ou.ShippingCity, ou.ShippingCountry, ou.ShippingAddressLine1, ou.ShippingAddressLine2, ou.ShippingPostalCode, ou.ShippingRegion, // Shipping
+					ou.City, ou.Country, ou.AddressLine1, ou.AddressLine2, ou.PostalCode, ou.Region, // Billing
+				)
+				if err != nil {
+					impl.Logger.Error("updated customer from payment processor error", slog.Any("error", err))
+					return nil, err
+				}
+				impl.Logger.Debug("updated customer in stripe",
+					slog.Any("ou.Region", ou.Region),
+				)
 			}
-			impl.Logger.Debug("updated customer in stripe",
-				slog.Any("ou.Region", ou.Region),
-			)
 		}
 
 		return nil, nil

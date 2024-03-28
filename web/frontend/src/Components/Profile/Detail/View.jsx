@@ -188,7 +188,7 @@ function AccountDetail() {
                 </div>
                 <div class="column has-text-right">
                   <Link
-                    to={`/account/change-password`}
+                    to={`/account/update`}
                     class="button is-small is-success is-fullwidth-mobile"
                     type="button"
                   >

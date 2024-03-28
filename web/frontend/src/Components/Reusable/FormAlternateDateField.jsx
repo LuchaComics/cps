@@ -1,4 +1,4 @@
-// Version 1.0.0
+// Version 1.0.1
 import React, { useState, useEffect } from "react";
 
 /*
@@ -86,72 +86,69 @@ function FormAlternateDateField({
   };
 
   const onDayChange = (d) => {
-    // Step 1: Convert into an integer.
-    const di = parseInt(d);
-    if (!isNumeric(d)) {
+    // Convert the input value to a number
+    const di = parseInt(d, 10);
+
+    // If the input value is "0", set the day field to "0"
+    if (d === "0") {
+      setDay("0");
+      return;
+    }
+
+    // If the input value is not a valid number or is empty, clear the day field
+    if (isNaN(di) || d === "") {
       setDay("");
       return;
     }
 
-    // Prevent futuredates if max date exists.
-    if (maxDate) {
-      if (
-        year >= maxDate.getFullYear() &&
-        month >= maxDate.getMonth() + 1 &&
-        di >= maxDate.getDate()
-      ) {
+    // Prevent future dates if max date exists
+    if (
+      maxDate &&
+      year === maxDate.getFullYear() &&
+      month === maxDate.getMonth() + 1
+    ) {
+      if (di > maxDate.getDate()) {
         setDay(maxDate.getDate());
         return;
       }
     }
 
-    // Step 2: Defensive Code
-    if (di < 1) {
-      setDay(1);
-      onDateChange(1, month, year);
-      return;
+    // If the input value is within the valid range, update the day field
+    if (di >= 1 && di <= 31) {
+      setDay(di);
+      onDateChange(di, month, year);
     }
-    if (di > 31) {
-      setDay(31);
-      onDateChange(31, month, year);
-      return;
-    }
-    // Step 3: Set day.
-    setDay(di);
-    onDateChange(di, month, year);
   };
 
   const onMonthChange = (m) => {
-    // Step 1: Convert into an integer.
-    const mi = parseInt(m);
-    if (!isNumeric(m)) {
+    // Convert the input value to a number
+    const mi = parseInt(m, 10);
+
+    // If the input value is "0", set the month field to "0"
+    if (m === "0") {
+      setMonth("0");
+      return;
+    }
+
+    // If the input value is not a valid number or is empty, clear the month field
+    if (isNaN(mi) || m === "") {
       setMonth("");
       return;
     }
 
-    // Prevent futuredates if max date exists.
-    if (maxDate) {
-      if (year >= maxDate.getFullYear() && mi >= maxDate.getMonth() + 1) {
+    // Prevent future dates if max date exists
+    if (maxDate && year === maxDate.getFullYear()) {
+      if (mi > maxDate.getMonth() + 1) {
         setMonth(maxDate.getMonth() + 1);
         return;
       }
     }
 
-    // Step 2: Defensive Code
-    if (mi < 1) {
-      setMonth(1);
-      onDateChange(day, 1, year);
-      return;
+    // If the input value is within the valid range, update the month field
+    if (mi >= 1 && mi <= 12) {
+      setMonth(mi);
+      onDateChange(day, mi, year);
     }
-    if (mi > 12) {
-      setMonth(12);
-      onDateChange(day, 12, year);
-      return;
-    }
-
-    // Step 3: Set month.
-    setMonth(mi);
-    onDateChange(day, mi, year);
   };
 
   const onYearChange = (y) => {
@@ -217,6 +214,7 @@ function FormAlternateDateField({
                 onChange={(e) => {
                   onDayChange(e.target.value);
                 }}
+                disabled={disabled}
               />
             </span>
           </div>
@@ -232,6 +230,7 @@ function FormAlternateDateField({
                 onChange={(e) => {
                   onMonthChange(e.target.value);
                 }}
+                disabled={disabled}
               />
             </span>
           </div>
@@ -247,6 +246,7 @@ function FormAlternateDateField({
                 onChange={(e) => {
                   onYearChange(e.target.value);
                 }}
+                disabled={disabled}
               />
             </span>
           </div>
